@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+.modern-grid-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 171, 240, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 171, 240, 0.15) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse at center, black 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 70%);
+  animation: grid-pan 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes grid-pan {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
