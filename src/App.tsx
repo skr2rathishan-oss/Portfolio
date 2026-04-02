@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Download, Facebook, Twitter, Instagram, Linkedin, Github, ExternalLink } from 'lucide-react';
+import About from './About';
+import Contact from './Contact';
 
 const skillsData = [
   { name: 'laravel', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg', proficiency: 95, color: '#ff2d20' },
@@ -132,7 +134,7 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 
 function Skills({ isDarkMode }: { isDarkMode: boolean }) {
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 py-20">
+    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           My <span className="text-[#00abf0]">Skills</span>
@@ -186,7 +188,7 @@ function Skills({ isDarkMode }: { isDarkMode: boolean }) {
 
 function Projects({ isDarkMode }: { isDarkMode: boolean }) {
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 py-20">
+    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           My <span className="text-[#00abf0]">Projects</span>
@@ -284,11 +286,10 @@ function Layout() {
         <div className={`hidden lg:flex items-center space-x-8 text-sm font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>
           <Link to="/" className={`${location.pathname === '/' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Home</Link>
           <Link to="/about" className={`${location.pathname === '/about' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>About</Link>
-          <Link to="/education" className={`${location.pathname === '/education' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Education</Link>
           <Link to="/skills" className={`${location.pathname === '/skills' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Skills</Link>
           <Link to="/projects" className={`${location.pathname === '/projects' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Projects</Link>
           <Link to="/services" className={`${location.pathname === '/services' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Services</Link>
-          <Link to="/contact" className={`${location.pathname === '/contact' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Contact</Link>
+          <Link to="/contact" className={`${location.pathname === '/contact' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Connect</Link>
         </div>
 
         <div className="flex items-center space-x-4 md:space-x-6">
@@ -314,8 +315,10 @@ function Layout() {
       {/* Main Content Area */}
       <Routes>
         <Route path="/" element={<Home isDarkMode={isDarkMode} />} />
+        <Route path="/about" element={<About isDarkMode={isDarkMode} />} />
         <Route path="/skills" element={<Skills isDarkMode={isDarkMode} />} />
         <Route path="/projects" element={<Projects isDarkMode={isDarkMode} />} />
+        <Route path="/contact" element={<Contact isDarkMode={isDarkMode} />} />
         <Route path="*" element={<Home isDarkMode={isDarkMode} />} />
       </Routes>
 
