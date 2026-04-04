@@ -6,14 +6,21 @@ import {
   Rocket
 } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import LogoLoop from './LogoLoop';
+
+const interestLogos = [
+  { src: "https://cdn-icons-png.flaticon.com/512/1693/1693746.png", alt: "Generative AI", title: "Generative AI" },
+  { src: "https://cdn-icons-png.flaticon.com/512/8637/8637299.png", alt: "Computer Vision", title: "Computer Vision" },
+  { src: "https://cdn-icons-png.flaticon.com/512/1005/1005141.png", alt: "Full-Stack Dev", title: "Full-Stack Dev" },
+  { src: "https://cdn-icons-png.flaticon.com/512/1183/1183672.png", alt: "Signal Processing", title: "Signal Processing" },
+  { src: "https://cdn-icons-png.flaticon.com/512/733/733609.png", alt: "Open Source", title: "Open Source" },
+  { src: "https://cdn-icons-png.flaticon.com/512/1086/1086741.png", alt: "IoT & Electronics", title: "IoT & Electronics" },
+];
 
 function About({ isDarkMode }: { isDarkMode: boolean }) {
   const { scrollY } = useScroll();
   
   // Scroll zoom hero effects
-  const headerY = useTransform(scrollY, [0, 300], [0, 80]);
-  const headerOpacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const headerScale = useTransform(scrollY, [0, 300], [1, 1.15]);
   const imageScale = useTransform(scrollY, [0, 400], [1, 1.3]);
 
   const cardBaseClass = `rounded-2xl p-6 transition-all duration-500 ${
@@ -28,36 +35,19 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
   const innerCardBg = isDarkMode ? 'bg-[#081b29]' : 'bg-slate-50';
 
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
+    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-4 pb-12">
       
-      {/* 1. PAGE HEADER */}
-      <motion.div 
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        style={{ y: headerY, opacity: headerOpacity, scale: headerScale }}
-        className="text-center mb-16 origin-top"
-      >
-        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${textPrimary}`}>
-          About <span className="text-[#00abf0]">Me</span>
-        </h2>
-        <p className={`text-sm md:text-base transition-colors duration-500 ${textSecondary}`}>
-          A passionate Computer Engineering student building the future with AI and code.
-        </p>
-        <div className="w-[60px] h-[2px] bg-[#00abf0] mx-auto mt-3"></div>
-      </motion.div>
-
       {/* 2. INTRODUCTION CARD */}
       <motion.div 
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className={`${cardBaseClass} mb-8`}
+        className={`${cardBaseClass} mb-6`}
       >
-        <div className="flex flex-col lg:flex-row gap-8 items-center">
+        <div className="flex flex-col lg:flex-row gap-6 items-center">
           <div className="flex-shrink-0">
-            <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-[#00abf0]/40 shadow-[0_0_20px_rgba(0,171,240,0.2)]">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-[#00abf0]/40 shadow-[0_0_20px_rgba(0,171,240,0.2)]">
               <motion.img 
                 src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                 alt="Professional Portrait" 
@@ -68,18 +58,18 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
             </div>
           </div>
           <div className="flex-1">
-            <h3 className={`text-xl font-bold mb-4 border-l-4 border-[#00abf0] pl-3 ${textPrimary}`}>
+            <h3 className={`text-lg font-bold mb-2 border-l-4 border-[#00abf0] pl-3 ${textPrimary}`}>
               Introduction
             </h3>
-            <p className={`font-medium text-base mb-3 ${textPrimary}`}>
+            <p className={`font-medium text-sm mb-2 ${textPrimary}`}>
               I'm Mahendran Rathishan, a 2nd-year Computer Engineering student at the University of Ruhuna, Sri Lanka, deeply passionate about AI engineering, full-stack development, and electronics.
             </p>
-            <p className={`text-sm leading-relaxed mb-6 ${textSecondary}`}>
+            <p className={`text-xs leading-relaxed mb-4 ${textSecondary}`}>
               I build intelligent systems, web applications, and explore signal processing. Active in the IEEE Student Branch and the Innovation Club (AI & Data Science section) at my university. I submitted a GSoC 2026 proposal to Oppia Foundation for an AI-Powered Personalized Learning Assistant.
             </p>
             <div className="flex flex-wrap gap-2">
               {['AI Engineering', 'Full-Stack Dev', 'Electronics'].map(skill => (
-                <span key={skill} className="bg-[#00abf0]/15 border border-[#00abf0]/30 text-[#00abf0] text-xs px-3 py-1 rounded-full">
+                <span key={skill} className="bg-[#00abf0]/15 border border-[#00abf0]/30 text-[#00abf0] text-[11px] px-2.5 py-0.5 rounded-full">
                   {skill}
                 </span>
               ))}
@@ -89,7 +79,7 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
       </motion.div>
 
       {/* 3. TWO-COLUMN GRID: Background + Goals */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         
         {/* Background Card */}
         <motion.div 
@@ -99,23 +89,23 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className={`${cardBaseClass}`}
         >
-          <h3 className={`text-xl font-bold mb-6 flex items-center gap-2 ${textPrimary}`}>
-            <User size={20} className="text-[#00abf0]" /> Background
+          <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${textPrimary}`}>
+            <User size={18} className="text-[#00abf0]" /> Background
           </h3>
           <div className="flex flex-col">
             {[
-              { icon: <User size={16} />, label: 'Name', value: 'Rathishan M.' },
-              { icon: <Calendar size={16} />, label: 'Birthday', value: 'Oct 02' },
-              { icon: <MapPin size={16} />, label: 'Location', value: 'Sri Lanka (GMT+5:30)' },
-              { icon: <BookOpen size={16} />, label: 'University', value: 'Univ. of Ruhuna' },
-              { icon: <GraduationCap size={16} />, label: 'Degree', value: 'B.Sc. Comp. Engineering' },
-              { icon: <Languages size={16} />, label: 'Languages', value: 'English & Sinhala' },
-              { icon: <Briefcase size={16} />, label: 'Status', value: 'Open to Opportunities' },
+              { icon: <User size={14} />, label: 'Name', value: 'Rathishan M.' },
+              { icon: <Calendar size={14} />, label: 'Birthday', value: 'Oct 02' },
+              { icon: <MapPin size={14} />, label: 'Location', value: 'Sri Lanka (GMT+5:30)' },
+              { icon: <BookOpen size={14} />, label: 'University', value: 'Univ. of Ruhuna' },
+              { icon: <GraduationCap size={14} />, label: 'Degree', value: 'B.Sc. Comp. Engineering' },
+              { icon: <Languages size={14} />, label: 'Languages', value: 'English & Sinhala' },
+              { icon: <Briefcase size={14} />, label: 'Status', value: 'Open to Opportunities' },
             ].map((item, i) => (
-              <div key={i} className={`flex items-center gap-3 py-3 border-b ${borderDivider} last:border-0`}>
+              <div key={i} className={`flex items-center gap-3 py-2 border-b ${borderDivider} last:border-0`}>
                 <div className="text-[#00abf0]">{item.icon}</div>
-                <span className={`text-xs w-28 ${textSecondary}`}>{item.label}</span>
-                <span className={`text-sm font-medium ${textPrimary}`}>{item.value}</span>
+                <span className={`text-[11px] w-24 ${textSecondary}`}>{item.label}</span>
+                <span className={`text-xs font-medium ${textPrimary}`}>{item.value}</span>
               </div>
             ))}
           </div>
@@ -129,22 +119,22 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
           transition={{ duration: 0.6, delay: 0.3 }}
           className={`${cardBaseClass}`}
         >
-          <h3 className={`text-xl font-bold mb-6 flex items-center gap-2 ${textPrimary}`}>
-            <Target size={20} className="text-[#00abf0]" /> Goals
+          <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${textPrimary}`}>
+            <Target size={18} className="text-[#00abf0]" /> Goals
           </h3>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             {[
               { title: 'AI/ML Engineer', desc: 'Specialize in generative AI and LLM applications' },
               { title: 'Open Source Contributor', desc: 'Contribute to GSoC 2026 — Oppia AI Learning Assistant' },
               { title: 'Full-Stack AI Apps', desc: 'Build production-ready intelligent web applications' },
             ].map((goal, i) => (
-              <div key={i} className="flex gap-3 mb-4 last:mb-0">
-                <div className="w-7 h-7 rounded-full bg-[#00abf0]/20 border border-[#00abf0]/40 text-[#00abf0] text-sm font-bold flex items-center justify-center flex-shrink-0">
+              <div key={i} className="flex gap-3 mb-3 last:mb-0">
+                <div className="w-6 h-6 rounded-full bg-[#00abf0]/20 border border-[#00abf0]/40 text-[#00abf0] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                   {i + 1}
                 </div>
                 <div>
-                  <h4 className={`font-semibold text-sm ${textPrimary}`}>{goal.title}</h4>
-                  <p className={`text-xs mt-0.5 ${textSecondary}`}>{goal.desc}</p>
+                  <h4 className={`font-semibold text-xs ${textPrimary}`}>{goal.title}</h4>
+                  <p className={`text-[11px] mt-0.5 ${textSecondary}`}>{goal.desc}</p>
                 </div>
               </div>
             ))}
@@ -165,26 +155,20 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
           <h3 className={`text-2xl font-bold mb-2 ${textPrimary}`}>Interests</h3>
           <p className={`text-sm ${textSecondary}`}>What drives my curiosity and passion</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {[
-            { icon: <BrainCircuit size={24} />, label: 'Generative AI' },
-            { icon: <Eye size={24} />, label: 'Computer Vision' },
-            { icon: <Code size={24} />, label: 'Full-Stack Dev' },
-            { icon: <Activity size={24} />, label: 'Signal Processing' },
-            { icon: <Github size={24} />, label: 'Open Source' },
-            { icon: <Cpu size={24} />, label: 'IoT & Electronics' },
-          ].map((interest, i) => (
-            <div key={i} className={`p-4 rounded-xl flex flex-col items-center gap-2 text-center cursor-default transition-all duration-300 ${
-              isDarkMode 
-                ? 'bg-[#0a253a] border border-[#00abf0]/10' 
-                : 'bg-white border border-slate-100 shadow-sm'
-            }`}>
-              <div className="w-10 h-10 rounded-lg bg-[#00abf0]/10 flex items-center justify-center text-[#00abf0]">
-                {interest.icon}
-              </div>
-              <span className={`text-xs font-medium ${textPrimary}`}>{interest.label}</span>
-            </div>
-          ))}
+        
+        <div style={{ height: '80px', position: 'relative', overflow: 'hidden' }}>
+          <LogoLoop
+            logos={interestLogos}
+            speed={60}
+            direction="left"
+            logoHeight={48}
+            gap={48}
+            hoverSpeed={0}
+            scaleOnHover
+            fadeOut
+            fadeOutColor={isDarkMode ? '#081b29' : '#f8fafc'}
+            ariaLabel="My Interests"
+          />
         </div>
       </motion.div>
 

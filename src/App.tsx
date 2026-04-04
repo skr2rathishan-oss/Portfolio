@@ -135,15 +135,6 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 function Skills({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          My <span className="text-[#00abf0]">Skills</span>
-        </h2>
-        <p className={`text-sm md:text-base transition-colors duration-500 ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>
-          Technologies and tools I work with to create amazing web experiences
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {skillsData.map((skill, index) => (
           <div 
@@ -189,15 +180,6 @@ function Skills({ isDarkMode }: { isDarkMode: boolean }) {
 function Projects({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          My <span className="text-[#00abf0]">Projects</span>
-        </h2>
-        <p className={`text-sm md:text-base transition-colors duration-500 ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>
-          A showcase of my recent work
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projectsData.map((project, index) => (
           <div 
