@@ -23,31 +23,44 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
   // Scroll zoom hero effects
   const imageScale = useTransform(scrollY, [0, 400], [1, 1.3]);
 
-  const cardBaseClass = `rounded-2xl p-6 transition-all duration-500 ${
+  const cardBaseClass = `rounded-[24px] p-8 transition-all duration-500 ${
     isDarkMode 
-      ? 'bg-[#0a253a] border border-[#00abf0]/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)]' 
-      : 'bg-white border border-slate-100 shadow-xl shadow-slate-200/50'
+      ? 'relative overflow-hidden bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:-translate-y-2 hover:shadow-[0_8px_32px_rgba(0,171,240,0.15)] hover:border-[#00abf0]/30 hover:bg-white/[0.04]' 
+      : 'relative overflow-hidden bg-white/60 backdrop-blur-xl border border-slate-200 shadow-xl shadow-slate-200/50 hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-200/60 hover:border-[#00abf0]/30'
   }`;
 
   const textPrimary = isDarkMode ? 'text-white' : 'text-slate-800';
   const textSecondary = isDarkMode ? 'text-gray-400' : 'text-slate-500';
-  const borderDivider = isDarkMode ? 'border-[#00abf0]/10' : 'border-slate-100';
-  const innerCardBg = isDarkMode ? 'bg-[#081b29]' : 'bg-slate-50';
+  const borderDivider = isDarkMode ? 'border-white/[0.05]' : 'border-slate-200';
+  const innerCardBg = isDarkMode ? 'bg-white/[0.02]' : 'bg-white/50';
 
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-4 pb-12">
       
+      {/* Glowing Background Gradients (Only visible in dark mode for the futuristic vibe) */}
+      {isDarkMode && (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+           <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[120px] mix-blend-screen"></div>
+           <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-cyan-500/20 rounded-full blur-[120px] mix-blend-screen"></div>
+        </div>
+      )}
+
       {/* 2. INTRODUCTION CARD */}
       <motion.div 
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className={`${cardBaseClass} mb-6`}
+        className={`${cardBaseClass} mb-8`}
       >
-        <div className="flex flex-col lg:flex-row gap-6 items-center">
+        <div className="flex flex-col lg:flex-row gap-8 items-center">
           <div className="flex-shrink-0">
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-[#00abf0]/40 shadow-[0_0_20px_rgba(0,171,240,0.2)]">
+            <motion.div 
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-[#00abf0]/30 shadow-[0_0_30px_rgba(0,171,240,0.3)] relative"
+            >
+              <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,171,240,0.5)] z-10 rounded-full pointer-events-none"></div>
               <motion.img 
                 src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                 alt="Professional Portrait" 
@@ -55,21 +68,18 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
                 referrerPolicy="no-referrer"
                 style={{ scale: imageScale }}
               />
-            </div>
+            </motion.div>
           </div>
           <div className="flex-1">
-            <h3 className={`text-lg font-bold mb-2 border-l-4 border-[#00abf0] pl-3 ${textPrimary}`}>
+            <h3 className={`text-2xl font-bold mb-4 border-l-4 border-[#00abf0] pl-4 ${textPrimary}`}>
               Introduction
             </h3>
-            <p className={`font-medium text-sm mb-2 ${textPrimary}`}>
-              I'm Mahendran Rathishan, a 2nd-year Computer Engineering student at the University of Ruhuna, Sri Lanka, deeply passionate about AI engineering, full-stack development, and electronics.
+            <p className={`text-base leading-relaxed mb-6 ${textSecondary}`}>
+              I'm Mahendran Rathishan, a 2nd-year Computer Engineering student at the University of Ruhuna, Sri Lanka, deeply passionate about AI engineering, full-stack development, and electronics. I build intelligent systems, web applications, and explore signal processing. Active in the IEEE Student Branch and the Innovation Club (AI & Data Science section) at my university. I submitted a GSoC 2026 proposal to Oppia Foundation for an AI-Powered Personalized Learning Assistant.
             </p>
-            <p className={`text-xs leading-relaxed mb-4 ${textSecondary}`}>
-              I build intelligent systems, web applications, and explore signal processing. Active in the IEEE Student Branch and the Innovation Club (AI & Data Science section) at my university. I submitted a GSoC 2026 proposal to Oppia Foundation for an AI-Powered Personalized Learning Assistant.
-            </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {['AI Engineering', 'Full-Stack Dev', 'Electronics'].map(skill => (
-                <span key={skill} className="bg-[#00abf0]/15 border border-[#00abf0]/30 text-[#00abf0] text-[11px] px-2.5 py-0.5 rounded-full">
+                <span key={skill} className="bg-white/[0.05] border border-white/[0.1] text-[#00abf0] text-sm px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(0,171,240,0.1)] backdrop-blur-md">
                   {skill}
                 </span>
               ))}
@@ -79,7 +89,7 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
       </motion.div>
 
       {/* 3. TWO-COLUMN GRID: Background + Goals */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         
         {/* Background Card */}
         <motion.div 
@@ -89,23 +99,25 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className={`${cardBaseClass}`}
         >
-          <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${textPrimary}`}>
-            <User size={18} className="text-[#00abf0]" /> Background
+          <h3 className={`text-xl font-bold mb-6 flex items-center gap-3 ${textPrimary}`}>
+            <User size={22} className="text-[#00abf0]" /> Background
           </h3>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-4">
             {[
-              { icon: <User size={14} />, label: 'Name', value: 'Rathishan M.' },
-              { icon: <Calendar size={14} />, label: 'Birthday', value: 'Oct 02' },
-              { icon: <MapPin size={14} />, label: 'Location', value: 'Sri Lanka (GMT+5:30)' },
-              { icon: <BookOpen size={14} />, label: 'University', value: 'Univ. of Ruhuna' },
-              { icon: <GraduationCap size={14} />, label: 'Degree', value: 'B.Sc. Comp. Engineering' },
-              { icon: <Languages size={14} />, label: 'Languages', value: 'English & Sinhala' },
-              { icon: <Briefcase size={14} />, label: 'Status', value: 'Open to Opportunities' },
+              { icon: <User size={16} />, label: 'Name', value: 'Rathishan M.' },
+              { icon: <Calendar size={16} />, label: 'Birthday', value: 'Oct 02' },
+              { icon: <MapPin size={16} />, label: 'Location', value: 'Sri Lanka (GMT+5:30)' },
+              { icon: <BookOpen size={16} />, label: 'University', value: 'Univ. of Ruhuna' },
+              { icon: <GraduationCap size={16} />, label: 'Degree', value: 'B.Sc. Comp. Engineering' },
+              { icon: <Languages size={16} />, label: 'Languages', value: 'English & Sinhala' },
+              { icon: <Briefcase size={16} />, label: 'Status', value: 'Open to Opportunities' },
             ].map((item, i) => (
-              <div key={i} className={`flex items-center gap-3 py-2 border-b ${borderDivider} last:border-0`}>
-                <div className="text-[#00abf0]">{item.icon}</div>
-                <span className={`text-[11px] w-24 ${textSecondary}`}>{item.label}</span>
-                <span className={`text-xs font-medium ${textPrimary}`}>{item.value}</span>
+              <div key={i} className={`flex items-center gap-4 py-3 border-b ${borderDivider} last:border-0 last:pb-0`}>
+                <div className="w-8 h-8 rounded-full bg-[#00abf0]/10 flex items-center justify-center text-[#00abf0] shadow-[0_0_10px_rgba(0,171,240,0.1)]">
+                  {item.icon}
+                </div>
+                <span className={`text-sm w-28 font-medium ${textSecondary}`}>{item.label}</span>
+                <span className={`text-sm font-semibold ${textPrimary}`}>{item.value}</span>
               </div>
             ))}
           </div>
@@ -119,22 +131,22 @@ function About({ isDarkMode }: { isDarkMode: boolean }) {
           transition={{ duration: 0.6, delay: 0.3 }}
           className={`${cardBaseClass}`}
         >
-          <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${textPrimary}`}>
-            <Target size={18} className="text-[#00abf0]" /> Goals
+          <h3 className={`text-xl font-bold mb-6 flex items-center gap-3 ${textPrimary}`}>
+            <Target size={22} className="text-[#00abf0]" /> Goals
           </h3>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-5">
             {[
               { title: 'AI/ML Engineer', desc: 'Specialize in generative AI and LLM applications' },
               { title: 'Open Source Contributor', desc: 'Contribute to GSoC 2026 — Oppia AI Learning Assistant' },
               { title: 'Full-Stack AI Apps', desc: 'Build production-ready intelligent web applications' },
             ].map((goal, i) => (
-              <div key={i} className="flex gap-3 mb-3 last:mb-0">
-                <div className="w-6 h-6 rounded-full bg-[#00abf0]/20 border border-[#00abf0]/40 text-[#00abf0] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+              <div key={i} className={`flex gap-4 p-4 rounded-2xl ${innerCardBg} border ${borderDivider} transition-all duration-300 hover:bg-white/[0.05] hover:border-[#00abf0]/30`}>
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00abf0]/20 to-purple-500/20 border border-[#00abf0]/30 text-[#00abf0] text-sm font-bold flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(0,171,240,0.2)]">
                   {i + 1}
                 </div>
                 <div>
-                  <h4 className={`font-semibold text-xs ${textPrimary}`}>{goal.title}</h4>
-                  <p className={`text-[11px] mt-0.5 ${textSecondary}`}>{goal.desc}</p>
+                  <h4 className={`font-bold text-base mb-1 ${textPrimary}`}>{goal.title}</h4>
+                  <p className={`text-sm leading-relaxed ${textSecondary}`}>{goal.desc}</p>
                 </div>
               </div>
             ))}
