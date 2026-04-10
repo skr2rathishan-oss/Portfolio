@@ -51,3 +51,18 @@
 .delay-300 { animation-delay: 0.3s; }
 .delay-400 { animation-delay: 0.4s; }
 .opacity-0-init { opacity: 0; }
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-9px); }
+}
+.animate-float-1 { animation: floatY 3.2s ease-in-out infinite 0.0s; }
+.animate-float-2 { animation: floatY 2.9s ease-in-out infinite 0.5s; }
+.animate-float-3 { animation: floatY 3.5s ease-in-out infinite 1.0s; }
+.animate-float-4 { animation: floatY 2.7s ease-in-out infinite 1.5s; }
+.animate-float-5 { animation: floatY 3.0s ease-in-out infinite 0.8s; }
+.animate-float-6 { animation: floatY 2.8s ease-in-out infinite 1.3s; }
+
+/* No scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

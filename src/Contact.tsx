@@ -1,241 +1,187 @@
 import React, { useState } from 'react';
-import { Mail, Linkedin, Github, BookOpen, MapPin, ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
+import { Mail, Linkedin, Github, BookOpen, MapPin, ArrowUpRight, CheckCircle2, XCircle, Send } from 'lucide-react';
 
-function Contact({ isDarkMode }: { isDarkMode: boolean }) {
-  const [formData, setFormData] = useState({
-    name: '', email: '', subject: '', message: ''
-  });
+interface Props { isDarkMode: boolean; }
+
+const CYAN = '#00abf0';
+
+export default function Contact({ isDarkMode }: Props) {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    // Simulate async send — replace with real API later
-    await new Promise(r => setTimeout(r, 1500));
-    setStatus('success'); // or 'error'
+    await new Promise(r => setTimeout(r, 1400));
+    setStatus('success');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const tp = isDarkMode ? 'text-white'     : 'text-slate-800';
+  const ts = isDarkMode ? 'text-gray-400'  : 'text-slate-500';
+  const inputBorder = isDarkMode ? 'border-white/10 text-white' : 'border-slate-200 text-slate-800';
+  const focusBorder = 'focus:border-[#00abf0] focus:outline-none';
+  const card = isDarkMode
+    ? 'bg-white/[0.03] border border-white/[0.08] backdrop-blur-md'
+    : 'bg-white border border-slate-100 shadow-md';
+
   const IeeeIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-[18px] stroke-[#00abf0]">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      <path d="M8 11h8" />
-      <path d="M8 15h8" />
-      <path d="M12 7v8" />
+      <path d="M8 11h8M8 15h8M12 7v8" />
     </svg>
   );
 
-  const inputClasses = `w-full rounded-xl border px-4 py-3.5 text-sm transition-all duration-200 outline-none ${
-    isDarkMode 
-      ? 'bg-[#081b29] border-[#00abf0]/20 text-white placeholder-gray-600 focus:border-[#00abf0]/60 focus:shadow-[0_0_0_3px_rgba(0,171,240,0.12)]' 
-      : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:border-[#00abf0]/60 focus:shadow-[0_0_0_3px_rgba(0,171,240,0.12)]'
-  }`;
-
-  const labelClasses = "text-xs font-semibold tracking-widest uppercase text-gray-400 flex items-center gap-2 mb-2";
-  const labelDot = <span className="w-1 h-1 rounded-full bg-[#00abf0] inline-block"></span>;
-
-  const cardClasses = `group block rounded-2xl p-5 border transition-all duration-300 hover:-translate-y-1 relative ${
-    isDarkMode
-      ? 'bg-[#0a253a] border-[#00abf0]/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,171,240,0.15)] hover:border-[#00abf0]/30'
-      : 'bg-white border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60 hover:border-[#00abf0]/30'
-  }`;
-
-  const textPrimary = isDarkMode ? 'text-white' : 'text-slate-800';
-
-  const contactCards = [
-    {
-      name: 'Email',
-      handle: 'rathishanm@gmail.com',
-      icon: <Mail className="size-[18px] stroke-[#00abf0]" />,
-      link: 'mailto:rathishanm@gmail.com',
-      external: false
-    },
-    {
-      name: 'LinkedIn',
-      handle: 'rathishan-mahendran',
-      icon: <Linkedin className="size-[18px] stroke-[#00abf0]" />,
-      link: 'https://linkedin.com/in/rathishan-mahendran-39812b316',
-      external: true
-    },
-    {
-      name: 'GitHub',
-      handle: 'skr2rathishan-oss',
-      icon: <Github className="size-[18px] stroke-[#00abf0]" />,
-      link: 'https://github.com/skr2rathishan-oss',
-      external: true
-    },
-    {
-      name: 'IEEE',
-      handle: 'IEEE Student Branch',
-      icon: <IeeeIcon />,
-      link: '#',
-      external: true
-    },
-    {
-      name: 'University',
-      handle: 'Univ. of Ruhuna',
-      icon: <BookOpen className="size-[18px] stroke-[#00abf0]" />,
-      link: '#',
-      external: true
-    },
-    {
-      name: 'Location',
-      handle: 'Sri Lanka • GMT+5:30',
-      icon: <MapPin className="size-[18px] stroke-[#00abf0]" />,
-      link: '#',
-      external: true
-    }
+  const presence = [
+    { label: 'Email',      sub: 'rathishanm@gmail.com',         icon: <Mail className="w-5 h-5" />,    link: 'mailto:rathishanm@gmail.com',                   color: '#EA4335' },
+    { label: 'LinkedIn',   sub: 'rathishan-mahendran',           icon: <Linkedin className="w-5 h-5" />, link: 'https://linkedin.com/in/rathishan-mahendran', color: '#0A66C2' },
+    { label: 'GitHub',     sub: 'skr2rathishan-oss',             icon: <Github className="w-5 h-5" />,  link: 'https://github.com/skr2rathishan-oss',          color: isDarkMode ? '#E6EDF3' : '#24292F' },
+    { label: 'IEEE',       sub: 'IEEE Student Branch',           icon: <IeeeIcon />,                    link: '#',                                             color: '#00629B' },
+    { label: 'University', sub: 'Univ. of Ruhuna',               icon: <BookOpen className="w-5 h-5" />, link: '#',                                          color: '#7C3AED' },
+    { label: 'Location',   sub: 'Sri Lanka · GMT+5:30',          icon: <MapPin className="w-5 h-5" />,  link: '#',                                             color: '#10B981' },
   ];
 
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
+    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-20">
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
-        
-        {/* Left Column - 55% */}
-        <div className="w-full lg:w-[55%] animate-slide-left">
-          
-          {/* Availability Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#00abf0]/10 border border-[#00abf0]/20 rounded-full px-4 py-1.5 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#00abf0] animate-pulse"></span>
-            <span className="text-[#00abf0] text-xs font-medium tracking-wide">Available for opportunities</span>
+
+        {/* ── Left: Form ── */}
+        <div className="w-full lg:w-[52%]">
+          <div className="mb-8">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-3" style={{ color: CYAN }}>Get in Touch</p>
+            <h2 className={`text-3xl md:text-4xl font-bold tracking-tight ${tp}`}>
+              Let's <span style={{ color: CYAN }}>Connect.</span>
+            </h2>
+            <p className={`mt-3 text-sm leading-relaxed max-w-md ${ts}`}>
+              Open to collaborations, internships, and conversations about AI, design, and engineering.
+            </p>
           </div>
 
-          <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${textPrimary}`}>
-            Let's <span className="text-[#00abf0]">Connect</span>
-          </h2>
-          
-          <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-sm">
-            Whether it's a project collaboration, internship, GSoC mentorship, or just a conversation about AI — my inbox is always open.
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className={labelClasses}>{labelDot} Name</label>
-                <input 
-                  type="text" 
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="John Doe" 
-                  className={inputClasses}
-                  required
-                />
-              </div>
-              <div>
-                <label className={labelClasses}>{labelDot} Email</label>
-                <input 
-                  type="email" 
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="john@example.com" 
-                  className={inputClasses}
-                  required
-                />
-              </div>
+              {(['name', 'email'] as const).map(field => (
+                <div key={field} className="flex flex-col gap-1.5">
+                  <label className={`text-[11px] font-bold uppercase tracking-widest ${ts}`}>{field}</label>
+                  <input
+                    type={field === 'email' ? 'email' : 'text'}
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    required
+                    placeholder={field === 'name' ? 'Your Name' : 'your@email.com'}
+                    className={`bg-transparent border-b px-0 py-2.5 text-sm transition-colors duration-200 placeholder-gray-600 ${inputBorder} ${focusBorder}`}
+                  />
+                </div>
+              ))}
             </div>
-            
-            <div>
-              <label className={labelClasses}>{labelDot} Subject</label>
-              <input 
-                type="text" 
+
+            <div className="flex flex-col gap-1.5">
+              <label className={`text-[11px] font-bold uppercase tracking-widest ${ts}`}>Subject</label>
+              <input
+                type="text"
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                placeholder="How can I help you?" 
-                className={inputClasses}
                 required
+                placeholder="What's this about?"
+                className={`bg-transparent border-b px-0 py-2.5 text-sm transition-colors duration-200 placeholder-gray-600 ${inputBorder} ${focusBorder}`}
               />
             </div>
-            
-            <div>
-              <label className={labelClasses}>{labelDot} Message</label>
-              <textarea 
+
+            <div className="flex flex-col gap-1.5">
+              <label className={`text-[11px] font-bold uppercase tracking-widest ${ts}`}>Message</label>
+              <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="Write your message here..." 
-                rows={5}
-                className={`${inputClasses} resize-none`}
                 required
-              ></textarea>
+                rows={4}
+                placeholder="Tell me what's on your mind..."
+                className={`bg-transparent border-b px-0 py-2.5 text-sm transition-colors duration-200 placeholder-gray-600 resize-none ${inputBorder} ${focusBorder}`}
+              />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={status === 'loading'}
-              className="w-full h-[52px] bg-[#00abf0] text-[#081b29] font-bold tracking-wide rounded-xl flex items-center justify-center gap-2 transition-all duration-300 hover:brightness-110 hover:shadow-[0_8px_24px_rgba(0,171,240,0.4)] hover:-translate-y-[1px] group disabled:opacity-70 disabled:pointer-events-none"
+              className={`mt-2 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 ${
+                isDarkMode
+                  ? 'bg-[#00abf0] text-[#081b29] hover:shadow-[0_0_20px_rgba(0,171,240,0.5)] hover:-translate-y-0.5'
+                  : 'bg-[#00abf0] text-white hover:shadow-[0_8px_20px_rgba(0,171,240,0.4)] hover:-translate-y-0.5'
+              }`}
             >
               {status === 'loading' ? (
-                <>
-                  <span className="animate-spin border-2 border-[#081b29]/30 border-t-[#081b29] rounded-full w-4 h-4"></span>
-                  Sending...
-                </>
+                <><span className="w-4 h-4 border-2 border-t-transparent border-[#081b29] rounded-full animate-spin" /> Sending</>
               ) : (
-                <>
-                  Send Message
-                  <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </>
+                <><Send size={15} /> Send Message</>
               )}
             </button>
 
-            {/* Status Feedback */}
-            <div className={`transition-all duration-300 overflow-hidden ${status === 'success' || status === 'error' ? 'max-h-16 opacity-100 mt-4' : 'max-h-0 opacity-0 mt-0'}`}>
-              {status === 'success' && (
-                <div className="flex items-center gap-2 text-emerald-500 text-sm font-medium bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-4 py-3">
-                  <CheckCircle2 size={18} />
-                  Message sent! I'll get back to you soon.
-                </div>
-              )}
-              {status === 'error' && (
-                <div className="flex items-center gap-2 text-red-500 text-sm font-medium bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3">
-                  <XCircle size={18} />
-                  Something went wrong. Try again.
-                </div>
-              )}
-            </div>
+            {status === 'success' && (
+              <div className="flex items-center gap-2 text-emerald-500 text-sm font-medium mt-1">
+                <CheckCircle2 size={16} /> Sent successfully! I'll respond soon.
+              </div>
+            )}
+            {status === 'error' && (
+              <div className="flex items-center gap-2 text-red-500 text-sm font-medium mt-1">
+                <XCircle size={16} /> Something went wrong. Please try again.
+              </div>
+            )}
           </form>
         </div>
 
-        {/* Right Column - 45% */}
-        <div className="w-full lg:w-[45%] animate-slide-right mt-12 lg:mt-0">
-          <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-4">
-            Find me on
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {contactCards.map((card, idx) => (
-              <a 
-                key={idx}
-                href={card.link}
-                target={card.external ? "_blank" : undefined}
-                rel={card.external ? "noopener noreferrer" : undefined}
-                className={cardClasses}
+        {/* ── Right: Digital Presence Bento Grid ── */}
+        <div className="w-full lg:w-[48%]">
+          <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-5" style={{ color: CYAN }}>Digital Presence</p>
+
+          <div className="grid grid-cols-2 gap-3">
+            {presence.map((item, i) => (
+              <a
+                key={i}
+                href={item.link}
+                target={item.link.startsWith('http') ? '_blank' : undefined}
+                rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className={`group relative p-4 rounded-2xl flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1 ${card} hover:border-[${item.color}]/40`}
+                style={{ borderColor: 'transparent' }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = `${item.color}40`)}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
               >
-                <div className="bg-[#00abf0]/10 w-9 h-9 rounded-lg flex items-center justify-center mb-3">
-                  {card.icon}
+                {/* Icon badge */}
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  style={{ background: `${item.color}18`, color: item.color }}>
+                  {item.icon}
                 </div>
-                <h3 className={`font-semibold text-sm ${textPrimary}`}>
-                  {card.name}
-                </h3>
-                <p className="text-[#00abf0] text-xs mt-0.5 font-mono truncate">
-                  {card.handle}
-                </p>
-                <div className="absolute bottom-5 right-5 text-gray-600 group-hover:text-[#00abf0] transition-colors duration-300">
-                  <ArrowRight size={16} />
+
+                <div className="flex-1">
+                  <p className={`font-bold text-sm ${tp}`}>{item.label}</p>
+                  <p className={`text-xs font-mono mt-0.5 truncate ${ts}`}>{item.sub}</p>
                 </div>
+
+                <ArrowUpRight
+                  size={14}
+                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ color: item.color }}
+                />
               </a>
             ))}
           </div>
-        </div>
 
+          {/* Availability badge */}
+          <div className={`mt-4 p-4 rounded-2xl flex items-center gap-3 ${card}`}>
+            <div className="relative w-3 h-3">
+              <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-70" />
+              <div className="absolute inset-0 rounded-full bg-emerald-500" />
+            </div>
+            <div>
+              <p className={`text-sm font-semibold ${tp}`}>Available for opportunities</p>
+              <p className={`text-xs ${ts}`}>Internships · Freelance · Collaborations</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-
-export default Contact;

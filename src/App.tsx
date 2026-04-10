@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Moon, Sun, Download, Facebook, Twitter, Instagram, Linkedin, Github, ExternalLink } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Moon, Sun, Download, Linkedin, Github, ExternalLink } from 'lucide-react';
 import About from './About';
 import Contact from './Contact';
 
@@ -66,32 +66,72 @@ const projectsData = [
   }
 ];
 
+const roles = ["Front-End Designer", "AI Engineer", "Full-Stack Developer"];
+
+const Typewriter = () => {
+  const [displayText, setDisplayText] = React.useState('');
+  const [index, setIndex] = React.useState(0);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  React.useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const currentWord = roles[index];
+    
+    if (isDeleting) {
+      timer = setTimeout(() => setDisplayText(currentWord.substring(0, displayText.length - 1)), 40);
+    } else {
+      timer = setTimeout(() => setDisplayText(currentWord.substring(0, displayText.length + 1)), 80);
+    }
+
+    if (!isDeleting && displayText === currentWord) {
+      timer = setTimeout(() => setIsDeleting(true), 2000); 
+    } else if (isDeleting && displayText === '') {
+      setIsDeleting(false);
+      setIndex((prev) => (prev + 1) % roles.length);
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, index]);
+
+  return <span className="text-[#00abf0] font-bold">{displayText}</span>;
+}
+
 function Home({ isDarkMode }: { isDarkMode: boolean }) {
+  // Tech orbs removed from UI per request.
+
+
+  const orbBase = isDarkMode
+    ? 'bg-[#0c1f30] border border-[#00abf0]/20 shadow-[0_0_18px_rgba(0,0,0,0.6)]'
+    : 'bg-white border border-slate-200 shadow-xl';
+
   return (
     <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 pt-12 pb-20 flex flex-col lg:flex-row items-center justify-between gap-12 w-full">
-      {/* Left: Image with Blob */}
+      {/* Left: Image with Blob & Orbitals */}
       <div className="w-full lg:w-1/2 flex justify-center relative order-1 lg:order-1 mt-10 lg:mt-0">
         {/* Glowing background */}
         <div className={`absolute inset-0 bg-[#00abf0] blur-[100px] rounded-full w-[250px] h-[250px] md:w-[350px] md:h-[350px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 ${isDarkMode ? 'opacity-20' : 'opacity-15'}`}></div>
-        
-        <div className="relative w-[300px] h-[300px] md:w-[420px] md:h-[420px] flex items-center justify-center">
+
+        <div className="relative w-[300px] h-[300px] md:w-[420px] md:h-[420px] flex flex-col items-center justify-center">
+
+          {/* Circular Icon Orbitals (Removed as requested) */}
+
            {/* Solid Blob */}
-           <div 
+           <div
              className={`absolute inset-0 bg-[#00abf0] transition-shadow duration-500 ${isDarkMode ? 'shadow-[0_0_30px_rgba(0,171,240,0.5)]' : 'shadow-[0_10px_40px_rgba(0,171,240,0.3)]'}`}
              style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}
            ></div>
-           
+
            {/* Outline Blob */}
-           <div 
+           <div
              className={`absolute inset-[-15px] md:inset-[-20px] border-2 transition-colors duration-500 ${isDarkMode ? 'border-white opacity-50' : 'border-[#00abf0] opacity-30'}`}
              style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%', transform: 'rotate(-15deg)' }}
            ></div>
 
            {/* Image */}
-           <img 
-             src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-             alt="Chandni Chauhan" 
-             className="relative z-10 w-full h-full object-cover"
+           <img
+             src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+             alt="Rathishan Mahendran Portrait"
+             className="relative z-10 w-full h-full object-cover shadow-2xl"
              style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}
            />
         </div>
@@ -99,33 +139,33 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 
       {/* Right: Content */}
       <div className="w-full lg:w-1/2 flex flex-col items-start text-left order-2 lg:order-2">
-        <h2 className="text-xl md:text-2xl font-semibold mb-2">Hello, I'm</h2>
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">Chandni Chauhan</h1>
-        <h3 className="text-xl md:text-3xl font-semibold mb-6">
-          And I'm a <span className="text-[#00abf0]">Frontend Developer</span><span className="animate-pulse text-[#00abf0]">|</span>
+        <h2 className={`text-xl md:text-2xl font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>Hello, I'm</h2>
+        <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">Rathishan M.</h1>
+        <h3 className="text-xl md:text-3xl font-semibold mb-6 flex items-center h-10">
+          <span className="mr-2">And I'm a</span> <Typewriter /><span className="animate-pulse text-[#00abf0] font-light ml-[1px]">|</span>
         </h3>
         
-        <p className={`text-sm md:text-base leading-relaxed mb-8 max-w-lg transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eveniet iusto tempore possimus voluptates quis necessitatibus, cupiditate explicabo ad a perferendis!
+        <p className={`text-sm md:text-base leading-relaxed mb-8 max-w-lg transition-colors duration-500 ${isDarkMode ? 'text-gray-400' : 'text-slate-600'}`}>
+          A passionate Computer Engineering student driven to build intelligent, premium digital experiences through Generative AI, Full-Stack Development, and sophisticated UI/UX design.
         </p>
 
         {/* Social Icons */}
         <div className="flex items-center space-x-4 mb-8">
-          {[Facebook, Twitter, Instagram, Linkedin].map((Icon, idx) => (
-            <a key={idx} href="#" className={`w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:shadow-[0_0_15px_#00abf0] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}>
-              <Icon size={18} className={Icon !== Instagram ? "fill-current" : ""} />
+          {[Github, Linkedin].map((Icon, idx) => (
+            <a key={idx} href="#" className={`w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_#00abf0] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}>
+              <Icon size={18} className={Icon === Github ? "fill-current" : ""} />
             </a>
           ))}
         </div>
 
         {/* Buttons */}
         <div className="flex items-center space-x-4">
-          <button className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,171,240,0.6)] ${isDarkMode ? 'bg-[#00abf0] text-[#081b29]' : 'bg-[#00abf0] text-white shadow-md'}`}>
+          <button className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,171,240,0.6)] ${isDarkMode ? 'bg-[#00abf0] text-[#081b29]' : 'bg-[#00abf0] text-white shadow-md'}`}>
             Hire Me
           </button>
-          <button className={`border-2 border-[#00abf0] text-[#00abf0] px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,171,240,0.4)] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}>
+          <Link to="/contact" className={`border-2 border-[#00abf0] text-[#00abf0] px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,171,240,0.4)] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}>
             Contact Me
-          </button>
+          </Link>
         </div>
       </div>
     </main>
@@ -133,43 +173,43 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 }
 
 function Skills({ isDarkMode }: { isDarkMode: boolean }) {
+  const card = isDarkMode
+    ? 'bg-white/[0.03] border border-white/[0.08] hover:border-[#00abf0]/30 hover:shadow-[0_0_25px_rgba(0,171,240,0.12)]'
+    : 'bg-white border border-slate-100 shadow-md hover:shadow-xl hover:border-[#00abf0]/30';
+  const ts = isDarkMode ? 'text-gray-400' : 'text-slate-500';
+
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {skillsData.map((skill, index) => (
-          <div 
-            key={index} 
-            className={`p-6 rounded-2xl transition-all duration-500 hover:-translate-y-2 ${
-              isDarkMode 
-                ? 'bg-[#0a253a] border border-[#00abf0]/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,171,240,0.15)]' 
-                : 'bg-white border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60'
-            }`}
+      <div className="mb-8">
+        <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">Tech Stack</p>
+        <h2 className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Tools I Work With</h2>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {skillsData.map((skill, i) => (
+          <div
+            key={i}
+            className={`group relative p-5 rounded-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-default ${card}`}
           >
-            <div className="flex items-center gap-4 mb-6">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center p-2.5 ${isDarkMode ? 'bg-[#081b29]' : 'bg-slate-50'}`}>
-                <img src={skill.icon} alt={skill.name} className="w-full h-full object-contain" />
-              </div>
-              <h3 className="font-bold text-lg">{skill.name}</h3>
+            {/* Glow orb on hover */}
+            <div
+              className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{ boxShadow: `inset 0 0 30px ${skill.color}18` }}
+            />
+            <div
+              className={`w-14 h-14 rounded-xl flex items-center justify-center p-3 mb-4 ${isDarkMode ? 'bg-white/[0.04]' : 'bg-slate-50'}`}
+              style={{ boxShadow: `0 0 0 1px ${skill.color}40` }}
+            >
+              <img src={skill.icon} alt={skill.name} className="w-full h-full object-contain" />
             </div>
-            
-            <div className="space-y-3">
-              <div className="flex justify-between items-center text-sm">
-                <span className={`${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>Proficiency</span>
-                <span className="font-bold" style={{ color: skill.color }}>{skill.proficiency}%</span>
-              </div>
-              
-              <div className={`h-2 w-full rounded-full overflow-hidden ${isDarkMode ? 'bg-[#081b29]' : 'bg-slate-100'}`}>
-                <div 
-                  className="h-full rounded-full transition-all duration-1000"
-                  style={{ width: `${skill.proficiency}%`, backgroundColor: skill.color }}
-                ></div>
-              </div>
-              
-              <div 
-                className="h-1 w-8 rounded-full mt-4"
-                style={{ backgroundColor: skill.color, opacity: 0.5 }}
-              ></div>
+            <h3 className={`font-bold text-sm mb-1 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{skill.name}</h3>
+            <div className="flex items-center gap-2">
+              <div
+                className="h-1 rounded-full flex-1"
+                style={{ background: `linear-gradient(to right, ${skill.color}, ${skill.color}40)`, opacity: 0.8 }}
+              />
+              <span className="text-[11px] font-bold" style={{ color: skill.color }}>{skill.proficiency}%</span>
             </div>
+            <p className={`text-[11px] mt-2 ${ts}`}>Expert</p>
           </div>
         ))}
       </div>
@@ -178,66 +218,59 @@ function Skills({ isDarkMode }: { isDarkMode: boolean }) {
 }
 
 function Projects({ isDarkMode }: { isDarkMode: boolean }) {
+  const card = isDarkMode
+    ? 'bg-white/[0.03] border border-white/[0.07] hover:border-[#00abf0]/30'
+    : 'bg-white border border-slate-100 shadow-md hover:shadow-xl hover:border-[#00abf0]/30';
+  const ts = isDarkMode ? 'text-gray-400' : 'text-slate-500';
+  const tp = isDarkMode ? 'text-white' : 'text-slate-800';
+  const tagBg = isDarkMode ? 'bg-white/[0.05] text-gray-300' : 'bg-slate-100 text-slate-600';
+
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projectsData.map((project, index) => (
-          <div 
-            key={index} 
-            className={`rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 flex flex-col ${
-              isDarkMode 
-                ? 'bg-[#0a253a] border border-[#00abf0]/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,171,240,0.15)]' 
-                : 'bg-white border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-slate-200/60'
+      <div className="mb-8">
+        <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">Portfolio</p>
+        <h2 className={`text-2xl md:text-3xl font-bold ${tp}`}>Featured Projects</h2>
+      </div>
+
+      {/* Asymmetric layout: first two tall, rest small */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {[...projectsData].reverse().map((project, i) => (
+          <div
+            key={i}
+            className={`group relative rounded-2xl overflow-hidden flex flex-col transition-all duration-400 hover:-translate-y-1.5 ${card} ${
+              i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''
             }`}
           >
             {/* Image */}
-            <div className="h-48 w-full overflow-hidden bg-gray-200 dark:bg-gray-800">
-              <img 
-                src={project.image} 
-                alt={project.title} 
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+            <div className={`w-full overflow-hidden ${i === 0 ? 'h-56' : 'h-36'}`}>
+              <img
+                src={project.image}
+                alt={project.title}
                 referrerPolicy="no-referrer"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
             </div>
-            
-            {/* Content */}
-            <div className="p-6 flex flex-col flex-1">
-              <h3 className="font-bold text-xl mb-2">{project.title}</h3>
-              <p className={`text-sm mb-4 flex-1 ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>
-                {project.description}
-              </p>
-              
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {project.tags.map((tag, tagIndex) => (
-                  <span 
-                    key={tagIndex} 
-                    className={`text-xs px-3 py-1 rounded-full font-medium ${
-                      isDarkMode ? 'bg-[#081b29] text-gray-300' : 'bg-slate-100 text-slate-600'
-                    }`}
-                  >
-                    {tag}
-                  </span>
+
+            <div className="p-5 flex flex-col flex-1">
+              <h3 className={`font-bold ${i === 0 ? 'text-xl' : 'text-base'} mb-1.5 ${tp}`}>{project.title}</h3>
+              <p className={`text-xs leading-relaxed flex-1 mb-4 ${ts}`}>{project.description}</p>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {project.tags.map((tag, ti) => (
+                  <span key={ti} className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium ${tagBg}`}>{tag}</span>
                 ))}
               </div>
-              
-              {/* Buttons */}
-              <div className="flex items-center gap-4 mt-auto">
-                <a 
-                  href={project.codeLink}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-medium text-sm transition-colors ${
-                    isDarkMode 
-                      ? 'bg-[#081b29] hover:bg-gray-800 text-white' 
-                      : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm'
-                  }`}
-                >
-                  <Github size={16} /> Code
+              <div className="flex gap-3 mt-auto">
+                <a href={project.codeLink}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-colors ${
+                    isDarkMode ? 'bg-white/[0.05] hover:bg-white/[0.1] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                  }`}>
+                  <Github size={13} /> Code
                 </a>
-                <a 
-                  href={project.demoLink}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-medium text-sm bg-[#00abf0] hover:bg-[#00abf0]/90 text-white transition-colors shadow-lg shadow-[#00abf0]/20"
-                >
-                  <ExternalLink size={16} /> Demo
+                <a href={project.demoLink}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold bg-[#00abf0] hover:bg-[#00abf0]/80 text-white transition-colors">
+                  <ExternalLink size={13} /> Live Demo
                 </a>
               </div>
             </div>
@@ -250,7 +283,6 @@ function Projects({ isDarkMode }: { isDarkMode: boolean }) {
 
 function Layout() {
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const location = useLocation();
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -260,35 +292,31 @@ function Layout() {
       <div className={`modern-grid-bg transition-opacity duration-500 ${isDarkMode ? 'opacity-100' : 'opacity-60'}`}></div>
 
       {/* Navbar */}
-      <nav className="relative z-10 flex items-center justify-between px-6 md:px-12 py-6 max-w-7xl mx-auto w-full">
+      <nav className={`relative z-20 flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto w-full mb-4 border-b ${isDarkMode ? 'border-white/5' : 'border-slate-200'}`}>
         <Link to="/" className="text-2xl font-bold tracking-tight cursor-pointer">
-          Portfolio
+          <span className="text-[#00abf0]">Portfolio</span>
         </Link>
         
-        <div className={`hidden lg:flex items-center space-x-8 text-sm font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>
-          <Link to="/" className={`${location.pathname === '/' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Home</Link>
-          <Link to="/about" className={`${location.pathname === '/about' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>About</Link>
-          <Link to="/skills" className={`${location.pathname === '/skills' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Skills</Link>
-          <Link to="/projects" className={`${location.pathname === '/projects' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Projects</Link>
-          <Link to="/services" className={`${location.pathname === '/services' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Services</Link>
-          <Link to="/contact" className={`${location.pathname === '/contact' ? 'text-[#00abf0]' : 'hover:text-[#00abf0]'} transition-colors`}>Connect</Link>
+        <div className={`hidden lg:flex items-center space-x-8 text-sm font-semibold tracking-wide transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>
+          <Link to="/" className="hover:text-[#00abf0] transition-colors">Home</Link>
+          <Link to="/about" className="hover:text-[#00abf0] transition-colors relative group">
+            About Me
+          </Link>
+          <Link to="/skills" className="hover:text-[#00abf0] transition-colors">Skills</Link>
+          <Link to="/projects" className="hover:text-[#00abf0] transition-colors">Projects</Link>
+          <Link to="/contact" className="hover:text-[#00abf0] transition-colors">Connect</Link>
         </div>
 
         <div className="flex items-center space-x-4 md:space-x-6">
           {/* Theme Toggle */}
           <div className="hidden md:flex items-center space-x-3 cursor-pointer group" onClick={toggleTheme}>
-            <div className={`w-12 h-6 rounded-full relative flex items-center px-1 transition-colors duration-300 ${isDarkMode ? 'bg-gray-700' : 'bg-slate-300'}`}>
-              <div className={`w-4 h-4 rounded-full transition-transform duration-300 flex items-center justify-center ${isDarkMode ? 'translate-x-0 bg-[#00abf0]' : 'translate-x-6 bg-white shadow-sm'}`}>
+            <div className={`w-[46px] h-[24px] rounded-full relative flex items-center px-1 transition-colors duration-300 ${isDarkMode ? 'bg-[#00abf0]/20 border border-[#00abf0]/50' : 'bg-slate-200 border border-slate-300'}`}>
+              <div className={`w-[16px] h-[16px] rounded-full transition-transform duration-300 ease-spring flex items-center justify-center ${isDarkMode ? 'translate-x-[20px] bg-[#00abf0]' : 'translate-x-0 bg-white shadow-sm'}`}>
               </div>
             </div>
-            {isDarkMode ? (
-              <Moon size={18} className="text-gray-300 group-hover:text-white transition-colors" />
-            ) : (
-              <Sun size={18} className="text-amber-500 group-hover:text-amber-600 transition-colors" />
-            )}
           </div>
           
-          <button className="bg-[#ff004f] hover:bg-[#ff004f]/90 text-white px-4 py-2 md:px-5 md:py-2.5 rounded text-sm font-medium flex items-center gap-2 transition-all shadow-lg shadow-[#ff004f]/20 hover:shadow-[#ff004f]/40">
+          <button className={`border-2 px-4 py-2 md:px-5 md:py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-all duration-300 ${isDarkMode ? 'border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)] hover:shadow-[0_0_20px_rgba(255,0,79,0.5)]' : 'border-[#ff004f] text-[#ff004f] hover:bg-[#ff004f] hover:text-white'}`}>
             Download CV <Download size={16} />
           </button>
         </div>
@@ -305,10 +333,10 @@ function Layout() {
       </Routes>
 
       {/* Footer */}
-      <footer className={`relative z-10 w-full py-6 mt-auto border-t backdrop-blur-md transition-colors duration-500 ${isDarkMode ? 'border-[#00abf0]/20 bg-[#081b29]/50' : 'border-slate-200 bg-white/50'}`}>
+      <footer className={`relative z-10 w-full py-6 mt-auto border-t transition-colors duration-500 ${isDarkMode ? 'border-white/5 bg-[#081b29]' : 'border-slate-200 bg-[#f8fafc]'}`}>
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className={`text-sm transition-colors duration-500 ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>
-            &copy; {new Date().getFullYear()} Chandni Chauhan. All rights reserved.
+          <p className={`text-sm font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-500' : 'text-slate-500'}`}>
+            &copy; {new Date().getFullYear()} Rathishan Mahendran. Built with React & Vite.
           </p>
           <div className={`flex items-center space-x-4 text-sm transition-colors duration-500 ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>
             <a href="#" className="hover:text-[#00abf0] transition-colors">Privacy Policy</a>
