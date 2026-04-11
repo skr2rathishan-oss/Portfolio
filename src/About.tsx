@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Target, GraduationCap, Award, Trophy, Users, MapPin, BookOpen, Languages, ChevronRight } from 'lucide-react';
+import { User, Target, GraduationCap, Award, Trophy, Users, MapPin, BookOpen, Languages, ChevronRight, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { profileData, educationData, certificationsData, achievementsData, communityData } from './data';
 
@@ -267,16 +267,45 @@ export default function About({ isDarkMode }: Props) {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {certificationsData.map((cert, i) => (
-                      <div key={i} className={`flex items-center gap-3 p-3.5 rounded-xl ${innerCard} group hover:border-[#00abf0]/40 transition-colors`}>
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-white/5 overflow-hidden"
-                          style={{ border: `1px solid ${cert.color}40` }}>
-                          <img src={cert.image} alt={cert.name} className="w-6 h-6 object-cover" />
+                      <div key={i} className={`flex flex-col gap-2.5 p-3.5 rounded-xl ${innerCard} group hover:border-[#00abf0]/40 transition-colors`}>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
+                            style={{ border: `1px solid ${cert.color}40`, background: `${cert.color}10` }}>
+                            <img src={cert.image} alt={cert.name} className="w-6 h-6 object-contain" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm font-bold ${tp}`}>{cert.name}</p>
+                            <p className={`text-xs ${ts}`}>{cert.issuer} · {cert.year}</p>
+                          </div>
+                          <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: cert.color }} />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-bold truncate ${tp}`}>{cert.name}</p>
-                          <p className={`text-xs ${ts}`}>{cert.issuer} · {cert.year}</p>
-                        </div>
-                        <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: CYAN }} />
+                        {cert.skillsLearned && cert.skillsLearned.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {cert.skillsLearned.map((skill, si) => (
+                              <span key={si} className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+                                style={{ background: `${cert.color}15`, color: cert.color, border: `1px solid ${cert.color}25` }}>
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {cert.credentialLink ? (
+                          <a
+                            href={cert.credentialLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-1.5 w-full py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 hover:opacity-90"
+                            style={{ background: `${cert.color}18`, color: cert.color, border: `1px solid ${cert.color}30` }}
+                          >
+                            <ExternalLink size={11} /> View Credential
+                          </a>
+                        ) : (
+                          <div
+                            className={`flex items-center justify-center gap-1.5 w-full py-1.5 rounded-lg text-xs font-semibold opacity-40 cursor-default ${isDarkMode ? 'bg-white/[0.03] text-gray-500' : 'bg-slate-50 text-slate-400'}`}
+                          >
+                            <ExternalLink size={11} /> Credential Coming Soon
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -293,19 +322,38 @@ export default function About({ isDarkMode }: Props) {
                   </h3>
                   <div className="flex flex-col gap-3">
                     {achievementsData.map((a, i) => (
-                      <div key={i} className={`flex items-center gap-4 p-4 rounded-xl ${innerCard}`}>
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-white/5 overflow-hidden"
-                          style={{ border: `1px solid ${a.badgeColor}40` }}>
-                          <img src={a.image} alt={a.title} className="w-7 h-7 object-cover" />
+                      <div key={i} className={`flex flex-col gap-2.5 p-4 rounded-xl ${innerCard}`}>
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden"
+                            style={{ border: `1px solid ${a.badgeColor}40`, background: `${a.badgeColor}0D` }}>
+                            <img src={a.image} alt={a.title} className="w-8 h-8 object-contain" />
+                          </div>
+                          <div className="flex-1">
+                            <p className={`font-bold text-sm ${tp}`}>{a.title}</p>
+                            <p className={`text-xs ${ts} mt-0.5`}>{a.org} · {a.year}</p>
+                          </div>
+                          <span className="text-xs px-2.5 py-1 rounded-full font-semibold flex-shrink-0"
+                            style={{ background: `${a.badgeColor}20`, color: a.badgeColor }}>
+                            {a.badge}
+                          </span>
                         </div>
-                        <div className="flex-1">
-                          <p className={`font-bold text-sm ${tp}`}>{a.title}</p>
-                          <p className={`text-xs ${ts} mt-0.5`}>{a.org} · {a.year}</p>
-                        </div>
-                        <span className="text-xs px-2.5 py-1 rounded-full font-semibold flex-shrink-0"
-                          style={{ background: `${a.badgeColor}20`, color: a.badgeColor }}>
-                          {a.badge}
-                        </span>
+                        {a.skillsGained && a.skillsGained.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {a.skillsGained.map((s, si) => (
+                              <span key={si} className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+                                style={{ background: `${a.badgeColor}15`, color: a.badgeColor, border: `1px solid ${a.badgeColor}25` }}>
+                                {s}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {a.link && (
+                          <a href={a.link} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-1.5 w-full py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 hover:opacity-90"
+                            style={{ background: `${a.badgeColor}15`, color: a.badgeColor, border: `1px solid ${a.badgeColor}30` }}>
+                            <ExternalLink size={11} /> View on LinkedIn
+                          </a>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -350,6 +398,11 @@ export default function About({ isDarkMode }: Props) {
                           </div>
                           <p className={`text-xs ${ts} mb-1`}>{c.org}</p>
                           <p className={`text-xs ${ts} leading-relaxed`}>{c.desc}</p>
+                          {c.link && (
+                            <a href={c.link} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-1 mt-2 text-xs font-semibold hover:underline underline-offset-2 transition-colors`} style={{ color: c.color }}>
+                              <ExternalLink size={10} /> Visit Link
+                            </a>
+                          )}
                         </div>
                       </div>
                     ))}

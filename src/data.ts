@@ -34,6 +34,8 @@ export interface Certification {
   year: string;
   image: string;
   color: string;
+  skillsLearned?: string[];
+  credentialLink?: string;
 }
 
 export interface Achievement {
@@ -43,6 +45,8 @@ export interface Achievement {
   image: string;
   badge: string;
   badgeColor: string;
+  skillsGained?: string[];
+  link?: string;
 }
 
 export interface CommunityRole {
@@ -52,6 +56,7 @@ export interface CommunityRole {
   desc: string;
   image: string;
   color: string;
+  link?: string;
 }
 
 export const profileData: ProfileInfo = {
@@ -125,7 +130,7 @@ export const projectsData: Project[] = [
 
 export const educationData: Education[] = [
   {
-    period: '2023 – 2027', degree: 'B.Sc. Computer Engineering',
+    period: '2023 – 2028', degree: 'B.Sc. Computer Engineering',
     school: 'University of Ruhuna', status: 'In Progress',
     logo: '/Education/Ruhuna.jpeg',
     link: 'https://www.eng.ruh.ac.lk/'
@@ -139,64 +144,73 @@ export const educationData: Education[] = [
 ];
 
 export const certificationsData: Certification[] = [
-  { name: 'Docker Fundamentals', issuer: 'Docker Inc.', year: '2024', image: '/icons/cert.png', color: '#2496ED' },
-  { name: 'Generative AI Basics', issuer: 'Google', year: '2024', image: '/icons/cert.png', color: '#4285F4' },
-  { name: 'AI/ML Engineering', issuer: 'Coursera', year: '2024', image: '/icons/cert.png', color: '#F5821F' },
-  { name: 'Python Programming', issuer: 'UoM', year: '2023', image: '/icons/cert.png', color: '#3776AB' },
-  { name: 'React Development', issuer: 'Online', year: '2024', image: '/icons/cert.png', color: '#61DAFB' },
-  { name: 'Firebase & Cloud', issuer: 'Google Cloud', year: '2024', image: '/icons/cert.png', color: '#FFCA28' },
+  {
+    name: 'Generative AI Chatbot Bootcamp',
+    issuer: 'DevTown',
+    year: 'March 2026',
+    image: '/Certificates/Devtown.jpg',
+    color: '#00abf0',
+    credentialLink: 'https://cert.devtown.in/verify/1Deezj',
+    skillsLearned: ['Ai Agent Building']
+  },
+  {
+    name: 'GitHub Actions Learning',
+    issuer: 'GitHub Actions Learning (by Nisal Gunawardhana)',
+    year: 'February 2026',
+    image: '/Certificates/Github Actions.png',
+    color: '#2496ED',
+    credentialLink: 'https://github.com/nisalgunawardhana/github-actions-learning/issues/85#issuecomment-3848795415',
+    skillsLearned: ['GitHub']
+  },
+  {
+    name: 'Generative AI Handbook',
+    issuer: 'Educative',
+    year: 'December 2025',
+    image: '/Certificates/educative.jpg',
+    color: '#A855F7',
+    credentialLink: 'https://www.educative.io/verify-certificate/985KjktxAO7yklNVyH0jWo6rDgkVhN',
+    skillsLearned: ['LLMs', 'RAGs', 'Fine-tuning', 'Prompt Engineering']
+  },
+  {
+    name: 'AI/ML Engineer - Stage 1',
+    issuer: 'SLIIT',
+    year: 'October 2025',
+    image: '/Certificates/sliit_logo.jpg',
+    color: '#F5821F',
+    credentialLink: 'https://code.sliit.org/certificates/veaysmvojn',
+    skillsLearned: ['Image Processing', 'Computer Vision']
+  }
 ];
 
 export const achievementsData: Achievement[] = [
   {
-    title: 'Top 10 — CodeBlast Hackathon',
-    org: 'Univ. of Ruhuna & Mobitel',
-    year: '2024',
-    image: '/icons/trophy.png',
+    title: 'CodeBlast 2025 Hackathon',
+    org: 'University of Ruhuna & SLT Mobitel',
+    year: '2025',
+    image: 'https://cdn-icons-png.flaticon.com/512/888/888846.png',
     badge: 'Competition',
     badgeColor: '#FFB800',
-  },
-  {
-    title: 'GSoC 2026 Proposal Submitted',
-    org: 'Oppia Foundation (Google)',
-    year: '2025',
-    image: '/icons/trophy.png',
-    badge: 'Open Source',
-    badgeColor: '#00abf0',
-  },
-  {
-    title: 'IEEE Student Branch Member',
-    org: 'University of Ruhuna',
-    year: '2023',
-    image: '/icons/trophy.png',
-    badge: 'Membership',
-    badgeColor: '#A855F7',
-  },
+    link: 'https://www.linkedin.com/posts/rathishan-mahendran-39812b316_codeblast2025-rextro2025-universityofruhuna-activity-7410300981302886402-QD_x',
+    skillsGained: ['MSPACE APIs', 'Microsoft Azure', 'Backend Development', 'Model Training & Inference']
+  }
 ];
 
 export const communityData: CommunityRole[] = [
   {
-    name: 'IEEE Student Branch',
-    role: 'Active Member',
+    name: 'AI & Data Science Innovation Club Of Ruhuna Engineering',
+    role: 'AI Knowledge Disseminator (Part-time)',
     org: 'University of Ruhuna',
-    desc: 'Participating in workshops, technical seminars, and IEEE-organized events.',
-    image: '/icons/community.png',
-    color: '#00629B',
-  },
-  {
-    name: 'Innovation Club',
-    role: 'AI & Data Lead',
-    org: 'University of Ruhuna',
-    desc: 'Driving AI exploration sessions, conducting data workshops and project demos.',
-    image: '/icons/community.png',
+    desc: 'Contributed to AI knowledge dissemination within the university and broader external community.',
+    image: 'https://cdn-icons-png.flaticon.com/512/306/306232.png',
     color: '#F59E0B',
+    link: 'https://theicore.org/'
   },
   {
-    name: 'Open-Source Community',
-    role: 'Contributor',
-    org: 'GitHub',
-    desc: 'Contributing to open-source projects under GSoC 2026 preparations (Oppia).',
-    image: '/icons/community.png',
-    color: '#10B981',
-  },
+    name: 'IEEE Member',
+    role: 'Active Member',
+    org: 'IEEE (Global)',
+    desc: 'Actively participated in technical workshops and research discussions focused on advancements in AI engineering. Engaged in professional development activities and networking initiatives to foster innovation.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/IEEE_logo.svg/1200px-IEEE_logo.svg.png',
+    color: '#00629B'
+  }
 ];
