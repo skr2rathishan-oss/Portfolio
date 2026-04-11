@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Moon, Sun, Download, Linkedin, Github, ExternalLink, Cpu, Zap, Instagram, Facebook } from 'lucide-react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Moon, Sun, Download, Linkedin, Github, ExternalLink, Cpu, Zap, Instagram, Facebook, Menu, X } from 'lucide-react';
 import About from './About';
 import Contact from './Contact';
 import { projectsData, profileData } from './data';
@@ -45,9 +45,9 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
     : 'bg-white border border-slate-200 shadow-xl';
 
   return (
-    <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 pt-12 pb-20 flex flex-col lg:flex-row items-center justify-between gap-12 w-full">
+    <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 pt-2 lg:pt-12 pb-20 flex flex-col lg:flex-row items-center justify-between gap-12 w-full">
       {/* Left: Image with Blob & Orbitals */}
-      <div className="w-full lg:w-1/2 flex justify-center relative order-1 lg:order-1 mt-10 lg:mt-0">
+      <div className="w-full lg:w-1/2 flex justify-center relative order-1 lg:order-1 mt-4 lg:mt-0">
         {/* Glowing background */}
         <div className={`absolute inset-0 bg-[#00abf0] blur-[100px] rounded-full w-[250px] h-[250px] md:w-[350px] md:h-[350px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 ${isDarkMode ? 'opacity-20' : 'opacity-15'}`}></div>
 
@@ -153,7 +153,7 @@ function Skills({ isDarkMode }: { isDarkMode: boolean }) {
   const getLabelColor = (p: number) => p >= 88 ? '#00abf0' : p >= 78 ? '#a855f7' : p >= 70 ? '#f59e0b' : '#6b7280';
 
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
+    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-2 lg:pt-8 pb-20">
       {/* Header */}
       <div className="mb-8 flex items-end justify-between">
         <div>
@@ -254,7 +254,7 @@ function Projects({ isDarkMode }: { isDarkMode: boolean }) {
   };
 
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
+    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-2 lg:pt-8 pb-20">
       <div className="mb-8">
         <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">Portfolio</p>
         <h2 className={`text-2xl md:text-3xl font-bold ${tp}`}>Featured Projects</h2>
@@ -336,44 +336,168 @@ function Projects({ isDarkMode }: { isDarkMode: boolean }) {
 
 function Layout() {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
+  const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
+
+  // Auto-close sidebar whenever the route changes
+  useEffect(() => {
+    closeMobileMenu();
+  }, [location.pathname, closeMobileMenu]);
+
+  // Prevent body scroll when sidebar is open
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobileMenuOpen]);
+
+  const navLinks = [
+    { to: '/',        label: 'Home'     },
+    { to: '/about',   label: 'About Me' },
+    { to: '/skills',  label: 'Skills'   },
+    { to: '/projects',label: 'Projects' },
+    { to: '/contact', label: 'Connect'  },
+  ];
 
   return (
     <div className={`min-h-screen font-sans flex flex-col relative overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-[#081b29] text-white selection:bg-[#00abf0] selection:text-white' : 'bg-[#f8fafc] text-[#0f172a] selection:bg-[#00abf0] selection:text-white'}`}>
       {/* Modern Grid Background */}
       <div className={`modern-grid-bg transition-opacity duration-500 ${isDarkMode ? 'opacity-100' : 'opacity-60'}`}></div>
 
-      {/* Navbar */}
-      <nav className={`relative z-20 flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto w-full mb-4 border-b ${isDarkMode ? 'border-white/5' : 'border-slate-200'}`}>
+      {/* ─── Navbar ─── */}
+      <nav className={`relative z-20 flex items-center justify-between px-5 lg:px-12 py-3 lg:py-5 max-w-7xl mx-auto w-full border-b ${isDarkMode ? 'border-white/5' : 'border-slate-200'}`}>
+        {/* Logo — always visible */}
         <Link to="/" className="text-2xl font-bold tracking-tight cursor-pointer">
           <span className="text-[#00abf0]">Portfolio</span>
         </Link>
-        
+
+        {/* Desktop nav links */}
         <div className={`hidden lg:flex items-center space-x-8 text-sm font-semibold tracking-wide transition-colors duration-500 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>
-          <Link to="/" className="hover:text-[#00abf0] transition-colors">Home</Link>
-          <Link to="/about" className="hover:text-[#00abf0] transition-colors relative group">
-            About Me
-          </Link>
-          <Link to="/skills" className="hover:text-[#00abf0] transition-colors">Skills</Link>
-          <Link to="/projects" className="hover:text-[#00abf0] transition-colors">Projects</Link>
-          <Link to="/contact" className="hover:text-[#00abf0] transition-colors">Connect</Link>
+          {navLinks.map(l => (
+            <Link key={l.to} to={l.to} className="hover:text-[#00abf0] transition-colors">{l.label}</Link>
+          ))}
         </div>
 
-        <div className="flex items-center space-x-4 md:space-x-6">
+        {/* Desktop right controls */}
+        <div className="hidden lg:flex items-center space-x-6">
           {/* Theme Toggle */}
-          <div className="hidden md:flex items-center space-x-3 cursor-pointer group" onClick={toggleTheme}>
+          <div className="flex items-center space-x-3 cursor-pointer" onClick={toggleTheme}>
             <div className={`w-[46px] h-[24px] rounded-full relative flex items-center px-1 transition-colors duration-300 ${isDarkMode ? 'bg-[#00abf0]/20 border border-[#00abf0]/50' : 'bg-slate-200 border border-slate-300'}`}>
-              <div className={`w-[16px] h-[16px] rounded-full transition-transform duration-300 ease-spring flex items-center justify-center ${isDarkMode ? 'translate-x-[20px] bg-[#00abf0]' : 'translate-x-0 bg-white shadow-sm'}`}>
-              </div>
+              <div className={`w-[16px] h-[16px] rounded-full transition-transform duration-300 ${isDarkMode ? 'translate-x-[20px] bg-[#00abf0]' : 'translate-x-0 bg-white shadow-sm'}`} />
             </div>
           </div>
-          
-          <button className={`border-2 px-4 py-2 md:px-5 md:py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-all duration-300 ${isDarkMode ? 'border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)] hover:shadow-[0_0_20px_rgba(255,0,79,0.5)]' : 'border-[#ff004f] text-[#ff004f] hover:bg-[#ff004f] hover:text-white'}`}>
+          <button className={`border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-all duration-300 ${isDarkMode ? 'border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)]' : 'border-[#ff004f] text-[#ff004f] hover:bg-[#ff004f] hover:text-white'}`}>
             Download CV <Download size={16} />
           </button>
         </div>
+
+        {/* Mobile: hamburger */}
+        <div className="flex lg:hidden items-center">
+          {/* Hamburger button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            aria-label="Toggle navigation menu"
+            className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+              isDarkMode ? 'bg-white/[0.05] hover:bg-white/[0.1] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
+            } ${isMobileMenuOpen ? 'ring-2 ring-[#00abf0]/50' : ''}`}
+          >
+            {/* Animated icon: X when open, Menu when closed */}
+            <span
+              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
+                isMobileMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 rotate-90'
+              }`}
+            >
+              <X size={20} style={{ color: '#00abf0' }} />
+            </span>
+            <span
+              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
+                isMobileMenuOpen ? 'opacity-0 -rotate-90' : 'opacity-100 rotate-0'
+              }`}
+            >
+              <Menu size={20} />
+            </span>
+          </button>
+        </div>
       </nav>
+
+      {/* ─── Mobile Sidebar Overlay ─── */}
+      {/* Backdrop */}
+      <div
+        onClick={closeMobileMenu}
+        className={`lg:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      {/* Drawer panel — slides in from the right */}
+      <aside
+        className={`lg:hidden fixed top-0 right-0 z-40 h-full w-72 flex flex-col transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        } ${isDarkMode ? 'bg-[#081b29]/95 border-l border-white/10 backdrop-blur-xl' : 'bg-white/95 border-l border-slate-200 backdrop-blur-xl'}`}
+      >
+        {/* Drawer header */}
+        <div className={`flex items-center justify-between px-6 py-4 border-b ${isDarkMode ? 'border-white/10' : 'border-slate-100'}`}>
+          <span className="text-lg font-bold text-[#00abf0]">Navigation</span>
+          <button
+            onClick={closeMobileMenu}
+            className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${
+              isDarkMode ? 'hover:bg-white/10 text-gray-400' : 'hover:bg-slate-100 text-slate-500'
+            }`}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Nav links */}
+        <nav className="flex flex-col px-4 pt-4 gap-1 flex-1">
+          {navLinks.map((l, i) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              onClick={closeMobileMenu}
+              className={`flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                location.pathname === l.to
+                  ? 'bg-[#00abf0]/10 text-[#00abf0] border-l-2 border-[#00abf0]'
+                  : isDarkMode
+                    ? 'text-gray-300 hover:bg-white/[0.05] hover:text-white'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+              }`}
+              style={{ transitionDelay: isMobileMenuOpen ? `${i * 40}ms` : '0ms' }}
+            >
+              <span
+                className={`transition-all duration-300 ${
+                  isMobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
+                }`}
+                style={{ transitionDelay: isMobileMenuOpen ? `${i * 50 + 100}ms` : '0ms' }}
+              >
+                {l.label}
+              </span>
+            </Link>
+          ))}
+        </nav>
+
+        {/* Drawer footer: Theme Toggle & Download CV */}
+        <div className={`px-4 pb-6 pt-4 border-t flex flex-col gap-4 ${isDarkMode ? 'border-white/10' : 'border-slate-100'}`}>
+          {/* Theme Toggle */}
+          <div className="flex items-center justify-between px-2 cursor-pointer" onClick={toggleTheme}>
+             <span className={`text-sm font-semibold transition-colors duration-300 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>Dark Mode</span>
+             <div className={`w-[46px] h-[24px] rounded-full relative flex items-center px-1 transition-colors duration-300 ${isDarkMode ? 'bg-[#00abf0]/20 border border-[#00abf0]/50' : 'bg-slate-200 border border-slate-300'}`}>
+               <div className={`w-[16px] h-[16px] rounded-full transition-transform duration-300 ${isDarkMode ? 'translate-x-[20px] bg-[#00abf0]' : 'translate-x-0 bg-white shadow-sm'}`} />
+             </div>
+          </div>
+          
+          <button className={`w-full border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 ${
+            isDarkMode ? 'border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white' : 'border-[#ff004f] text-[#ff004f] hover:bg-[#ff004f] hover:text-white'
+          }`}>
+            Download CV <Download size={16} />
+          </button>
+          <p className={`text-[11px] text-center mt-3 ${isDarkMode ? 'text-gray-600' : 'text-slate-400'}`}>
+            © {new Date().getFullYear()} Rathishan Mahendran
+          </p>
+        </div>
+      </aside>
 
       {/* Main Content Area */}
       <Routes>

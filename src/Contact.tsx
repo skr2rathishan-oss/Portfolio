@@ -45,7 +45,7 @@ export default function Contact({ isDarkMode }: Props) {
   ];
 
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-10 pb-20">
+    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-2 lg:pt-10 pb-20">
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
 
         {/* ── Left: Form ── */}
@@ -98,7 +98,7 @@ export default function Contact({ isDarkMode }: Props) {
                 value={formData.message}
                 onChange={handleChange}
                 required
-                rows={4}
+                rows={2}
                 placeholder="Tell me what's on your mind..."
                 className={`bg-transparent border-b px-0 py-2.5 text-sm transition-colors duration-200 placeholder-gray-600 resize-none ${inputBorder} ${focusBorder}`}
               />
@@ -107,7 +107,7 @@ export default function Contact({ isDarkMode }: Props) {
             <button
               type="submit"
               disabled={status === 'loading'}
-              className={`mt-2 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 ${
+              className={`-mt-1 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 ${
                 isDarkMode
                   ? 'bg-[#00abf0] text-[#081b29] hover:shadow-[0_0_20px_rgba(0,171,240,0.5)] hover:-translate-y-0.5'
                   : 'bg-[#00abf0] text-white hover:shadow-[0_8px_20px_rgba(0,171,240,0.4)] hover:-translate-y-0.5'

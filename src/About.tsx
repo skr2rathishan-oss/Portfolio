@@ -52,8 +52,10 @@ export default function About({ isDarkMode }: Props) {
     </div>
   );
 
+  const secClass = (id: string) => `flex-col gap-4 flex ${activeTab === id ? '' : 'md:hidden'}`;
+
   return (
-    <section className={`relative z-10 w-full max-w-7xl mx-auto px-4 md:px-12 pt-6 pb-6 flex gap-6`}
+    <section className={`relative z-10 w-full max-w-7xl mx-auto px-4 md:px-12 pt-2 lg:pt-6 pb-6 flex flex-col md:flex-row gap-6`}
       style={{ height: 'calc(100vh - 160px)' }}>
 
       {/* Subtle glow — unified cyan only */}
@@ -61,7 +63,7 @@ export default function About({ isDarkMode }: Props) {
         style={{ background: `radial-gradient(circle, ${CYAN}08 0%, transparent 70%)` }} />
 
       {/* ── Sidebar ── */}
-      <nav className={`w-52 flex-shrink-0 rounded-2xl p-3 flex flex-col gap-1 self-start ${card}`}>
+      <nav className={`hidden md:flex w-52 flex-shrink-0 rounded-2xl p-3 flex-col gap-1 self-start ${card}`}>
         <p className={`text-[10px] font-bold tracking-[0.25em] uppercase mb-3 px-2 ${ts}`}>Sections</p>
         {tabs.map(tab => (
           <button
@@ -84,14 +86,13 @@ export default function About({ isDarkMode }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25 }}
-            className="absolute inset-0 flex flex-col gap-4 overflow-auto"
+            className="absolute inset-0 flex flex-col gap-10 md:gap-4 overflow-auto pb-10"
             style={{ scrollbarWidth: 'none' }}
           >
 
             {/* ══ OVERVIEW ══ */}
-            {activeTab === 'overview' && (
-              <>
-                {/* Intro card */}
+            <div className={secClass('overview')}>
+              {/* Intro card */}
                 <div className={`rounded-2xl p-5 ${card}`}>
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl flex-shrink-0 overflow-hidden">
@@ -153,12 +154,10 @@ export default function About({ isDarkMode }: Props) {
                     </div>
                   </div>
                 </div>
-              </>
-            )}
+            </div>
 
             {/* ══ EDUCATION ══ */}
-            {activeTab === 'education' && (
-              <div className="flex flex-col gap-4">
+            <div className={secClass('education')}>
                 <div className={`rounded-2xl p-5 ${card}`}>
                   <h3 className={`text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${tp}`}>
                     <GraduationCap size={14} style={{ color: CYAN }} /> Formal Education
@@ -255,12 +254,10 @@ export default function About({ isDarkMode }: Props) {
                     ))}
                   </div>
                 </div>
-              </div>
-            )}
+            </div>
 
             {/* ══ CERTIFICATIONS ══ */}
-            {activeTab === 'certifications' && (
-              <div className="flex flex-col gap-4">
+            <div className={secClass('certifications')}>
                 <div className={`rounded-2xl p-5 ${card}`}>
                   <h3 className={`text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${tp}`}>
                     <Award size={14} style={{ color: CYAN }} /> Certifications
@@ -310,12 +307,10 @@ export default function About({ isDarkMode }: Props) {
                     ))}
                   </div>
                 </div>
-              </div>
-            )}
+            </div>
 
             {/* ══ ACHIEVEMENTS ══ */}
-            {activeTab === 'achievements' && (
-              <div className="flex flex-col gap-4">
+            <div className={secClass('achievements')}>
                 <div className={`rounded-2xl p-5 ${card}`}>
                   <h3 className={`text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${tp}`}>
                     <Trophy size={14} style={{ color: CYAN }} /> Achievements
@@ -373,12 +368,10 @@ export default function About({ isDarkMode }: Props) {
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+            </div>
 
             {/* ══ COMMUNITY ══ */}
-            {activeTab === 'community' && (
-              <div className="flex flex-col gap-4">
+            <div className={secClass('community')}>
                 <div className={`rounded-2xl p-5 ${card}`}>
                   <h3 className={`text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${tp}`}>
                     <Users size={14} style={{ color: CYAN }} /> Community & Clubs
@@ -408,8 +401,7 @@ export default function About({ isDarkMode }: Props) {
                     ))}
                   </div>
                 </div>
-              </div>
-            )}
+            </div>
 
           </motion.div>
         </AnimatePresence>
