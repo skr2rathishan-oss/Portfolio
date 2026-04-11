@@ -4,69 +4,9 @@ import { Moon, Sun, Download, Linkedin, Github, ExternalLink } from 'lucide-reac
 import About from './About';
 import Contact from './Contact';
 
-const skillsData = [
-  { name: 'laravel', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg', proficiency: 95, color: '#ff2d20' },
-  { name: 'framer_motion', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/framer/framer-original.svg', proficiency: 90, color: '#0055FF' },
-  { name: 'vue', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg', proficiency: 88, color: '#41b883' },
-  { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg', proficiency: 85, color: '#61dafb' },
-  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', proficiency: 92, color: '#38bdf8' },
-  { name: 'firebase.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg', proficiency: 80, color: '#ffca28' },
-  { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg', proficiency: 75, color: '#3776ab' },
-  { name: 'vite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg', proficiency: 80, color: '#646cff' },
-];
+import { skillsData, projectsData, profileData } from './data';
 
-const projectsData = [
-  {
-    title: 'E-Commerce Platform',
-    description: 'Full-featured e-commerce platform with payment gateway',
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['React', 'Node.js', 'MongoDB'],
-    codeLink: '#',
-    demoLink: '#'
-  },
-  {
-    title: 'Fitness Tracker App',
-    description: 'Mobile fitness app with workout plans',
-    image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['React Native', 'Firebase'],
-    codeLink: '#',
-    demoLink: '#'
-  },
-  {
-    title: 'AI Content Generator',
-    description: 'AI-powered content generation tool',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Python', 'OpenAI'],
-    codeLink: '#',
-    demoLink: '#'
-  },
-  {
-    title: 'Crypto Dashboard',
-    description: 'Real-time crypto tracking dashboard',
-    image: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Vue.js', 'Chart.js'],
-    codeLink: '#',
-    demoLink: '#'
-  },
-  {
-    title: 'Task Management',
-    description: 'Collaborative task management system',
-    image: 'https://images.unsplash.com/photo-1507925922893-a4c1d63cb856?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Laravel', 'Vue.js'],
-    codeLink: '#',
-    demoLink: '#'
-  },
-  {
-    title: 'Real Estate Platform',
-    description: 'Virtual tour real estate platform',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Next.js', 'Three.js'],
-    codeLink: '#',
-    demoLink: '#'
-  }
-];
-
-const roles = ["Front-End Designer", "AI Engineer", "Full-Stack Developer"];
+const roles = ["AI Engineer", "UI/UX Designer", "Front-End Developer"];
 
 const Typewriter = () => {
   const [displayText, setDisplayText] = React.useState('');
@@ -129,7 +69,7 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 
            {/* Image */}
            <img
-             src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+             src={profileData.homeImage}
              alt="Rathishan Mahendran Portrait"
              className="relative z-10 w-full h-full object-cover shadow-2xl"
              style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}
@@ -151,11 +91,22 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 
         {/* Social Icons */}
         <div className="flex items-center space-x-4 mb-8">
-          {[Github, Linkedin].map((Icon, idx) => (
-            <a key={idx} href="#" className={`w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_#00abf0] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}>
-              <Icon size={18} className={Icon === Github ? "fill-current" : ""} />
-            </a>
-          ))}
+          <a
+            href="https://github.com/skr2rathishan-oss"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_#00abf0] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}
+          >
+            <Github size={18} className="fill-current" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/rathishan-mahendran-39812b316"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_#00abf0] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}
+          >
+            <Linkedin size={18} />
+          </a>
         </div>
 
         {/* Buttons */}
