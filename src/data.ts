@@ -1,17 +1,28 @@
+// ── Skill (produced by the engine, not stored statically) ───
 export interface Skill {
-  name: string;
-  icon: string;
-  proficiency: number;
-  color: string;
+  name:        string;
+  icon:        string;
+  color:       string;
+  proficiency: number;  // 0-95, derived algorithmically
+  frequency:   number;  // number of projects it appears in
 }
 
+// ── Tag attached to each project ────────────────────────────
+export interface Tag {
+  name:  string;
+  level: 'core' | 'supporting' | 'exposure';
+}
+
+// ── Project ──────────────────────────────────────────────────
 export interface Project {
-  title: string;
+  title:       string;
   description: string;
-  image: string;
-  tags: string[];
-  codeLink: string;
-  demoLink: string;
+  image:       string;
+  tags:        Tag[];             // structured tags
+  weight:      1 | 2 | 3;        // project importance
+  complexity:  'low' | 'medium' | 'high';
+  codeLink:    string;
+  demoLink?:   string;           // optional — only shown when present
 }
 
 export interface ProfileInfo {
@@ -64,68 +75,68 @@ export const profileData: ProfileInfo = {
   aboutImage: '/profile/Aboutmeprofile.jpeg',
 };
 
-export const skillsData: Skill[] = [
-  { name: 'laravel', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg', proficiency: 95, color: '#ff2d20' },
-  { name: 'framer_motion', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/framer/framer-original.svg', proficiency: 90, color: '#0055FF' },
-  { name: 'vue', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg', proficiency: 88, color: '#41b883' },
-  { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg', proficiency: 85, color: '#61dafb' },
-  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', proficiency: 92, color: '#38bdf8' },
-  { name: 'firebase.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg', proficiency: 80, color: '#ffca28' },
-  { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg', proficiency: 75, color: '#3776ab' },
-  { name: 'vite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg', proficiency: 80, color: '#646cff' },
-];
-
+// ── Projects (controls order = exact render order in UI) ─────
 export const projectsData: Project[] = [
   {
-    title: 'E-Commerce Platform',
-    description: 'Full-featured e-commerce platform with payment gateway',
-    // To use a local image, create a 'projects' folder inside your 'public' folder
-    // and reference it like this: image: '/projects/ecommerce.jpg'
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['React', 'Node.js', 'MongoDB'],
-    codeLink: '#',
-    demoLink: '#'
+    // ★ FEATURED project — full-width hero card
+    title:       'E-Commerce Mini-Project',
+    description: 'A fully responsive Vue 3 e-commerce SPA featuring real-time product search, cart management, JWT auth, and pagination — consuming the DummyJSON REST API.',
+    image:       '/projects/Ecommerce-miniproject.jpg',
+    weight:      3,
+    complexity:  'high',
+    tags: [
+      { name: 'Vue 3',        level: 'core'       },
+      { name: 'Tailwind CSS', level: 'core'       },
+      { name: 'TypeScript',   level: 'supporting' },
+      { name: 'DummyJSON',    level: 'supporting' },
+      { name: 'Vite',         level: 'exposure'   },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/Mini-Project',
+    demoLink: 'https://miniproject584.netlify.app/',
   },
   {
-    title: 'Fitness Tracker App',
-    description: 'Mobile fitness app with workout plans',
-    image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['React Native', 'Firebase'],
-    codeLink: '#',
-    demoLink: '#'
+    title:       'Personalized Study Buddy',
+    description: 'An AI-driven study companion that personalises learning paths and tracks progress using TypeScript-first architecture.',
+    image:       '/projects/StudyBuddy.jpg',
+    weight:      2,
+    complexity:  'medium',
+    tags: [
+      { name: 'TypeScript', level: 'core'       },
+      { name: 'React',      level: 'core'       },
+      { name: 'Vite',       level: 'supporting' },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/Personalized-Study-Buddy',
+    // no demoLink — only GitHub button will render
   },
   {
-    title: 'AI Content Generator',
-    description: 'AI-powered content generation tool',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Python', 'OpenAI'],
-    codeLink: '#',
-    demoLink: '#'
+    title:       'Web Dev Collection',
+    description: 'Curated showcase of responsive UI experiments exploring animations, design systems, and modern CSS techniques.',
+    image:       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    weight:      1,
+    complexity:  'low',
+    tags: [
+      { name: 'HTML',       level: 'core'       },
+      { name: 'CSS',        level: 'core'       },
+      { name: 'JavaScript', level: 'core'       },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/Web_Development_Projects',
+    // no demoLink
   },
   {
-    title: 'Crypto Dashboard',
-    description: 'Real-time crypto tracking dashboard',
-    image: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Vue.js', 'Chart.js'],
-    codeLink: '#',
-    demoLink: '#'
+    title:       'AI & Machine Learning Projects',
+    description: 'Collection of ML experiments covering data analysis, model training, computer vision, and NLP using the Python ML ecosystem.',
+    image:       'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    weight:      2,
+    complexity:  'high',
+    tags: [
+      { name: 'Python',       level: 'core'       },
+      { name: 'TensorFlow',   level: 'core'       },
+      { name: 'PyTorch',      level: 'supporting' },
+      { name: 'scikit-learn', level: 'supporting' },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/AI-ML--Projects',
+    // no demoLink
   },
-  {
-    title: 'Task Management',
-    description: 'Collaborative task management system',
-    image: 'https://images.unsplash.com/photo-1507925922893-a4c1d63cb856?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Laravel', 'Vue.js'],
-    codeLink: '#',
-    demoLink: '#'
-  },
-  {
-    title: 'Real Estate Platform',
-    description: 'Virtual tour real estate platform',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tags: ['Next.js', 'Three.js'],
-    codeLink: '#',
-    demoLink: '#'
-  }
 ];
 
 export const educationData: Education[] = [
