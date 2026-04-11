@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Moon, Sun, Download, Linkedin, Github, ExternalLink } from 'lucide-react';
+import { Moon, Sun, Download, Linkedin, Github, ExternalLink, Cpu, Zap, Instagram, Facebook } from 'lucide-react';
 import About from './About';
 import Contact from './Contact';
-
-import { skillsData, projectsData, profileData } from './data';
+import { projectsData, profileData } from './data';
+import { deriveTechnicalSkills } from './utils/skillEngine';
 
 const roles = ["AI Engineer", "UI/UX Designer", "Front-End Developer"];
 
@@ -107,6 +107,22 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
           >
             <Linkedin size={18} />
           </a>
+          <a
+            href="https://www.facebook.com/Rathishan21"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_#00abf0] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}
+          >
+            <Facebook size={18} />
+          </a>
+          <a
+            href="https://www.instagram.com/rathishan21/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_#00abf0] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}
+          >
+            <Instagram size={18} />
+          </a>
         </div>
 
         {/* Buttons */}
@@ -124,46 +140,101 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 }
 
 function Skills({ isDarkMode }: { isDarkMode: boolean }) {
+  // Engine derives skills from real project data — no static numbers
+  const skills = useMemo(() => deriveTechnicalSkills(projectsData), []);
+
   const card = isDarkMode
     ? 'bg-white/[0.03] border border-white/[0.08] hover:border-[#00abf0]/30 hover:shadow-[0_0_25px_rgba(0,171,240,0.12)]'
     : 'bg-white border border-slate-100 shadow-md hover:shadow-xl hover:border-[#00abf0]/30';
   const ts = isDarkMode ? 'text-gray-400' : 'text-slate-500';
+  const tp = isDarkMode ? 'text-white' : 'text-slate-800';
+
+  const getLabel = (p: number) => p >= 88 ? 'Expert' : p >= 78 ? 'Advanced' : p >= 70 ? 'Proficient' : 'Learning';
+  const getLabelColor = (p: number) => p >= 88 ? '#00abf0' : p >= 78 ? '#a855f7' : p >= 70 ? '#f59e0b' : '#6b7280';
 
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
-      <div className="mb-8">
-        <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">Tech Stack</p>
-        <h2 className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Tools I Work With</h2>
+      {/* Header */}
+      <div className="mb-8 flex items-end justify-between">
+        <div>
+          <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">Tech Stack</p>
+          <h2 className={`text-2xl md:text-3xl font-bold ${tp}`}>Tools I Work With</h2>
+        </div>
+        {/* Algo badge */}
+        <div className={`hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold border ${
+          isDarkMode ? 'border-[#00abf0]/20 text-[#00abf0] bg-[#00abf0]/5' : 'border-[#00abf0]/30 text-[#00abf0] bg-[#00abf0]/5'
+        }`}>
+          <Cpu size={12} />
+          Scores derived from project analysis
+        </div>
       </div>
+
+      {/* Skills grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {skillsData.map((skill, i) => (
+        {skills.map((skill, i) => (
           <div
-            key={i}
+            key={skill.name}
             className={`group relative p-5 rounded-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-default ${card}`}
           >
-            {/* Glow orb on hover */}
+            {/* Ambient glow on hover */}
             <div
               className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{ boxShadow: `inset 0 0 30px ${skill.color}18` }}
             />
+
+            {/* Icon box */}
             <div
               className={`w-14 h-14 rounded-xl flex items-center justify-center p-3 mb-4 ${isDarkMode ? 'bg-white/[0.04]' : 'bg-slate-50'}`}
               style={{ boxShadow: `0 0 0 1px ${skill.color}40` }}
             >
               <img src={skill.icon} alt={skill.name} className="w-full h-full object-contain" />
             </div>
-            <h3 className={`font-bold text-sm mb-1 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{skill.name}</h3>
-            <div className="flex items-center gap-2">
-              <div
-                className="h-1 rounded-full flex-1"
-                style={{ background: `linear-gradient(to right, ${skill.color}, ${skill.color}40)`, opacity: 0.8 }}
-              />
-              <span className="text-[11px] font-bold" style={{ color: skill.color }}>{skill.proficiency}%</span>
+
+            {/* Name + frequency badge */}
+            <div className="flex items-center justify-between mb-1">
+              <h3 className={`font-bold text-sm ${tp}`}>{skill.name}</h3>
+              {/* Tooltip-style frequency badge */}
+              <span
+                title="Calculated from real project usage"
+                className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold cursor-help ${
+                  isDarkMode ? 'bg-white/[0.06] text-gray-400' : 'bg-slate-100 text-slate-500'
+                }`}
+              >
+                {skill.frequency}× used
+              </span>
             </div>
-            <p className={`text-[11px] mt-2 ${ts}`}>Expert</p>
+
+            {/* Animated progress bar */}
+            <div className={`h-1.5 rounded-full mb-2 overflow-hidden ${ isDarkMode ? 'bg-white/[0.06]' : 'bg-slate-100'}`}>
+              <div
+                className={`h-full rounded-full transition-all duration-700 delay-75 ${
+                  skill.proficiency >= 88 ? 'animate-pulse' : ''
+                }`}
+                style={{
+                  width: `${skill.proficiency}%`,
+                  background: `linear-gradient(to right, ${skill.color}, ${skill.color}bb)`,
+                }}
+              />
+            </div>
+
+            {/* Proficiency % + label */}
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-semibold" style={{ color: getLabelColor(skill.proficiency) }}>
+                {getLabel(skill.proficiency)}
+              </span>
+              <span className="text-[11px] font-bold" style={{ color: skill.color }}>
+                {skill.proficiency}%
+              </span>
+            </div>
           </div>
         ))}
       </div>
+
+      {/* Footer note */}
+      <p className={`mt-6 text-[11px] text-center flex items-center justify-center gap-1.5 ${ts}`}>
+        <Zap size={11} style={{ color: '#00abf0' }} />
+        Proficiency scores are algorithmically derived from project weight, complexity, and tag role — never inflated.
+      </p>
     </section>
   );
 }
@@ -174,7 +245,13 @@ function Projects({ isDarkMode }: { isDarkMode: boolean }) {
     : 'bg-white border border-slate-100 shadow-md hover:shadow-xl hover:border-[#00abf0]/30';
   const ts = isDarkMode ? 'text-gray-400' : 'text-slate-500';
   const tp = isDarkMode ? 'text-white' : 'text-slate-800';
-  const tagBg = isDarkMode ? 'bg-white/[0.05] text-gray-300' : 'bg-slate-100 text-slate-600';
+
+  // Tag level → badge style
+  const tagStyle = (level: 'core' | 'supporting' | 'exposure', isDark: boolean) => {
+    if (level === 'core')       return isDark ? 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/20' : 'bg-[#00abf0]/10 text-[#00abf0] border border-[#00abf0]/20';
+    if (level === 'supporting') return isDark ? 'bg-white/[0.05] text-gray-300 border border-white/10' : 'bg-slate-100 text-slate-600 border border-slate-200';
+    return isDark ? 'bg-white/[0.02] text-gray-500 border border-white/5' : 'bg-slate-50 text-slate-400 border border-slate-150';
+  };
 
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-20">
@@ -183,46 +260,71 @@ function Projects({ isDarkMode }: { isDarkMode: boolean }) {
         <h2 className={`text-2xl md:text-3xl font-bold ${tp}`}>Featured Projects</h2>
       </div>
 
-      {/* Asymmetric layout: first two tall, rest small */}
+      {/* Refined layout: Featured project spans full row horizontally, others take 1 column each */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {[...projectsData].reverse().map((project, i) => (
+        {projectsData.map((project, i) => (
           <div
-            key={i}
-            className={`group relative rounded-2xl overflow-hidden flex flex-col transition-all duration-400 hover:-translate-y-1.5 ${card} ${
-              i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''
+            key={project.title}
+            className={`group relative rounded-2xl overflow-hidden flex transition-all duration-400 hover:-translate-y-1.5 ${card} ${
+              i === 0 ? 'flex-col lg:flex-row lg:col-span-3' : 'flex-col'
             }`}
           >
-            {/* Image */}
-            <div className={`w-full overflow-hidden ${i === 0 ? 'h-56' : 'h-36'}`}>
+            {/* Project image */}
+            <div className={`${i === 0 ? 'w-full lg:w-3/5 h-60 lg:h-auto min-h-[280px]' : 'w-full h-40'} overflow-hidden relative border-b lg:border-b-0 lg:border-r ${isDarkMode ? 'border-white/[0.08]' : 'border-slate-100'}`}>
               <img
                 src={project.image}
                 alt={project.title}
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
             </div>
 
-            <div className="p-5 flex flex-col flex-1">
-              <h3 className={`font-bold ${i === 0 ? 'text-xl' : 'text-base'} mb-1.5 ${tp}`}>{project.title}</h3>
-              <p className={`text-xs leading-relaxed flex-1 mb-4 ${ts}`}>{project.description}</p>
+            <div className={`p-5 flex flex-col flex-1 ${i === 0 ? 'lg:p-8 lg:w-2/5 justify-center' : ''}`}>
+              {/* Featured badge for first project */}
+              {i === 0 && (
+                <span className="self-start mb-3 text-[10px] px-3 py-1 rounded-full font-bold bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/25">
+                  ★ Featured Project
+                </span>
+              )}
+              <h3 className={`font-bold ${i === 0 ? 'text-2xl' : 'text-base'} mb-2 ${tp}`}>{project.title}</h3>
+              <p className={`text-sm leading-relaxed flex-1 mb-5 lg:mr-2 ${ts}`}>{project.description}</p>
+
+              {/* Tags — styled by level */}
               <div className="flex flex-wrap gap-1.5 mb-4">
-                {project.tags.map((tag, ti) => (
-                  <span key={ti} className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium ${tagBg}`}>{tag}</span>
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag.name}
+                    title={`Role: ${tag.level}`}
+                    className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium ${tagStyle(tag.level, isDarkMode)}`}
+                  >
+                    {tag.name}
+                  </span>
                 ))}
               </div>
+
+              {/* Buttons — conditionally render demo only when demoLink exists */}
               <div className="flex gap-3 mt-auto">
-                <a href={project.codeLink}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-colors ${
-                    isDarkMode ? 'bg-white/[0.05] hover:bg-white/[0.1] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                  }`}>
+                <a
+                  href={project.codeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-colors ${
+                    project.demoLink ? 'flex-1' : 'w-full'
+                  } ${isDarkMode ? 'bg-white/[0.05] hover:bg-white/[0.1] text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
+                >
                   <Github size={13} /> Code
                 </a>
-                <a href={project.demoLink}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold bg-[#00abf0] hover:bg-[#00abf0]/80 text-white transition-colors">
-                  <ExternalLink size={13} /> Live Demo
-                </a>
+                {project.demoLink && (
+                  <a
+                    href={project.demoLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold bg-[#00abf0] hover:bg-[#00abf0]/80 text-white transition-colors"
+                  >
+                    <ExternalLink size={13} /> Live Demo
+                  </a>
+                )}
               </div>
             </div>
           </div>
