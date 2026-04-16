@@ -12,16 +12,48 @@ export default function Contact({ isDarkMode }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    await new Promise(r => setTimeout(r, 1400));
-    setStatus('success');
+
+    const submitData = new FormData();
+    submitData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
+    submitData.append("name", formData.name);
+    submitData.append("email", formData.email);
+    submitData.append("subject", formData.subject);
+    submitData.append("message", formData.message);
+
+    // Honeypot (anti-spam)
+    submitData.append("botcheck", "");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: submitData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus('success');
+        // Reset form
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        
+        // Optionally revert back to idle after a few seconds
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 5000);
+      }
+    } catch (err) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const tp = isDarkMode ? 'text-white'     : 'text-slate-800';
-  const ts = isDarkMode ? 'text-gray-400'  : 'text-slate-500';
+  const tp = isDarkMode ? 'text-white' : 'text-slate-800';
+  const ts = isDarkMode ? 'text-gray-400' : 'text-slate-500';
   const inputBorder = isDarkMode ? 'border-white/10 text-white' : 'border-slate-200 text-slate-800';
   const focusBorder = 'focus:border-[#00abf0] focus:outline-none';
   const card = isDarkMode
@@ -36,12 +68,12 @@ export default function Contact({ isDarkMode }: Props) {
   );
 
   const presence = [
-    { label: 'Email',      sub: 'rathishanm@gmail.com',         icon: <Mail className="w-5 h-5" />,    link: 'mailto:rathishanm@gmail.com',                   color: '#EA4335' },
-    { label: 'LinkedIn',   sub: 'rathishan-mahendran',           icon: <Linkedin className="w-5 h-5" />, link: 'https://linkedin.com/in/rathishan-mahendran', color: '#0A66C2' },
-    { label: 'GitHub',     sub: 'skr2rathishan-oss',             icon: <Github className="w-5 h-5" />,  link: 'https://github.com/skr2rathishan-oss',          color: isDarkMode ? '#E6EDF3' : '#24292F' },
-    { label: 'IEEE',       sub: 'IEEE Student Branch',           icon: <IeeeIcon />,                    link: '#',                                             color: '#00629B' },
-    { label: 'University', sub: 'Univ. of Ruhuna',               icon: <BookOpen className="w-5 h-5" />, link: '#',                                          color: '#7C3AED' },
-    { label: 'Location',   sub: 'Sri Lanka · GMT+5:30',          icon: <MapPin className="w-5 h-5" />,  link: '#',                                             color: '#10B981' },
+    { label: 'Email', sub: 'rathishan2103@gmail.com', icon: <Mail className="w-5 h-5" />, link: 'mailto:rathishanm@gmail.com', color: '#EA4335' },
+    { label: 'LinkedIn', sub: 'rathishan-mahendran', icon: <Linkedin className="w-5 h-5" />, link: 'https://linkedin.com/in/rathishan-mahendran', color: '#0A66C2' },
+    { label: 'GitHub', sub: 'skr2rathishan-oss', icon: <Github className="w-5 h-5" />, link: 'https://github.com/skr2rathishan-oss', color: isDarkMode ? '#E6EDF3' : '#24292F' },
+    { label: 'IEEE', sub: 'IEEE Student Branch', icon: <IeeeIcon />, link: '#', color: '#00629B' },
+    { label: 'University', sub: 'Univ. of Ruhuna', icon: <BookOpen className="w-5 h-5" />, link: '#', color: '#7C3AED' },
+    { label: 'Location', sub: 'Sri Lanka · GMT+5:30', icon: <MapPin className="w-5 h-5" />, link: '#', color: '#10B981' },
   ];
 
   return (
@@ -107,11 +139,10 @@ export default function Contact({ isDarkMode }: Props) {
             <button
               type="submit"
               disabled={status === 'loading'}
-              className={`-mt-1 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 ${
-                isDarkMode
+              className={`-mt-1 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 ${isDarkMode
                   ? 'bg-[#00abf0] text-[#081b29] hover:shadow-[0_0_20px_rgba(0,171,240,0.5)] hover:-translate-y-0.5'
                   : 'bg-[#00abf0] text-white hover:shadow-[0_8px_20px_rgba(0,171,240,0.4)] hover:-translate-y-0.5'
-              }`}
+                }`}
             >
               {status === 'loading' ? (
                 <><span className="w-4 h-4 border-2 border-t-transparent border-[#081b29] rounded-full animate-spin" /> Sending</>
