@@ -169,7 +169,7 @@ export const certificationsData: Certification[] = [
     issuer: 'GitHub Actions Learning (by Nisal Gunawardhana)',
     year: 'February 2026',
     image: '/Certificates/Github Actions.png',
-    color: '#2496ED',
+    color: '#00abf0',
     credentialLink: 'https://github.com/nisalgunawardhana/github-actions-learning/issues/85#issuecomment-3848795415',
     skillsLearned: ['GitHub']
   },
@@ -178,7 +178,7 @@ export const certificationsData: Certification[] = [
     issuer: 'Educative',
     year: 'December 2025',
     image: '/Certificates/educative.jpg',
-    color: '#A855F7',
+    color: '#00abf0',
     credentialLink: 'https://www.educative.io/verify-certificate/985KjktxAO7yklNVyH0jWo6rDgkVhN',
     skillsLearned: ['LLMs', 'RAGs', 'Fine-tuning', 'Prompt Engineering']
   },
@@ -187,7 +187,7 @@ export const certificationsData: Certification[] = [
     issuer: 'SLIIT',
     year: 'October 2025',
     image: '/Certificates/sliit_logo.jpg',
-    color: '#F5821F',
+    color: '#00abf0',
     credentialLink: 'https://code.sliit.org/certificates/veaysmvojn',
     skillsLearned: ['Image Processing', 'Computer Vision']
   }
@@ -200,7 +200,7 @@ export const achievementsData: Achievement[] = [
     year: '2025',
     image: 'https://cdn-icons-png.flaticon.com/512/888/888846.png',
     badge: 'Competition',
-    badgeColor: '#FFB800',
+    badgeColor: '#00abf0',
     link: 'https://www.linkedin.com/posts/rathishan-mahendran-39812b316_codeblast2025-rextro2025-universityofruhuna-activity-7410300981302886402-QD_x',
     skillsGained: ['MSPACE APIs', 'Microsoft Azure', 'Backend Development', 'Model Training & Inference']
   }
@@ -213,7 +213,7 @@ export const communityData: CommunityRole[] = [
     org: 'University of Ruhuna',
     desc: 'Contributed to AI knowledge dissemination within the university and broader external community.',
     image: 'https://cdn-icons-png.flaticon.com/512/306/306232.png',
-    color: '#F59E0B',
+    color: '#00abf0',
     link: 'https://theicore.org/'
   },
   {
@@ -222,6 +222,6 @@ export const communityData: CommunityRole[] = [
     org: 'IEEE (Global)',
     desc: 'Actively participated in technical workshops and research discussions focused on advancements in AI engineering. Engaged in professional development activities and networking initiatives to foster innovation.',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/IEEE_logo.svg/1200px-IEEE_logo.svg.png',
-    color: '#00629B'
+    color: '#00abf0'
   }
 ];

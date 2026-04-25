@@ -127,9 +127,9 @@ function Home({ isDarkMode }: { isDarkMode: boolean }) {
 
         {/* Buttons */}
         <div className="flex items-center space-x-4">
-          <button className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,171,240,0.6)] ${isDarkMode ? 'bg-[#00abf0] text-[#081b29]' : 'bg-[#00abf0] text-white shadow-md'}`}>
+          <Link to="/contact" className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,171,240,0.6)] ${isDarkMode ? 'bg-[#00abf0] text-[#081b29]' : 'bg-[#00abf0] text-white shadow-md'}`}>
             Hire Me
-          </button>
+          </Link>
           <Link to="/contact" className={`border-2 border-[#00abf0] text-[#00abf0] px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,171,240,0.4)] ${isDarkMode ? 'hover:bg-[#00abf0] hover:text-[#081b29]' : 'hover:bg-[#00abf0] hover:text-white'}`}>
             Contact Me
           </Link>
@@ -388,9 +388,9 @@ function Layout() {
               <div className={`w-[16px] h-[16px] rounded-full transition-transform duration-300 ${isDarkMode ? 'translate-x-[20px] bg-[#00abf0]' : 'translate-x-0 bg-white shadow-sm'}`} />
             </div>
           </div>
-          <button className={`border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-all duration-300 ${isDarkMode ? 'border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)]' : 'border-[#ff004f] text-[#ff004f] hover:bg-[#ff004f] hover:text-white'}`}>
+          <a href="/Resume/Rathishan_Resume_Template.pdf" download="Rathishan_Resume_Template.pdf" className={`border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-all duration-300 ${isDarkMode ? 'border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)]' : 'border-[#ff004f] text-[#ff004f] hover:bg-[#ff004f] hover:text-white'}`}>
             Download CV <Download size={16} />
-          </button>
+          </a>
         </div>
 
         {/* Mobile: hamburger */}
@@ -488,11 +488,11 @@ function Layout() {
              </div>
           </div>
           
-          <button className={`w-full border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 ${
+          <a href="/Resume/Rathishan_Resume_Template.pdf" download="Rathishan_Resume_Template.pdf" className={`w-full border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 ${
             isDarkMode ? 'border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white' : 'border-[#ff004f] text-[#ff004f] hover:bg-[#ff004f] hover:text-white'
           }`}>
             Download CV <Download size={16} />
-          </button>
+          </a>
           <p className={`text-[11px] text-center mt-3 ${isDarkMode ? 'text-gray-600' : 'text-slate-400'}`}>
             © {new Date().getFullYear()} Rathishan Mahendran
           </p>
@@ -513,7 +513,7 @@ function Layout() {
       <footer className={`relative z-10 w-full py-6 mt-auto border-t transition-colors duration-500 ${isDarkMode ? 'border-white/5 bg-[#081b29]' : 'border-slate-200 bg-[#f8fafc]'}`}>
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className={`text-sm font-medium transition-colors duration-500 ${isDarkMode ? 'text-gray-500' : 'text-slate-500'}`}>
-            &copy; {new Date().getFullYear()} Rathishan Mahendran. Built with React & Vite.
+            &copy; {new Date().getFullYear()} Rathishan Mahendran.
           </p>
           <div className={`flex items-center space-x-4 text-sm transition-colors duration-500 ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>
             <a href="#" className="hover:text-[#00abf0] transition-colors">Privacy Policy</a>
