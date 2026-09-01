@@ -4,16 +4,15 @@ import {
   Download, Linkedin, Github, ExternalLink, Cpu, Zap, Instagram, Facebook, Menu, X, 
   Terminal, Code2, Sparkles, Bot, Globe, Database, Wrench, Layers, CheckCircle2, Activity 
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, type Variants } from 'motion/react';
 import About from './About';
 import Contact from './Contact';
 import NetworkBackground from './NetworkBackground';
 import { projectsData, profileData } from './data';
-import { deriveTechnicalSkills } from './utils/skillEngine';
 
 function Home() {
   // Motion variants for smooth orchestrated entry
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -24,7 +23,7 @@ function Home() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
     visible: {
       opacity: 1,
@@ -37,7 +36,7 @@ function Home() {
     },
   };
 
-  const socialVariants = {
+  const socialVariants: Variants = {
     hidden: { opacity: 0, scale: 0.6, y: 15 },
     visible: {
       opacity: 1,
@@ -50,20 +49,9 @@ function Home() {
     },
   };
 
-  const coreDevStack = [
-    { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-    { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
-    { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
-    { name: 'Vue 3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg' },
-    { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg' },
-    { name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
-    { name: 'AI / LLMs', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg' },
-    { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
-  ];
-
   return (
-    <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 pt-8 lg:pt-14 pb-20 flex flex-col gap-12 w-full">
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-12 w-full">
+    <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 py-8 lg:py-16 flex flex-col justify-center w-full min-h-[calc(100vh-140px)]">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-14 w-full my-auto">
         {/* Left: Content with orchestrated staggered entry */}
         <motion.div 
           variants={containerVariants}
@@ -74,7 +62,7 @@ function Home() {
           {/* Developer Code Terminal Pill Badge */}
           <motion.div 
             variants={itemVariants}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-[#00abf0]/25 text-xs font-mono mb-5 shadow-[0_0_15px_rgba(0,171,240,0.1)] backdrop-blur-sm"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-[#00abf0]/25 text-xs font-mono mb-5 shadow-[0_0_15px_rgba(0,171,240,0.1)] backdrop-blur-sm"
           >
             <Terminal size={13} className="text-[#00abf0]" />
             <span className="text-gray-400">const</span>
@@ -87,16 +75,16 @@ function Home() {
           {/* Category tags */}
           <motion.p 
             variants={itemVariants}
-            className="text-[11px] md:text-xs font-bold tracking-[0.25em] uppercase mb-4 text-[#00abf0] font-mono flex items-center gap-2"
+            className="text-xs md:text-sm font-bold tracking-[0.25em] uppercase mb-4 text-[#00abf0] font-mono flex items-center gap-2"
           >
-            <Code2 size={13} className="text-[#00abf0]" />
+            <Code2 size={14} className="text-[#00abf0]" />
             AI &nbsp;&middot;&nbsp; AI Agents &nbsp;&middot;&nbsp; Software &nbsp;&middot;&nbsp; Robotics
           </motion.p>
 
           {/* Main heading */}
           <motion.h1 
             variants={itemVariants}
-            className="text-4xl md:text-5xl lg:text-[3.3rem] xl:text-[3.75rem] font-bold mb-6 tracking-tight leading-[1.15]"
+            className="text-4xl md:text-5xl lg:text-[3.2rem] xl:text-[3.6rem] font-bold mb-5 tracking-tight leading-[1.15]"
           >
             <span className="text-white">Building intelligent systems,</span>
             <br />
@@ -108,7 +96,7 @@ function Home() {
           {/* Description */}
           <motion.p 
             variants={itemVariants}
-            className="text-sm md:text-base leading-relaxed mb-8 max-w-lg text-gray-400"
+            className="text-sm md:text-base leading-relaxed mb-8 max-w-xl text-gray-400"
           >
             I'm Rathishan Mahendran — a Computer Engineering student
             at the University of Ruhuna who builds real software: AI
@@ -123,7 +111,7 @@ function Home() {
             <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}>
               <Link
                 to="/projects"
-                className="px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold bg-[#00abf0] text-[#081b29] transition-all duration-300 hover:shadow-[0_8px_24px_rgba(0,171,240,0.6)] flex items-center gap-2 text-sm"
+                className="px-8 py-3.5 rounded-full font-bold bg-[#00abf0] text-[#081b29] transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer border-none shadow-[0_0_20px_rgba(0,171,240,0.3)] hover:shadow-[0_0_25px_rgba(0,171,240,0.5)]"
               >
                 View my work <ExternalLink size={16} />
               </Link>
@@ -132,20 +120,11 @@ function Home() {
             <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}>
               <Link
                 to="/contact"
-                className="border-2 border-white/30 text-white px-6 py-2.5 md:px-8 md:py-3 rounded-full font-bold transition-all duration-300 hover:border-[#00abf0] hover:text-[#00abf0] text-sm"
+                className="border-2 border-white/30 text-white px-8 py-3.5 rounded-full font-bold transition-all duration-300 hover:border-[#00abf0] hover:text-[#00abf0] text-sm cursor-pointer bg-transparent"
               >
                 Let's connect
               </Link>
             </motion.div>
-
-            <motion.a
-              whileHover={{ scale: 1.04, x: 2 }}
-              href="/Resume/Rathishan_Resume_Template.pdf"
-              download="Rathishan_Resume_Template.pdf"
-              className="text-gray-400 hover:text-white font-semibold transition-colors flex items-center gap-1.5 text-sm"
-            >
-              Download CV
-            </motion.a>
           </motion.div>
 
           {/* Social Icons */}
@@ -167,7 +146,7 @@ function Home() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:shadow-[0_0_18px_#00abf0] hover:bg-[#00abf0] hover:text-[#081b29]"
+                className="w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:bg-[#00abf0] hover:text-[#081b29]"
               >
                 {social.icon}
               </motion.a>
@@ -182,39 +161,36 @@ function Home() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
           className="w-full lg:w-[44%] flex justify-center relative order-1 lg:order-2 mt-4 lg:mt-0"
         >
-          {/* Glowing background */}
-          <div className="absolute inset-0 bg-[#00abf0] blur-[100px] rounded-full w-[250px] h-[250px] md:w-[360px] md:h-[360px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-25"></div>
-
-          <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px] flex flex-col items-center justify-center">
+          <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] lg:w-[410px] lg:h-[410px] xl:w-[440px] xl:h-[440px] flex flex-col items-center justify-center">
              {/* Floating Dev Badge: Top Left */}
              <motion.div 
-               initial={{ opacity: 0, y: -15 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: 0.5, duration: 0.6 }}
-               className="absolute -top-4 -left-6 z-20 hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#081b29]/90 border border-[#00abf0]/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md"
-             >
-               <div className="w-6 h-6 rounded-lg bg-[#00abf0]/15 flex items-center justify-center text-[#00abf0]">
-                 <Terminal size={14} />
-               </div>
-               <div className="text-left">
-                 <p className="text-[10px] text-gray-400 font-mono">Specialization</p>
-                 <p className="text-xs font-bold text-white font-mono">AI Agents & Web</p>
-               </div>
-             </motion.div>
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="absolute -top-3 -left-4 z-20 hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#081b29]/90 border border-[#00abf0]/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md"
+              >
+                <div className="w-5 h-5 rounded-lg bg-[#00abf0]/15 flex items-center justify-center text-[#00abf0]">
+                  <Terminal size={13} />
+                </div>
+                <div className="text-left">
+                  <p className="text-[10px] text-gray-400 font-mono">Specialization</p>
+                  <p className="text-xs font-bold text-white font-mono">AI Agents & Web</p>
+                </div>
+              </motion.div>
 
              {/* Floating Dev Badge: Bottom Right */}
              <motion.div 
-               initial={{ opacity: 0, y: 15 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: 0.65, duration: 0.6 }}
-               className="absolute -bottom-4 -right-4 z-20 hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#081b29]/90 border border-emerald-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md"
-             >
-               <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-               <div className="text-left">
-                 <p className="text-[10px] text-gray-400 font-mono">Status</p>
-                 <p className="text-xs font-bold text-white font-mono">Open for Projects</p>
-               </div>
-             </motion.div>
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.65, duration: 0.6 }}
+                className="absolute -bottom-3 -right-3 z-20 hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#081b29]/90 border border-emerald-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md"
+              >
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                <div className="text-left">
+                  <p className="text-[10px] text-gray-400 font-mono">Status</p>
+                  <p className="text-xs font-bold text-white font-mono">Open for Projects</p>
+                </div>
+              </motion.div>
 
              {/* Solid Blob */}
              <div
@@ -242,30 +218,6 @@ function Home() {
           </div>
         </motion.div>
       </div>
-
-      {/* Programmer Tech Stack Strip */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.7 }}
-        className="w-full pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4"
-      >
-        <div className="flex items-center gap-2 text-xs font-mono text-gray-400">
-          <Sparkles size={14} className="text-[#00abf0]" />
-          <span>Core Stack & Technologies:</span>
-        </div>
-        <div className="flex items-center flex-wrap justify-center gap-2">
-          {coreDevStack.map((tech) => (
-            <div 
-              key={tech.name}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] hover:border-[#00abf0]/40 transition-colors text-xs font-medium text-gray-300"
-            >
-              <img src={tech.icon} alt={tech.name} className="w-3.5 h-3.5 object-contain" />
-              <span>{tech.name}</span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
     </main>
   );
 }
@@ -626,32 +578,40 @@ const toolkitCategories: CategoryData[] = [
   }
 ];
 
-const quickPills = [
-  { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', catId: 'devops', toolName: 'Linux & Bash' },
+const quickPillsRow1 = [
   { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'software-dev', toolName: 'Python' },
   { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', catId: 'software-dev', toolName: 'TypeScript' },
-  { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', catId: 'software-dev', toolName: 'JavaScript' },
   { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', catId: 'web-dev', toolName: 'React' },
-  { name: 'Vue.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg', catId: 'web-dev', toolName: 'Vue.js' },
-  { name: 'Vite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg', catId: 'web-dev', toolName: 'Vite' },
-  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg', catId: 'web-dev', toolName: 'Tailwind CSS' },
-  { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', catId: 'web-dev', toolName: 'REST APIs & Fetch' },
-  { name: 'Espressif', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg', catId: 'robotics', toolName: 'Espressif (ESP32)' },
-  { name: 'Raspberry Pi', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg', catId: 'robotics', toolName: 'Raspberry Pi' },
-  { name: 'ROS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ros/ros-original.svg', catId: 'robotics', toolName: 'ROS / ROS 2' },
   { name: 'PyTorch', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg', catId: 'ai-ml', toolName: 'PyTorch' },
   { name: 'TensorFlow', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg', catId: 'ai-ml', toolName: 'TensorFlow' },
+  { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', catId: 'web-dev', toolName: 'FastAPI' },
+  { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg', catId: 'devops', toolName: 'Docker' },
+  { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', catId: 'devops', toolName: 'Linux & Bash' },
+  { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', catId: 'software-dev', toolName: 'Git & Version Control' },
+  { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', catId: 'data-db', toolName: 'PostgreSQL' },
+  { name: 'ESP32', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg', catId: 'robotics', toolName: 'Espressif (ESP32)' },
+];
+
+const quickPillsRow2 = [
+  { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', catId: 'software-dev', toolName: 'JavaScript' },
+  { name: 'Vue.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg', catId: 'web-dev', toolName: 'Vue.js' },
+  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg', catId: 'web-dev', toolName: 'Tailwind CSS' },
   { name: 'Hugging Face', icon: 'https://huggingface.co/front/assets/huggingface_logo-noborder.svg', catId: 'ai-ml', toolName: 'Hugging Face' },
   { name: 'LangChain', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'ai-agents', toolName: 'LangChain' },
   { name: 'OpenCV', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg', catId: 'ai-ml', toolName: 'OpenCV' },
+  { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', catId: 'data-db', toolName: 'MongoDB' },
+  { name: 'Raspberry Pi', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg', catId: 'robotics', toolName: 'Raspberry Pi' },
+  { name: 'ROS 2', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ros/ros-original.svg', catId: 'robotics', toolName: 'ROS / ROS 2' },
+  { name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', catId: 'software-dev', toolName: 'C++' },
+  { name: 'Vite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg', catId: 'web-dev', toolName: 'Vite' },
 ];
 
 function Skills() {
-  const [selectedCatId, setSelectedCatId] = useState<string>('ai-ml');
-  const [selectedToolName, setSelectedToolName] = useState<string>('PyTorch');
+  const [selectedCatId, setSelectedCatId] = useState<string>('software-dev');
+  const [selectedToolName, setSelectedToolName] = useState<string>('Python');
 
   const currentCategory = useMemo(() => {
-    return toolkitCategories.find(c => c.id === selectedCatId) || toolkitCategories[1];
+    return toolkitCategories.find(c => c.id === selectedCatId) || toolkitCategories[0];
   }, [selectedCatId]);
 
   const currentTool = useMemo(() => {
@@ -666,64 +626,68 @@ function Skills() {
     }
   };
 
-  const handleSelectQuickPill = (catId: string, toolName: string) => {
-    setSelectedCatId(catId);
-    setSelectedToolName(toolName);
-  };
-
   const getStatusBadgeStyle = (status: ToolDetail['status']) => {
     switch (status) {
       case 'WORKING WITH':
-        return 'text-[#00abf0] border-[#00abf0]/40 bg-[#00abf0]/10 shadow-[0_0_10px_rgba(0,171,240,0.2)]';
+        return 'text-[#00abf0] border-[#00abf0]/40 bg-[#00abf0]/10';
       case 'HANDS-ON':
-        return 'text-[#a855f7] border-[#a855f7]/40 bg-[#a855f7]/10 shadow-[0_0_10px_rgba(168,85,247,0.2)]';
+        return 'text-[#a855f7] border-[#a855f7]/40 bg-[#a855f7]/10';
       case 'COMFORTABLE':
-        return 'text-[#10b981] border-[#10b981]/40 bg-[#10b981]/10 shadow-[0_0_10px_rgba(16,185,129,0.2)]';
+        return 'text-[#10b981] border-[#10b981]/40 bg-[#10b981]/10';
       case 'EXPLORING':
-        return 'text-[#f59e0b] border-[#f59e0b]/40 bg-[#f59e0b]/10 shadow-[0_0_10px_rgba(245,158,11,0.2)]';
+        return 'text-[#f59e0b] border-[#f59e0b]/40 bg-[#f59e0b]/10';
     }
   };
 
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-5 lg:px-12 pt-4 lg:pt-8 pb-24 text-white">
-      {/* ─── 1. Header ─── */}
-      <div className="mb-10">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-mono font-bold tracking-[0.3em] text-[#00abf0] uppercase">
-            04 &nbsp;TOOLKIT
+    <div className="relative z-10 w-full text-white">
+      {/* ─── 1. Header (Mobile Only, Hidden on Desktop) ─── */}
+      <div className="mb-6 md:hidden">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[11px] font-mono font-bold tracking-[0.3em] text-[#00abf0] uppercase">
+            03 &nbsp;TOOLKIT
           </span>
         </div>
-        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white mb-3">
-          Skills & Technologies
-        </h1>
-        <p className="text-sm md:text-base text-gray-400 max-w-2xl">
-          Tools I use to turn ideas into working, intelligent, and scalable systems.
-        </p>
+        <h2 className="text-2xl font-bold tracking-tight text-white mb-6">
+          Skills &amp; Technologies
+        </h2>
       </div>
 
-      {/* ─── 2. Top Interactive Tech Cloud / Quick Pills ─── */}
-      <div className="flex flex-wrap items-center gap-2.5 mb-10 pb-2">
-        {quickPills.map((pill) => {
-          const isSelected = selectedToolName === pill.toolName;
-          return (
-            <button
-              key={pill.name}
-              onClick={() => handleSelectQuickPill(pill.catId, pill.toolName)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
-                isSelected
-                  ? 'bg-[#00abf0]/20 border-[#00abf0] text-white shadow-[0_0_15px_rgba(0,171,240,0.4)] scale-105'
-                  : 'bg-white/[0.03] border-white/[0.08] text-gray-300 hover:border-[#00abf0]/40 hover:text-white hover:bg-white/[0.06]'
-              } border backdrop-blur-sm cursor-pointer`}
+      {/* ─── 2. Dual Horizontal Scrolling Marquee (Continuous, Non-stop, Non-clickable on All Devices) ─── */}
+      <div className="relative w-full overflow-hidden mb-8 pb-1 space-y-3 pointer-events-none select-none">
+        {/* Left and right fade gradient masks */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#081524] to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#081524] to-transparent z-10" />
+
+        {/* Row 1: Leftward Infinite Marquee */}
+        <div className="animate-marquee-left flex gap-3">
+          {[...quickPillsRow1, ...quickPillsRow1].map((pill, idx) => (
+            <div
+              key={`row1-${pill.name}-${idx}`}
+              className="h-11 md:h-12 px-4 rounded-xl flex items-center gap-2.5 text-xs font-semibold whitespace-nowrap border bg-white/[0.03] border-white/[0.08] text-gray-300 pointer-events-none select-none shrink-0"
             >
-              <img src={pill.icon} alt={pill.name} className="w-4 h-4 object-contain" />
+              <img src={pill.icon} alt={pill.name} className="w-5 h-5 object-contain" />
               <span>{pill.name}</span>
-            </button>
-          );
-        })}
+            </div>
+          ))}
+        </div>
+
+        {/* Row 2: Rightward Infinite Marquee */}
+        <div className="animate-marquee-right flex gap-3">
+          {[...quickPillsRow2, ...quickPillsRow2].map((pill, idx) => (
+            <div
+              key={`row2-${pill.name}-${idx}`}
+              className="h-11 md:h-12 px-4 rounded-xl flex items-center gap-2.5 text-xs font-semibold whitespace-nowrap border bg-white/[0.03] border-white/[0.08] text-gray-300 pointer-events-none select-none shrink-0"
+            >
+              <img src={pill.icon} alt={pill.name} className="w-5 h-5 object-contain" />
+              <span>{pill.name}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ─── 3. Main Interactive Workspace Frame ─── */}
-      <div className="rounded-2xl border border-white/10 bg-[#071726]/80 backdrop-blur-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+      {/* ─── 3. Main Interactive Workspace Frame (Shadowless & Clean Border) ─── */}
+      <div className="rounded-2xl border border-white/10 bg-[#071726]/80 backdrop-blur-xl overflow-hidden shadow-none">
         {/* Workspace Top Bar */}
         <div className="flex items-center justify-between px-6 py-3.5 border-b border-white/10 bg-[#05111d]/70 text-xs font-mono">
           <div className="flex items-center gap-2 text-gray-300 uppercase tracking-widest font-bold">
@@ -738,7 +702,7 @@ function Skills() {
         {/* 3-Column Layout Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 min-h-[480px]">
           {/* ── Column 1: Areas / Categories (md:col-span-3) ── */}
-          <div className="md:col-span-3 border-b md:border-b-0 md:border-r border-white/10 p-3 space-y-1.5 bg-black/20">
+          <div className="md:col-span-3 border-b md:border-b-0 md:border-r border-white/10 p-3 flex flex-col gap-1.5 bg-black/20">
             {toolkitCategories.map((cat) => {
               const isActive = cat.id === selectedCatId;
               const Icon = cat.icon;
@@ -746,9 +710,9 @@ function Skills() {
                 <button
                   key={cat.id}
                   onClick={() => handleSelectCategory(cat.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-left text-xs font-medium transition-all duration-200 cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 rounded-xl text-left text-xs font-medium transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-[#00abf0]/15 text-white border border-[#00abf0]/40 shadow-[0_0_15px_rgba(0,171,240,0.15)]'
+                      ? 'bg-[#00abf0]/15 text-white border border-[#00abf0]/40'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.04] border border-transparent'
                   }`}
                 >
@@ -756,7 +720,7 @@ function Skills() {
                     <Icon size={16} className={isActive ? 'text-[#00abf0]' : 'text-gray-500'} />
                     <span className="truncate font-semibold">{cat.title}</span>
                   </div>
-                  <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                  <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ml-2 ${
                     isActive ? 'bg-[#00abf0]/20 text-[#00abf0]' : 'text-gray-600 bg-white/[0.02]'
                   }`}>
                     0{cat.tools.length}
@@ -785,7 +749,7 @@ function Skills() {
                       onClick={() => setSelectedToolName(tool.name)}
                       className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? 'bg-[#00abf0]/15 border-[#00abf0]/60 shadow-[0_0_16px_rgba(0,171,240,0.2)]'
+                          ? 'bg-[#00abf0]/15 border-[#00abf0]/60'
                           : 'bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/15 text-gray-300'
                       }`}
                     >
@@ -824,9 +788,9 @@ function Skills() {
                 transition={{ duration: 0.25 }}
                 className="space-y-6"
               >
-                {/* Tool Header: Big glowing icon + Title + Status */}
+                {/* Tool Header: Icon + Title + Status */}
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-white/[0.05] border border-[#00abf0]/40 flex items-center justify-center p-3 shadow-[0_0_25px_rgba(0,171,240,0.2)]">
+                  <div className="w-16 h-16 rounded-2xl bg-white/[0.05] border border-[#00abf0]/40 flex items-center justify-center p-3">
                     <img src={currentTool.icon} alt={currentTool.name} className="w-full h-full object-contain" />
                   </div>
                   <div>
@@ -917,7 +881,7 @@ function Skills() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -934,10 +898,11 @@ function Projects() {
   };
 
   return (
-    <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-2 lg:pt-8 pb-20">
-      <div className="mb-8">
-        <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">Portfolio</p>
-        <h2 className={`text-2xl md:text-3xl font-bold ${tp}`}>Featured Projects</h2>
+    <div className="relative z-10 w-full">
+      {/* Header (Mobile Only, Hidden on Desktop) */}
+      <div className="mb-6 md:hidden">
+        <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">04 &nbsp;PORTFOLIO</p>
+        <h2 className={`text-2xl font-bold ${tp}`}>Featured Projects</h2>
       </div>
 
       {/* Refined layout: Featured project spans full row horizontally, others take 1 column each */}
@@ -1010,128 +975,154 @@ function Projects() {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
-function Layout() {
+function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function PortfolioLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('home');
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
 
-  // Auto-close sidebar whenever the route changes
+  const navLinks = useMemo(() => [
+    { to: '/',        id: 'home',     label: 'Home'     },
+    { to: '/about',   id: 'about',    label: 'About Me' },
+    { to: '/skills',  id: 'skills',   label: 'Skills'   },
+    { to: '/projects',id: 'projects', label: 'Projects' },
+    { to: '/contact', id: 'contact',  label: 'Connect'  },
+  ], []);
+
+  // For mobile devices: scrollspy active indicator
+  // For scroll detection and mobile scrollspy
   useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
+      if (window.innerWidth >= 1024) return;
+      const scrollPosition = window.scrollY + 200;
+      const sectionIds = ['home', 'about', 'skills', 'projects', 'contact'];
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el && scrollPosition >= el.offsetTop) {
+          setActiveSection(sectionIds[i]);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleMobileNavClick = (id: string) => {
     closeMobileMenu();
-  }, [location.pathname, closeMobileMenu]);
-
-  // Prevent body scroll when sidebar is open
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [isMobileMenuOpen]);
-
-  const navLinks = [
-    { to: '/',        label: 'Home'     },
-    { to: '/about',   label: 'About Me' },
-    { to: '/skills',  label: 'Skills'   },
-    { to: '/projects',label: 'Projects' },
-    { to: '/contact', label: 'Connect'  },
-  ];
+    setActiveSection(id);
+    scrollToSection(id);
+  };
 
   return (
-    <div className="min-h-screen font-sans flex flex-col relative overflow-hidden bg-[#081524] text-white selection:bg-[#00abf0] selection:text-white">
-      {/* First 3D Constellation & Atmospheric Network Background */}
+    <div className="min-h-screen font-sans flex flex-col relative bg-[#081524] text-white selection:bg-[#00abf0] selection:text-white">
+      {/* 3D Atmospheric Background */}
       <NetworkBackground />
 
-      {/* ─── Navbar ─── */}
-      <nav className="relative z-20 flex items-center justify-between px-5 lg:px-12 py-3 lg:py-5 max-w-7xl mx-auto w-full border-b border-white/5">
-        {/* Logo / Brand Name */}
-        <Link to="/" className="text-2xl font-bold tracking-tight cursor-pointer flex items-center group">
-          <span className="text-white group-hover:text-gray-100 transition-colors">Rathishan</span>
-          <span className="text-[#00abf0]">.</span>
-          <span className="text-gray-300 group-hover:text-white font-medium ml-1.5 transition-colors">M</span>
-        </Link>
-
-        {/* Desktop nav links with active state highlighting */}
-        <div className="hidden lg:flex items-center space-x-8 text-sm font-semibold tracking-wide">
-          {navLinks.map(l => {
-            const isActive = location.pathname === l.to;
-            return (
-              <Link 
-                key={l.to} 
-                to={l.to} 
-                className={`relative py-1 transition-colors duration-200 ${
-                  isActive ? 'text-[#00abf0] font-bold' : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {l.label}
-                {isActive && (
-                  <motion.span 
-                    layoutId="activeNavIndicator"
-                    className="absolute -bottom-1.5 left-0 right-0 h-[2px] bg-[#00abf0] rounded-full shadow-[0_0_8px_#00abf0]"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Desktop right controls */}
-        <div className="hidden lg:flex items-center space-x-6">
-          <a href="/Resume/Rathishan_Resume_Template.pdf" download="Rathishan_Resume_Template.pdf" className="border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-all duration-300 border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)]">
-            Download CV <Download size={16} />
-          </a>
-        </div>
-
-        {/* Mobile: hamburger */}
-        <div className="flex lg:hidden items-center">
-          <button
-            onClick={() => setIsMobileMenuOpen(prev => !prev)}
-            aria-label="Toggle navigation menu"
-            className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 bg-white/[0.05] hover:bg-white/[0.1] text-white ${isMobileMenuOpen ? 'ring-2 ring-[#00abf0]/50' : ''}`}
+      {/* ─── Sticky Navbar (Original styling from screenshot) ─── */}
+      <header className="sticky top-0 z-50 bg-[#081524]/85 backdrop-blur-md border-b border-white/5">
+        <nav className="flex items-center justify-between px-6 lg:px-12 py-4 max-w-7xl mx-auto w-full">
+          {/* Logo / Brand */}
+          <Link 
+            to="/" 
+            onClick={() => handleMobileNavClick('home')}
+            className="text-2xl font-bold tracking-tight cursor-pointer flex items-center group bg-transparent border-none p-0"
           >
-            <span
-              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-                isMobileMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 rotate-90'
-              }`}
+            <span className="text-white group-hover:text-gray-100 transition-colors">Rathishan</span>
+            <span className="text-[#00abf0]">.</span>
+            <span className="text-gray-300 group-hover:text-white font-medium ml-1.5 transition-colors">M</span>
+          </Link>
+
+          {/* Desktop Nav Links (Route-based for Desktop) */}
+          <div className="hidden lg:flex items-center space-x-8 text-sm font-semibold tracking-wide">
+            {navLinks.map(l => {
+              const isActive = location.pathname === l.to;
+              return (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className={`relative py-1 transition-colors duration-200 cursor-pointer ${
+                    isActive ? 'text-[#00abf0] font-bold' : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  {l.label}
+                  {isActive && (
+                    <motion.span 
+                      layoutId="activeNavIndicator"
+                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#00abf0] rounded-full"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Desktop Right Controls */}
+          <div className="hidden lg:flex items-center space-x-6">
+            <a 
+              href="/Resume/Rathishan_Resume_Template.pdf" 
+              download="Rathishan_Resume_Template.pdf" 
+              className="border-2 border-[#ff004f] text-[#ff004f] px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)] hover:shadow-[0_0_22px_rgba(255,0,79,0.5)] cursor-pointer"
             >
-              <X size={20} style={{ color: '#00abf0' }} />
-            </span>
-            <span
-              className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-                isMobileMenuOpen ? 'opacity-0 -rotate-90' : 'opacity-100 rotate-0'
-              }`}
+              Download CV <Download size={16} className="stroke-[2.2]" />
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex lg:hidden items-center">
+            <button
+              onClick={() => setIsMobileMenuOpen(prev => !prev)}
+              aria-label="Toggle navigation menu"
+              className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 bg-white/[0.05] hover:bg-white/[0.1] text-white ${isMobileMenuOpen ? 'ring-2 ring-[#00abf0]/50' : ''}`}
             >
-              <Menu size={20} />
-            </span>
-          </button>
-        </div>
-      </nav>
+              <span className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 rotate-0' : 'opacity-0 rotate-90'}`}>
+                <X size={20} style={{ color: '#00abf0' }} />
+              </span>
+              <span className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 -rotate-90' : 'opacity-100 rotate-0'}`}>
+                <Menu size={20} />
+              </span>
+            </button>
+          </div>
+        </nav>
+      </header>
 
       {/* ─── Mobile Sidebar Overlay ─── */}
-      {/* Backdrop */}
       <div
         onClick={closeMobileMenu}
-        className={`lg:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
-      ></div>
+      />
 
-      {/* Drawer panel — slides in from the right */}
       <aside
-        className={`lg:hidden fixed top-0 right-0 z-40 h-full w-72 flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`lg:hidden fixed top-0 right-0 z-50 h-full w-72 flex flex-col transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         } bg-[#081b29]/95 border-l border-white/10 backdrop-blur-xl`}
       >
-        {/* Drawer header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <Link to="/" onClick={closeMobileMenu} className="text-lg font-bold flex items-center">
+          <button onClick={() => handleMobileNavClick('home')} className="text-lg font-bold flex items-center bg-transparent border-none p-0">
             <span className="text-white">Rathishan</span>
             <span className="text-[#00abf0]">.</span>
             <span className="text-gray-300 ml-1">M</span>
-          </Link>
+          </button>
           <button
             onClick={closeMobileMenu}
             className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors hover:bg-white/10 text-gray-400"
@@ -1140,62 +1131,89 @@ function Layout() {
           </button>
         </div>
 
-        {/* Nav links */}
         <nav className="flex flex-col px-4 pt-4 gap-1 flex-1">
-          {navLinks.map((l, i) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              onClick={closeMobileMenu}
-              className={`flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                location.pathname === l.to
+          {navLinks.map((l) => (
+            <button
+              key={l.id}
+              onClick={() => handleMobileNavClick(l.id)}
+              className={`flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 text-left cursor-pointer ${
+                activeSection === l.id
                   ? 'bg-[#00abf0]/10 text-[#00abf0] border-l-2 border-[#00abf0]'
                   : 'text-gray-300 hover:bg-white/[0.05] hover:text-white border-l-2 border-transparent'
               }`}
-              style={{ transitionDelay: isMobileMenuOpen ? `${i * 40}ms` : '0ms' }}
             >
-              <span
-                className={`transition-all duration-300 ${
-                  isMobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'
-                }`}
-                style={{ transitionDelay: isMobileMenuOpen ? `${i * 50 + 100}ms` : '0ms' }}
-              >
-                {l.label}
-              </span>
-            </Link>
+              <span>{l.label}</span>
+            </button>
           ))}
         </nav>
 
-        {/* Drawer footer */}
         <div className="px-4 pb-6 pt-4 border-t flex flex-col gap-4 border-white/10">
-          <a href="/Resume/Rathishan_Resume_Template.pdf" download="Rathishan_Resume_Template.pdf" className="w-full border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white">
-            Download CV <Download size={16} />
+          <a 
+            href="/Resume/Rathishan_Resume_Template.pdf" 
+            download="Rathishan_Resume_Template.pdf" 
+            className="w-full border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white"
+          >
+            Download CV <Download size={15} />
           </a>
-          <p className="text-[11px] text-center mt-3 text-gray-600">
-            © {new Date().getFullYear()} Rathishan Mahendran
-          </p>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/skills" element={<Skills />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<Home />} />
-      </Routes>
+      {/* ─── Desktop Content: Dedicated Page Views (No Continuous Vertical Scroll) ─── */}
+      <div className="hidden lg:flex flex-col flex-1 w-full max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<div className="py-6"><About /></div>} />
+          <Route path="/skills" element={<div className="py-6"><Skills /></div>} />
+          <Route path="/projects" element={<div className="py-6"><Projects /></div>} />
+          <Route path="/contact" element={<div className="py-6"><Contact /></div>} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </div>
+
+      {/* ─── Mobile Content: Continuous Vertical Scrolling (No artificial gaps) ─── */}
+      <main className="lg:hidden flex-1 w-full max-w-7xl mx-auto px-4 relative z-10 space-y-6">
+        {/* 1. Hero Section */}
+        <section id="home" className="min-h-[calc(100vh-64px)] flex flex-col justify-center pt-4 pb-4 scroll-mt-16">
+          <Home />
+        </section>
+
+        {/* 2. About Me Section */}
+        <section id="about" className="pt-2 pb-4 scroll-mt-16">
+          <div className="mb-3">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-1 text-[#00abf0]">02 ABOUT</p>
+            <h2 className="text-2xl font-bold text-white">About Me</h2>
+          </div>
+          <About />
+        </section>
+
+        {/* 3. Skills & Technologies Section */}
+        <section id="skills" className="pt-2 pb-4 scroll-mt-16">
+          <Skills />
+        </section>
+
+        {/* 4. Featured Projects Section */}
+        <section id="projects" className="pt-2 pb-4 scroll-mt-16">
+          <Projects />
+        </section>
+
+        {/* 5. Contact Section */}
+        <section id="contact" className="pt-2 pb-14 scroll-mt-16">
+          <div className="mb-3">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-1 text-[#00abf0]">05 CONNECT</p>
+            <h2 className="text-2xl font-bold text-white">Get in Touch</h2>
+          </div>
+          <Contact />
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="relative z-10 w-full py-6 mt-auto border-t border-white/5 bg-[#081b29]">
+      <footer className="relative z-10 w-full py-8 border-t border-white/5 bg-[#081b29]">
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm font-medium text-gray-500">
-            &copy; {new Date().getFullYear()} Rathishan Mahendran.
+            &copy; {new Date().getFullYear()} Rathishan Mahendran. Built with React & TypeScript.
           </p>
-          <div className="flex items-center space-x-4 text-sm text-gray-400">
-            <a href="#" className="hover:text-[#00abf0] transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-[#00abf0] transition-colors">Terms of Service</a>
+          <div className="flex items-center space-x-6 text-sm text-gray-400">
+            <Link to="/" onClick={() => scrollToSection('home')} className="hover:text-[#00abf0] transition-colors cursor-pointer">Back to Top &uarr;</Link>
           </div>
         </div>
       </footer>
@@ -1206,7 +1224,7 @@ function Layout() {
 export default function App() {
   return (
     <Router>
-      <Layout />
+      <PortfolioLayout />
     </Router>
   );
 }
