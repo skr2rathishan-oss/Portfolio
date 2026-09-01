@@ -71,7 +71,7 @@ export interface CommunityRole {
 }
 
 export const profileData: ProfileInfo = {
-  homeImage: '/profile/Profilephoto.jpeg',
+  homeImage: '/profile/Aboutmeprofile.jpeg',
   aboutImage: '/profile/Aboutmeprofile.jpeg',
 };
 
