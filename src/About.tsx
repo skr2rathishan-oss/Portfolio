@@ -3,7 +3,7 @@ import { User, Target, GraduationCap, Award, Trophy, Users, MapPin, BookOpen, La
 import { motion, AnimatePresence } from 'motion/react';
 import { profileData, educationData, certificationsData, achievementsData, communityData } from './data';
 
-interface Props { isDarkMode: boolean; }
+
 
 const tabs = [
   { id: 'overview', label: 'Overview', icon: <User size={16} /> },
@@ -15,27 +15,21 @@ const tabs = [
 
 const CYAN = '#00abf0';
 
-export default function About({ isDarkMode }: Props) {
+export default function About() {
   const [activeTab, setActiveTab] = useState('overview');
 
-  const bg = isDarkMode ? 'bg-[#081b29]' : 'bg-[#f8fafc]';
-  const card = isDarkMode
-    ? 'bg-white/[0.03] border border-white/[0.07] backdrop-blur-md'
-    : 'bg-white border border-slate-100 shadow-md';
-  const tp = isDarkMode ? 'text-white' : 'text-slate-800';
-  const ts = isDarkMode ? 'text-gray-400' : 'text-slate-500';
-  const divider = isDarkMode ? 'border-white/[0.06]' : 'border-slate-100';
-  const innerCard = isDarkMode ? 'bg-white/[0.03] border border-white/[0.06]' : 'bg-slate-50 border border-slate-100';
-  const tabActive = isDarkMode
-    ? 'bg-[#00abf0]/10 text-[#00abf0] border-l-2 border-[#00abf0]'
-    : 'bg-[#00abf0]/10 text-[#00abf0] border-l-2 border-[#00abf0]';
-  const tabIdle = isDarkMode
-    ? 'text-gray-400 hover:bg-white/[0.04] hover:text-white border-l-2 border-transparent'
-    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800 border-l-2 border-transparent';
+  const bg = 'bg-[#081b29]';
+  const card = 'bg-white/[0.03] border border-white/[0.07] backdrop-blur-md';
+  const tp = 'text-white';
+  const ts = 'text-gray-400';
+  const divider = 'border-white/[0.06]';
+  const innerCard = 'bg-white/[0.03] border border-white/[0.06]';
+  const tabActive = 'bg-[#00abf0]/10 text-[#00abf0] border-l-2 border-[#00abf0]';
+  const tabIdle = 'text-gray-400 hover:bg-white/[0.04] hover:text-white border-l-2 border-transparent';
 
   // Reusable badge box
   const Badge = ({ src, alt, emoji }: { src?: string; alt: string; emoji?: string }) => (
-    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${isDarkMode ? 'bg-white/[0.05]' : 'bg-slate-100'}`}>
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-white/[0.05]`}>
       {src
         ? <img src={src} alt={alt} className="w-7 h-7 object-contain" />
         : <span className="text-2xl">{emoji}</span>
@@ -165,10 +159,10 @@ export default function About({ isDarkMode }: Props) {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     {educationData.map((e, i) => (
                       <div key={i} className={`flex items-center gap-4 p-4 rounded-xl ${innerCard}`}>
-                        <div className={`w-18 h-18 rounded-lg flex-shrink-0 overflow-hidden border ${isDarkMode ? 'border-white/[0.08]' : 'border-slate-200'}`}>
+                        <div className={`w-18 h-18 rounded-lg flex-shrink-0 overflow-hidden border border-white/[0.08]`}>
                           {e.logo
                             ? <img src={e.logo} alt={e.school} className="w-full h-full object-cover" />
-                            : <div className={`w-full h-full flex items-center justify-center text-xl ${isDarkMode ? 'bg-white/[0.05]' : 'bg-slate-100'}`}>🎓</div>
+                            : <div className={`w-full h-full flex items-center justify-center text-xl bg-white/[0.05]`}>🎓</div>
                           }
                         </div>
                         <div className="flex-1">
@@ -215,9 +209,7 @@ export default function About({ isDarkMode }: Props) {
                         <div
                           className={`w-9 h-9 rounded-full flex items-center justify-center text-[11px] font-extrabold flex-shrink-0 -ml-6 z-10 transition-all duration-300 ${step.done
                               ? 'text-white shadow-[0_0_14px_rgba(0,171,240,0.8)]'
-                              : isDarkMode
-                                ? 'border-2 border-dashed text-gray-600'
-                                : 'bg-slate-100 border-2 border-dashed border-slate-300 text-slate-400'
+                              : 'border-2 border-dashed text-gray-600'
                             }`}
                           style={step.done
                             ? { background: CYAN, border: `2px solid ${CYAN}` }
@@ -233,7 +225,7 @@ export default function About({ isDarkMode }: Props) {
                               style={{ color: step.done ? CYAN : `${CYAN}50` }}
                             >{step.y}</span>
                             {!step.done && (
-                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border border-dashed ${isDarkMode ? 'text-gray-500 border-gray-700' : 'text-slate-400 border-slate-300'}`}>
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border border-dashed text-gray-500 border-gray-700`}>
                                 Upcoming
                               </span>
                             )}
@@ -298,7 +290,7 @@ export default function About({ isDarkMode }: Props) {
                           </a>
                         ) : (
                           <div
-                            className={`flex items-center justify-center gap-1.5 w-full py-1.5 rounded-lg text-xs font-semibold opacity-40 cursor-default ${isDarkMode ? 'bg-white/[0.03] text-gray-500' : 'bg-slate-50 text-slate-400'}`}
+                            className={`flex items-center justify-center gap-1.5 w-full py-1.5 rounded-lg text-xs font-semibold opacity-40 cursor-default bg-white/[0.03] text-gray-500`}
                           >
                             <ExternalLink size={11} /> Credential Coming Soon
                           </div>
