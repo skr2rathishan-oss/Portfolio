@@ -1,9 +1,32 @@
 import React, { useState } from 'react';
 import { Mail, Linkedin, Github, BookOpen, MapPin, ArrowUpRight, CheckCircle2, XCircle, Send } from 'lucide-react';
-
-
+import { motion, type Variants } from 'motion/react';
 
 const CYAN = '#00abf0';
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 16, filter: 'blur(4px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -33,10 +56,7 @@ export default function Contact() {
 
       if (data.success) {
         setStatus('success');
-        // Reset form
         setFormData({ name: '', email: '', subject: '', message: '' });
-        
-        // Optionally revert back to idle after a few seconds
         setTimeout(() => setStatus('idle'), 5000);
       } else {
         setStatus('error');
@@ -66,7 +86,7 @@ export default function Contact() {
   );
 
   const presence = [
-    { label: 'Email', sub: 'rathishan2103@gmail.com', icon: <Mail className="w-5 h-5" />, link: 'mailto:rathishanm@gmail.com', color: '#EA4335' },
+    { label: 'Email', sub: 'rathishan2103@gmail.com', icon: <Mail className="w-5 h-5" />, link: 'mailto:rathishan2103@gmail.com', color: '#EA4335' },
     { label: 'LinkedIn', sub: 'rathishan-mahendran', icon: <Linkedin className="w-5 h-5" />, link: 'https://linkedin.com/in/rathishan-mahendran', color: '#0A66C2' },
     { label: 'GitHub', sub: 'skr2rathishan-oss', icon: <Github className="w-5 h-5" />, link: 'https://github.com/skr2rathishan-oss', color: '#E6EDF3' },
     { label: 'IEEE', sub: 'IEEE Student Branch', icon: <IeeeIcon />, link: '#', color: '#00629B' },
@@ -76,17 +96,21 @@ export default function Contact() {
 
   return (
     <section className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 pt-2 lg:pt-10 pb-20">
-      <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
-
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex flex-col lg:flex-row gap-12 lg:gap-16"
+      >
         {/* ── Left: Form ── */}
-        <div className="w-full lg:w-[52%]">
+        <motion.div variants={itemVariants} className="w-full lg:w-[52%]">
           <div className="mb-8">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-3" style={{ color: CYAN }}>Get in Touch</p>
             <h2 className={`text-3xl md:text-4xl font-bold tracking-tight ${tp}`}>
               Let's <span style={{ color: CYAN }}>Connect.</span>
             </h2>
             <p className={`mt-3 text-sm leading-relaxed max-w-md ${ts}`}>
-              Open to collaborations, internships, and conversations about AI, design, and engineering.
+              Open to collaborations, internships, and conversations about AI, software engineering, and robotics.
             </p>
           </div>
 
@@ -134,46 +158,58 @@ export default function Contact() {
               />
             </div>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
               type="submit"
               disabled={status === 'loading'}
-              className="-mt-1 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 bg-[#00abf0] text-[#081b29] hover:shadow-[0_0_20px_rgba(0,171,240,0.5)] hover:-translate-y-0.5"
+              className="-mt-1 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 bg-[#00abf0] text-[#081b29] hover:shadow-[0_0_20px_rgba(0,171,240,0.5)] cursor-pointer"
             >
               {status === 'loading' ? (
                 <><span className="w-4 h-4 border-2 border-t-transparent border-[#081b29] rounded-full animate-spin" /> Sending</>
               ) : (
                 <><Send size={15} /> Send Message</>
               )}
-            </button>
+            </motion.button>
 
             {status === 'success' && (
-              <div className="flex items-center gap-2 text-emerald-500 text-sm font-medium mt-1">
+              <motion.div 
+                initial={{ opacity: 0, y: 5 }} 
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 text-emerald-500 text-sm font-medium mt-1"
+              >
                 <CheckCircle2 size={16} /> Sent successfully! I'll respond soon.
-              </div>
+              </motion.div>
             )}
             {status === 'error' && (
-              <div className="flex items-center gap-2 text-red-500 text-sm font-medium mt-1">
+              <motion.div 
+                initial={{ opacity: 0, y: 5 }} 
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 text-red-500 text-sm font-medium mt-1"
+              >
                 <XCircle size={16} /> Something went wrong. Please try again.
-              </div>
+              </motion.div>
             )}
           </form>
-        </div>
+        </motion.div>
 
         {/* ── Right: Digital Presence Bento Grid ── */}
-        <div className="w-full lg:w-[48%]">
+        <motion.div variants={itemVariants} className="w-full lg:w-[48%]">
           <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-5" style={{ color: CYAN }}>Digital Presence</p>
 
           <div className="grid grid-cols-2 gap-3">
             {presence.map((item, i) => (
-              <a
+              <motion.a
                 key={i}
                 href={item.link}
                 target={item.link.startsWith('http') ? '_blank' : undefined}
                 rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className={`group relative p-4 rounded-2xl flex flex-col gap-3 transition-all duration-300 hover:-translate-y-1 ${card} hover:border-[${item.color}]/40`}
-                style={{ borderColor: 'transparent' }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`group relative p-4 rounded-2xl flex flex-col gap-3 transition-all duration-300 ${card}`}
+                style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
                 onMouseEnter={e => (e.currentTarget.style.borderColor = `${item.color}40`)}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)')}
               >
                 {/* Icon badge */}
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -191,23 +227,26 @@ export default function Contact() {
                   className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   style={{ color: item.color }}
                 />
-              </a>
+              </motion.a>
             ))}
           </div>
 
           {/* Availability badge */}
-          <div className={`mt-4 p-4 rounded-2xl flex items-center gap-3 ${card}`}>
+          <motion.div 
+            whileHover={{ scale: 1.01 }}
+            className={`mt-4 p-4 rounded-2xl flex items-center gap-3 ${card}`}
+          >
             <div className="relative w-3 h-3">
               <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-70" />
               <div className="absolute inset-0 rounded-full bg-emerald-500" />
             </div>
             <div>
               <p className={`text-sm font-semibold ${tp}`}>Available for opportunities</p>
-              <p className={`text-xs ${ts}`}>Internships · Freelance · Collaborations</p>
+              <p className={`text-xs ${ts}`}>Internships &middot; Research &middot; Collaborations</p>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

@@ -50,7 +50,7 @@ function Home() {
   };
 
   return (
-    <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 py-8 lg:py-16 flex flex-col justify-center w-full min-h-[calc(100vh-140px)]">
+    <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 py-4 lg:py-16 flex flex-col justify-center w-full lg:min-h-[calc(100vh-140px)]">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-14 w-full my-auto">
         {/* Left: Content with orchestrated staggered entry */}
         <motion.div 
@@ -68,7 +68,7 @@ function Home() {
             <span className="text-gray-400">const</span>
             <span className="text-[#00abf0] font-semibold">engineer</span>
             <span className="text-gray-400">=</span>
-            <span className="text-emerald-400 font-medium">"AI & Software Developer"</span>
+            <span className="text-emerald-400 font-medium">"AI &amp; Software Developer"</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-1" />
           </motion.div>
 
@@ -98,7 +98,7 @@ function Home() {
             variants={itemVariants}
             className="text-sm md:text-base leading-relaxed mb-8 max-w-xl text-gray-400"
           >
-            I'm Rathishan Mahendran — a Computer Engineering student
+            I'm Rathishan Mahendran &mdash; a Computer Engineering student
             at the University of Ruhuna who builds real software: AI
             agents, full-stack products and autonomous hardware.
           </motion.p>
@@ -120,33 +120,34 @@ function Home() {
             <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}>
               <Link
                 to="/contact"
-                className="border-2 border-white/30 text-white px-8 py-3.5 rounded-full font-bold transition-all duration-300 hover:border-[#00abf0] hover:text-[#00abf0] text-sm cursor-pointer bg-transparent"
+                className="px-8 py-3.5 rounded-full font-bold border border-[#00abf0]/40 text-white hover:bg-[#00abf0]/10 transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer hover:border-[#00abf0] hover:shadow-[0_0_15px_rgba(0,171,240,0.2)]"
               >
-                Let's connect
+                Let's talk
               </Link>
             </motion.div>
           </motion.div>
 
-          {/* Social Icons */}
+          {/* Social Links with Staggered Motion */}
           <motion.div 
             variants={itemVariants}
-            className="flex items-center space-x-4"
+            className="flex items-center space-x-4 text-gray-400"
           >
             {[
-              { icon: <Github size={18} className="fill-current" />, href: 'https://github.com/skr2rathishan-oss' },
-              { icon: <Linkedin size={18} />, href: 'https://www.linkedin.com/in/rathishan-mahendran-39812b316' },
-              { icon: <Facebook size={18} />, href: 'https://www.facebook.com/Rathishan21' },
-              { icon: <Instagram size={18} />, href: 'https://www.instagram.com/rathishan21/' },
+              { href: "https://linkedin.com/in/rathishan-mahendran", icon: <Linkedin size={18} />, label: "LinkedIn", color: "hover:text-[#0A66C2] hover:border-[#0A66C2]/40" },
+              { href: "https://github.com/skr2rathishan-oss", icon: <Github size={18} />, label: "GitHub", color: "hover:text-white hover:border-white/40" },
+              { href: "https://instagram.com/rathishan._", icon: <Instagram size={18} />, label: "Instagram", color: "hover:text-[#E4405F] hover:border-[#E4405F]/40" },
+              { href: "https://facebook.com/rathishan.21", icon: <Facebook size={18} />, label: "Facebook", color: "hover:text-[#1877F2] hover:border-[#1877F2]/40" }
             ].map((social, i) => (
               <motion.a
-                key={i}
+                key={social.label}
                 variants={socialVariants}
                 whileHover={{ scale: 1.15, y: -3 }}
-                whileTap={{ scale: 0.92 }}
+                whileTap={{ scale: 0.9 }}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border-2 border-[#00abf0] text-[#00abf0] flex items-center justify-center transition-all duration-300 hover:bg-[#00abf0] hover:text-[#081b29]"
+                aria-label={social.label}
+                className={`w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition-colors duration-200 bg-white/[0.02] cursor-pointer ${social.color}`}
               >
                 {social.icon}
               </motion.a>
@@ -154,48 +155,28 @@ function Home() {
           </motion.div>
         </motion.div>
 
-        {/* Right: Clean, High-Clarity Profile Image with Floating Programmer Badges */}
+        {/* Right: Floating Profile Card */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          className="w-full lg:w-[44%] flex justify-center relative order-1 lg:order-2 mt-4 lg:mt-0"
+          initial={{ opacity: 0, scale: 0.85, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="w-full lg:w-[44%] flex justify-center items-center order-1 lg:order-2"
         >
-          <div className="relative w-[300px] h-[300px] sm:w-[360px] sm:h-[360px] lg:w-[410px] lg:h-[410px] xl:w-[440px] xl:h-[440px] flex flex-col items-center justify-center">
-             {/* Floating Dev Badge: Top Left */}
-             <motion.div 
-                initial={{ opacity: 0, y: -15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-                className="absolute -top-3 -left-4 z-20 hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#081b29]/90 border border-[#00abf0]/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md"
-              >
-                <div className="w-5 h-5 rounded-lg bg-[#00abf0]/15 flex items-center justify-center text-[#00abf0]">
-                  <Terminal size={13} />
-                </div>
-                <div className="text-left">
-                  <p className="text-[10px] text-gray-400 font-mono">Specialization</p>
-                  <p className="text-xs font-bold text-white font-mono">AI Agents & Web</p>
-                </div>
-              </motion.div>
+          <div className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 flex items-center justify-center">
+             {/* Glowing Cybernetic Backdrop Accent */}
+             <div 
+               className="absolute inset-0 rounded-full blur-2xl opacity-40 animate-pulse pointer-events-none"
+               style={{ background: 'radial-gradient(circle, #00abf0 0%, #081b29 70%)' }}
+             />
 
-             {/* Floating Dev Badge: Bottom Right */}
-             <motion.div 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.65, duration: 0.6 }}
-                className="absolute -bottom-3 -right-3 z-20 hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#081b29]/90 border border-emerald-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] backdrop-blur-md"
-              >
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                <div className="text-left">
-                  <p className="text-[10px] text-gray-400 font-mono">Status</p>
-                  <p className="text-xs font-bold text-white font-mono">Open for Projects</p>
-                </div>
-              </motion.div>
-
-             {/* Solid Blob */}
-             <div
-               className="absolute inset-0 bg-[#00abf0] shadow-[0_0_35px_rgba(0,171,240,0.5)]"
-               style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}
+             {/* Dynamic Organic Outer Ring */}
+             <div 
+               className="absolute inset-[-10px] md:inset-[-12px] border border-[#00abf0]/40 transition-transform duration-1000"
+               style={{ 
+                 borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
+                 animation: 'morphShape 12s ease-in-out infinite alternate',
+                 background: 'linear-gradient(135deg, rgba(0,171,240,0.15) 0%, rgba(8,27,41,0.4) 100%)'
+               }}
              />
 
              {/* Outline Blob */}
@@ -561,12 +542,14 @@ function Skills() {
               const isActive = cat.id === selectedCatId;
               const Icon = cat.icon;
               return (
-                <button
+                <motion.button
                   key={cat.id}
+                  whileHover={{ x: 3 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => handleSelectCategory(cat.id)}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 rounded-xl text-left text-xs font-medium transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? 'bg-[#00abf0]/15 text-white border border-[#00abf0]/40'
+                      ? 'bg-[#00abf0]/15 text-white border border-[#00abf0]/40 shadow-[0_0_15px_rgba(0,171,240,0.15)]'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.04] border border-transparent'
                   }`}
                 >
@@ -579,7 +562,7 @@ function Skills() {
                   }`}>
                     0{cat.tools.length}
                   </span>
-                </button>
+                </motion.button>
               );
             })}
           </div>
@@ -598,12 +581,14 @@ function Skills() {
                 {currentCategory.tools.map((tool) => {
                   const isSelected = selectedToolName === tool.name;
                   return (
-                    <div
+                    <motion.div
                       key={tool.name}
+                      whileHover={{ x: 3, scale: 1.01 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedToolName(tool.name)}
                       className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? 'bg-[#00abf0]/15 border-[#00abf0]/60'
+                          ? 'bg-[#00abf0]/15 border-[#00abf0]/60 shadow-[0_0_15px_rgba(0,171,240,0.1)]'
                           : 'bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/15 text-gray-300'
                       }`}
                     >
@@ -618,7 +603,7 @@ function Skills() {
                       <span className={`text-[9px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-full border ${getStatusBadgeStyle(tool.status)}`}>
                         {tool.status}
                       </span>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -644,7 +629,7 @@ function Skills() {
               >
                 {/* Tool Header: Icon + Title + Status */}
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-white/[0.05] border border-[#00abf0]/40 flex items-center justify-center p-3">
+                  <div className="w-16 h-16 rounded-2xl bg-white/[0.05] border border-[#00abf0]/40 flex items-center justify-center p-3 shadow-[0_0_20px_rgba(0,171,240,0.15)]">
                     <img src={currentTool.icon} alt={currentTool.name} className="w-full h-full object-contain" />
                   </div>
                   <div>
@@ -719,20 +704,20 @@ function Skills() {
         </div>
 
         <div className="flex items-center flex-wrap justify-center gap-3 text-xs font-medium">
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-amber-500/30 text-amber-300">
+          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-amber-500/30 text-amber-300 cursor-default">
             <span>🤗</span>
             <span>Hugging Face Fine-Tuning</span>
-          </div>
+          </motion.div>
 
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-red-500/30 text-red-300">
+          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-red-500/30 text-red-300 cursor-default">
             <span>⚡</span>
             <span>Redis Vector Search</span>
-          </div>
+          </motion.div>
 
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-[#00abf0]/30 text-[#00abf0]">
+          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }} className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-[#00abf0]/30 text-[#00abf0] cursor-default">
             <span>🔄</span>
             <span>Sensor Fusion with ROS 2</span>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
@@ -745,63 +730,83 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: ProjectCardProps) {
-  return (
+  const cardBody = (
     <div
       className={`group relative rounded-2xl md:rounded-3xl bg-[#061424] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 pb-5 flex flex-col justify-between transition-colors duration-200 ${
         isMobile
-          ? 'w-[85vw] max-w-[340px] shrink-0 snap-center shadow-[0_8px_24px_rgba(0,0,0,0.5)]'
-          : 'hover:shadow-[0_8px_24px_rgba(0,171,240,0.12)]'
+          ? 'w-[84vw] max-w-[340px] flex-shrink-0 snap-center min-h-[460px]'
+          : 'w-full min-h-[490px]'
       }`}
     >
       <div>
-        {/* Project Image Frame (Device/Viewport Look) */}
-        <div className="w-full aspect-video rounded-xl overflow-hidden bg-black/50 border border-white/[0.08] relative mb-4">
+        {/* Project Thumbnail Image */}
+        <div className="relative w-full h-44 rounded-xl md:rounded-2xl overflow-hidden mb-4 bg-black/40 border border-white/5">
           <img
             src={project.image}
             alt={project.title}
-            referrerPolicy="no-referrer"
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#061424]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#061424]/90 via-transparent to-transparent pointer-events-none" />
+          
+          {/* Complexity pill badge top-left */}
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#061424]/80 backdrop-blur-md border border-white/10 text-[10px] font-mono uppercase tracking-wider text-gray-300">
+            <span className={`w-1.5 h-1.5 rounded-full ${
+              project.complexity === 'high' ? 'bg-amber-400' : project.complexity === 'medium' ? 'bg-[#00abf0]' : 'bg-emerald-400'
+            }`} />
+            {project.complexity}
+          </div>
         </div>
 
         {/* Title */}
-        <h3 className="text-base font-bold text-white mb-2 text-center group-hover:text-[#00abf0] transition-colors">
+        <h3 className="text-lg md:text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-[#00abf0] transition-colors duration-200">
           {project.title}
         </h3>
 
         {/* Description */}
-        <p className="text-xs text-gray-400 leading-relaxed text-center mb-4 line-clamp-3 min-h-[48px] px-1">
+        <p className="text-xs md:text-sm text-gray-400 leading-relaxed mb-4 line-clamp-3">
           {project.description}
         </p>
 
-        {/* Tags */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 mb-5">
-          {project.tags.map((tag: Tag) => (
-            <span
-              key={tag.name}
-              className="text-[10px] px-2.5 py-0.5 rounded-full font-medium bg-white/[0.04] text-gray-300 border border-white/[0.08]"
-            >
-              {tag.name}
-            </span>
-          ))}
+        {/* Structured Tags */}
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {project.tags.map((tag: Tag) => {
+            const isCore = tag.level === 'core';
+            return (
+              <span
+                key={tag.name}
+                className={`text-[10px] md:text-[11px] px-2.5 py-1 rounded-lg font-medium ${
+                  isCore
+                    ? 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/30'
+                    : 'bg-white/[0.04] text-gray-400 border border-white/[0.06]'
+                }`}
+              >
+                {tag.name}
+              </span>
+            );
+          })}
         </div>
       </div>
 
-      {/* Action Buttons (Visit Site & Source Code) */}
-      <div className="flex items-center gap-2.5 pt-3 border-t border-white/5 mt-auto">
+      {/* Action Buttons */}
+      <div className="flex items-center gap-2 pt-3 border-t border-white/5 mt-auto">
         {project.demoLink ? (
           <>
-            <a
+            <motion.a
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               href={project.demoLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#00abf0]/15 border border-[#00abf0]/30 text-[#00abf0] hover:bg-[#00abf0] hover:text-[#081b29] transition-colors duration-200 shadow-[0_0_12px_rgba(0,171,240,0.1)] hover:shadow-[0_0_18px_rgba(0,171,240,0.4)] cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#00abf0] text-[#081b29] hover:bg-[#00abf0]/90 transition-all duration-200 cursor-pointer shadow-[0_0_12px_rgba(0,171,240,0.25)]"
             >
               <Eye size={14} />
               <span>Visit Site</span>
-            </a>
-            <a
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               href={project.codeLink}
               target="_blank"
               rel="noopener noreferrer"
@@ -809,10 +814,12 @@ const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: Pro
             >
               <Github size={14} />
               <span>Source Code</span>
-            </a>
+            </motion.a>
           </>
         ) : (
-          <a
+          <motion.a
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             href={project.codeLink}
             target="_blank"
             rel="noopener noreferrer"
@@ -820,10 +827,23 @@ const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: Pro
           >
             <Github size={14} />
             <span>Source Code</span>
-          </a>
+          </motion.a>
         )}
       </div>
     </div>
+  );
+
+  if (isMobile) {
+    return cardBody;
+  }
+
+  return (
+    <motion.div
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      className="w-full flex"
+    >
+      {cardBody}
+    </motion.div>
   );
 });
 
@@ -860,12 +880,14 @@ function Projects() {
   }, [selectedCategory]);
 
   return (
-    <div className="relative z-10 w-full max-w-7xl mx-auto pb-12">
+    <div className="relative z-10 w-full max-w-7xl mx-auto pb-2 md:pb-12">
       {/* ─── Category Filter Pills (Desktop Only) ─── */}
       <div className="hidden md:flex items-center justify-center flex-wrap gap-2 mb-8 md:mb-10 pt-2">
         {categories.map(cat => (
-          <button
+          <motion.button
             key={cat.id}
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
             type="button"
             onClick={() => setSelectedCategory(cat.id as any)}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
@@ -875,7 +897,7 @@ function Projects() {
             }`}
           >
             {cat.label}
-          </button>
+          </motion.button>
         ))}
       </div>
 
@@ -909,6 +931,20 @@ function scrollToSection(id: string) {
   if (el) {
     el.scrollIntoView({ behavior: 'smooth' });
   }
+}
+
+function PageTransition({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="w-full flex-1 flex flex-col"
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 function PortfolioLayout() {
@@ -965,7 +1001,7 @@ function PortfolioLayout() {
       {/* 3D Atmospheric Background */}
       <NetworkBackground />
 
-      {/* ─── Sticky Navbar (Original styling from screenshot) ─── */}
+      {/* ─── Sticky Navbar ─── */}
       <header className="sticky top-0 z-50 bg-[#081524]/85 backdrop-blur-md border-b border-white/5">
         <nav className="flex items-center justify-between px-6 lg:px-12 py-4 max-w-7xl mx-auto w-full">
           {/* Logo / Brand */}
@@ -995,7 +1031,7 @@ function PortfolioLayout() {
                   {isActive && (
                     <motion.span 
                       layoutId="activeNavIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#00abf0] rounded-full"
+                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#00abf0] rounded-full shadow-[0_0_8px_rgba(0,171,240,0.8)]"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -1006,13 +1042,15 @@ function PortfolioLayout() {
 
           {/* Desktop Right Controls */}
           <div className="hidden lg:flex items-center space-x-6">
-            <a 
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="/Resume/Rathishan_Mahendran_Resume_Software.pdf" 
               download="Rathishan_Mahendran_Resume_Software.pdf" 
               className="border-2 border-[#ff004f] text-[#ff004f] px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)] hover:shadow-[0_0_22px_rgba(255,0,79,0.5)] cursor-pointer"
             >
               Download CV <Download size={16} className="stroke-[2.2]" />
-            </a>
+            </motion.a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -1087,27 +1125,29 @@ function PortfolioLayout() {
         </div>
       </aside>
 
-      {/* ─── Desktop Content: Dedicated Page Views (No Continuous Vertical Scroll) ─── */}
+      {/* ─── Desktop Content: Dedicated Page Views with Smooth Route Transitions ─── */}
       <div className="hidden lg:flex flex-col flex-1 w-full max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<div className="py-6"><About /></div>} />
-          <Route path="/skills" element={<div className="py-6"><Skills /></div>} />
-          <Route path="/projects" element={<div className="py-6"><Projects /></div>} />
-          <Route path="/contact" element={<div className="py-6"><Contact /></div>} />
-          <Route path="*" element={<Home />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+            <Route path="/about" element={<PageTransition><div className="py-6"><About /></div></PageTransition>} />
+            <Route path="/skills" element={<PageTransition><div className="py-6"><Skills /></div></PageTransition>} />
+            <Route path="/projects" element={<PageTransition><div className="py-6"><Projects /></div></PageTransition>} />
+            <Route path="/contact" element={<PageTransition><div className="py-6"><Contact /></div></PageTransition>} />
+            <Route path="*" element={<PageTransition><Home /></PageTransition>} />
+          </Routes>
+        </AnimatePresence>
       </div>
 
-      {/* ─── Mobile Content: Continuous Vertical Scrolling (No artificial gaps) ─── */}
-      <main className="lg:hidden flex-1 w-full max-w-7xl mx-auto px-4 relative z-10 space-y-6">
+      {/* ─── Mobile Content: Continuous Vertical Scrolling ─── */}
+      <main className="lg:hidden flex-1 w-full max-w-7xl mx-auto px-4 relative z-10 space-y-4">
         {/* 1. Hero Section */}
-        <section id="home" className="min-h-[calc(100vh-64px)] flex flex-col justify-center pt-4 pb-4 scroll-mt-16">
+        <section id="home" className="min-h-[calc(100vh-64px)] flex flex-col justify-center pt-2 pb-2 scroll-mt-16">
           <Home />
         </section>
 
         {/* 2. About Me Section */}
-        <section id="about" className="pt-2 pb-4 scroll-mt-16">
+        <section id="about" className="pt-2 pb-2 scroll-mt-16">
           <div className="mb-3">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-1 text-[#00abf0]">02 ABOUT</p>
             <h2 className="text-2xl font-bold text-white">About Me</h2>
@@ -1116,17 +1156,21 @@ function PortfolioLayout() {
         </section>
 
         {/* 3. Skills & Technologies Section */}
-        <section id="skills" className="pt-2 pb-4 scroll-mt-16">
+        <section id="skills" className="pt-2 pb-2 scroll-mt-16">
           <Skills />
         </section>
 
         {/* 4. Featured Projects Section */}
-        <section id="projects" className="pt-2 pb-4 scroll-mt-16">
+        <section id="projects" className="pt-2 pb-2 scroll-mt-16">
+          <div className="mb-3 md:hidden">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-1 text-[#00abf0]">04 WORK</p>
+            <h2 className="text-2xl font-bold text-white">Featured Projects</h2>
+          </div>
           <Projects />
         </section>
 
         {/* 5. Contact Section */}
-        <section id="contact" className="pt-2 pb-14 scroll-mt-16">
+        <section id="contact" className="pt-2 pb-8 scroll-mt-16">
           <div className="mb-3">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-1 text-[#00abf0]">05 CONNECT</p>
             <h2 className="text-2xl font-bold text-white">Get in Touch</h2>
@@ -1139,7 +1183,7 @@ function PortfolioLayout() {
       <footer className="relative z-10 w-full py-8 border-t border-white/5 bg-[#081b29]">
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm font-medium text-gray-500">
-            &copy; {new Date().getFullYear()} Rathishan Mahendran. Built with React & TypeScript.
+            &copy; {new Date().getFullYear()} Rathishan Mahendran. Built with React &amp; TypeScript.
           </p>
           <div className="flex items-center space-x-6 text-sm text-gray-400">
             <Link to="/" onClick={() => scrollToSection('home')} className="hover:text-[#00abf0] transition-colors cursor-pointer">Back to Top &uarr;</Link>
