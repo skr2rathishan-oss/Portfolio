@@ -25,8 +25,14 @@ export default function NetworkBackground() {
 
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+      // Skip if width is unchanged and height change is small (e.g. mobile URL bar show/hide)
+      if (canvas.width === newWidth && Math.abs(canvas.height - newHeight) < 160) {
+        return;
+      }
+      width = canvas.width = newWidth;
+      height = canvas.height = newHeight;
     };
 
     window.addEventListener('resize', handleResize);
