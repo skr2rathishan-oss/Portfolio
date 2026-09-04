@@ -76,7 +76,7 @@ export default function About() {
                   Computer Engineering Student · Front End Developer
                 </p>
                 <p className={`text-sm leading-relaxed ${ts}`}>
-                  2nd-year B.Sc. Computer Engineering student at the University of Ruhuna, Sri Lanka.
+                  3rd-year B.Sc. Computer Engineering student at the University of Ruhuna, Sri Lanka.
                   Passionate about Generative AI, Full-Stack Development, and Embedded Systems.
                 </p>
               </div>

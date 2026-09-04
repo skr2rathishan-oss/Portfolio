@@ -1,14 +1,14 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   Download, Linkedin, Github, ExternalLink, Cpu, Zap, Instagram, Facebook, Menu, X, 
-  Terminal, Code2, Sparkles, Bot, Globe, Database, Wrench, Layers, CheckCircle2, Activity 
+  Terminal, Code2, Sparkles, Bot, Globe, Database, Wrench, Layers, CheckCircle2, Activity, Eye 
 } from 'lucide-react';
 import { motion, AnimatePresence, type Variants } from 'motion/react';
 import About from './About';
 import Contact from './Contact';
 import NetworkBackground from './NetworkBackground';
-import { projectsData, profileData } from './data';
+import { projectsData, profileData, type Project, type Tag } from './data';
 
 function Home() {
   // Motion variants for smooth orchestrated entry
@@ -241,32 +241,112 @@ interface CategoryData {
 
 const toolkitCategories: CategoryData[] = [
   {
-    id: 'software-dev',
-    title: 'Software Development',
-    subtitle: 'Core programming languages, algorithms, and modular architecture.',
-    icon: Code2,
+    id: 'ai-agents',
+    title: 'AI Agents & LLMs',
+    subtitle: 'Autonomous agents, tool calling, memory systems, and LangChain orchestration.',
+    icon: Bot,
     tools: [
+      {
+        name: 'LangChain',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Orchestrating agent workflows, memory buffers, and tool-calling chains in Velora AI.',
+        howIUseIt: ['Agent Tool Calling', 'Custom Prompts', 'Conversation Memory', 'LLM Chains'],
+        flow: ['User Intent', 'Tool Selection', 'Action Execution', 'Synthesized Response']
+      },
+      {
+        name: 'LLM Agents',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Multi-tool reasoning, function calling, and structured JSON outputs.',
+        howIUseIt: ['Function Calling', 'Structured Schemas', 'Multi-step Reasoning', 'Automated Search'],
+        flow: ['Prompt', 'Guardrails', 'Function Call', 'Validation', 'Action']
+      },
+      {
+        name: 'FastAPI Services',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'High-performance async API endpoints powering AI agent workflows.',
+        howIUseIt: ['Async Handlers', 'Pydantic Schemas', 'CORS & Auth', 'Model Endpoints'],
+        flow: ['Request', 'Schema Parse', 'Agent Pipeline', 'JSON Payload']
+      },
       {
         name: 'Python',
         icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
         status: 'WORKING WITH',
-        tagline: 'Primary language for AI agents, algorithms, scripting, and backend microservices.',
-        howIUseIt: ['Agent Architecture', 'Data Pipelines', 'Scripting & Automation', 'FastAPI Services'],
-        flow: ['Problem', 'Data Structure', 'Algorithm', 'Unit Tests', 'Production']
+        tagline: 'Primary language for AI agents, machine learning experiments, and backend scripts.',
+        howIUseIt: ['Agent Architecture', 'Data Pipelines', 'Automation Scripts', 'FastAPI Services'],
+        flow: ['Problem', 'Data Structure', 'Algorithm', 'Testing', 'Production']
+      }
+    ]
+  },
+  {
+    id: 'ai-ml',
+    title: 'Machine Learning',
+    subtitle: 'Model training, data preprocessing, regression, and classification.',
+    icon: Cpu,
+    tools: [
+      {
+        name: 'scikit-learn',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Classical ML algorithms, regression, classification, clustering, and cross-validation.',
+        howIUseIt: ['Feature Engineering', 'Random Forests', 'Regression Models', 'Hyperparameter Tuning'],
+        flow: ['Raw Data', 'Preprocessing', 'Model Fit', 'Evaluation', 'Predictions']
       },
       {
-        name: 'C++',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+        name: 'PyTorch',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
         status: 'HANDS-ON',
-        tagline: 'High-performance computing, robotics control systems, and embedded firmware.',
-        howIUseIt: ['Low-level Drivers', 'Memory Optimization', 'Microcontroller Logic', 'Real-Time Control'],
-        flow: ['Hardware Specs', 'C++ Core', 'Memory Profiling', 'Flashing', 'Execution']
+        tagline: 'Building, training, and evaluating deep learning neural network architectures.',
+        howIUseIt: ['Tensors & Layers', 'Training Loops', 'Loss Functions', 'Model Validation'],
+        flow: ['Dataset', 'Model Architecture', 'Training Loop', 'Validation', 'Inference']
+      },
+      {
+        name: 'TensorFlow',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
+        status: 'HANDS-ON',
+        tagline: 'Machine learning workflows, Keras model pipelines, and neural classification.',
+        howIUseIt: ['Keras Models', 'Data Pipeline', 'Model Evaluation', 'Feature Scaling'],
+        flow: ['Preprocess', 'Architecture', 'Train', 'Validate', 'Export']
+      },
+      {
+        name: 'Pandas & Data Science',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Exploratory data analysis, cleaning, data wrangling, and feature transformations.',
+        howIUseIt: ['Data Preprocessing', 'Feature Extraction', 'Outlier Detection', 'Data Cleaning'],
+        flow: ['CSV/Data', 'Clean & Transform', 'Analyze', 'Feature Set', 'ML Ready']
+      }
+    ]
+  },
+  {
+    id: 'web-dev',
+    title: 'Frontend & UI',
+    subtitle: 'Reactive modern web applications, state management, and responsive styling.',
+    icon: Globe,
+    tools: [
+      {
+        name: 'React',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Component-driven interactive web applications with custom hooks and state.',
+        howIUseIt: ['Custom Hooks', 'Dynamic State', 'Framer Motion Animations', 'SPA Architecture'],
+        flow: ['Wireframe', 'Components', 'State & Props', 'Virtual DOM', 'Smooth UI']
+      },
+      {
+        name: 'Vue.js',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Reactive SPAs built with Composition API, Pinia state, and Vue Router in E-Commerce SPA.',
+        howIUseIt: ['Composition API', 'Pinia Store', 'Reactive Directives', 'Single-File Components'],
+        flow: ['Setup Script', 'Reactive State', 'Directives', 'Router/Pinia', 'Production SPA']
       },
       {
         name: 'TypeScript',
         icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
         status: 'WORKING WITH',
-        tagline: 'Strictly-typed scalable web applications, robust interfaces, and full-stack contracts.',
+        tagline: 'Strictly-typed scalable web applications, robust interfaces, and type safety.',
         howIUseIt: ['Type-safe Interfaces', 'Full-Stack SPAs', 'API Contracts', 'State Management'],
         flow: ['Schema', 'Types', 'Components', 'Build Verification', 'Deploy']
       },
@@ -279,140 +359,36 @@ const toolkitCategories: CategoryData[] = [
         flow: ['Design', 'Logic', 'DOM Bind', 'Event Loop', 'Live User']
       },
       {
-        name: 'OOP & Architecture',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',
-        status: 'COMFORTABLE',
-        tagline: 'Clean architecture, SOLID principles, and reusable design patterns.',
-        howIUseIt: ['Factory & Singleton', 'Modular Codebase', 'Encapsulation', 'Refactoring'],
-        flow: ['Requirements', 'System UML', 'Clean Code', 'Refactor', 'Maintain']
-      }
-    ]
-  },
-  {
-    id: 'ai-ml',
-    title: 'AI & ML',
-    subtitle: 'Model training, evaluation, computer vision, and deployment.',
-    icon: Cpu,
-    tools: [
-      {
-        name: 'PyTorch',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Used to build, train, and fine-tune deep learning neural networks.',
-        howIUseIt: ['Model training', 'Fine-tuning', 'Experiment loops', 'Loss Optimization'],
-        flow: ['Data', 'Model', 'Evaluation', 'Inference', 'Application']
-      },
-      {
-        name: 'TensorFlow',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'End-to-end machine learning workflows, CNN architectures, and edge deployment.',
-        howIUseIt: ['Keras Models', 'Transfer Learning', 'Classification', 'TF Lite Export'],
-        flow: ['Preprocess', 'Architecture', 'Train', 'Validate', 'Export']
-      },
-      {
-        name: 'scikit-learn',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg',
-        status: 'COMFORTABLE',
-        tagline: 'Classical machine learning algorithms, regression, clustering, and feature preprocessing.',
-        howIUseIt: ['Feature Scaling', 'Random Forests', 'SVM Classifiers', 'Cross-Validation'],
-        flow: ['Raw Data', 'Feature Eng', 'Model Fit', 'Metrics', 'Predict']
-      },
-      {
-        name: 'OpenCV',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Computer vision, real-time camera streams, edge detection, and visual processing.',
-        howIUseIt: ['Real-time Video', 'Object Tracking', 'Color Segmentation', 'Contour Filtering'],
-        flow: ['Camera Stream', 'Preprocessing', 'Detection', 'Bounding Box', 'Trigger']
-      },
-      {
-        name: 'Hugging Face',
-        icon: 'https://huggingface.co/front/assets/huggingface_logo-noborder.svg',
-        status: 'EXPLORING',
-        tagline: 'Open-source transformer models, tokenizers, quantized LLMs, and dataset hubs.',
-        howIUseIt: ['HF Transformers', 'Pipeline API', 'Sentence Embeddings', 'Model Hub Exploration'],
-        flow: ['Base Model', 'Tokenizer', 'Fine-Tuning', 'GGUF/ONNX', 'Local Deploy']
-      }
-    ]
-  },
-  {
-    id: 'ai-agents',
-    title: 'AI Agents',
-    subtitle: 'Autonomous agents, tool calling, memory systems, and RAG pipelines.',
-    icon: Bot,
-    tools: [
-      {
-        name: 'LangChain',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Composing LLM chains, agent memory buffers, and tool calling integrations.',
-        howIUseIt: ['Agent Tool Calling', 'Prompt Templates', 'Document Loaders', 'Conversation Memory'],
-        flow: ['User Query', 'Prompt Engine', 'LLM Reasoning', 'Tool Call', 'Final Output']
-      },
-      {
-        name: 'Multi-Agent Systems',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/networkx/networkx-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Collaborative autonomous multi-agent orchestration for complex multi-step workflows.',
-        howIUseIt: ['Role Delegation', 'Consensus Verification', 'Task Automation', 'Self-Correction'],
-        flow: ['Goal', 'Planning Agent', 'Execution Agents', 'Critic/Reviewer', 'Result']
-      },
-      {
-        name: 'RAG Architecture',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'Retrieval-Augmented Generation for grounded answers on custom knowledge bases.',
-        howIUseIt: ['Vector Embeddings', 'Chunking Strategy', 'Semantic Retrieval', 'Context Injection'],
-        flow: ['Documents', 'Embeddings', 'Vector DB', 'Top-K Retrieval', 'Synthesized Answer']
-      },
-      {
-        name: 'LLM APIs & Prompting',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Integration with frontier LLMs (Gemini, GPT-4, Claude) with structured JSON schemas.',
-        howIUseIt: ['Structured Outputs', 'Function Calling', 'Few-Shot Prompting', 'Chain-of-Thought'],
-        flow: ['User Prompt', 'System Guardrails', 'Reasoning Steps', 'JSON Validation', 'UI Action']
-      },
-      {
-        name: 'Vector DB / Chroma',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'Embedding storage, collection indexing, and cosine similarity query engines.',
-        howIUseIt: ['Vector Indexing', 'Metadata Filtering', 'Local Persistence', 'Similarity Search'],
-        flow: ['Text Chunks', 'Vector Math', 'Index Store', 'Similarity Query', 'Context Result']
-      }
-    ]
-  },
-  {
-    id: 'web-dev',
-    title: 'Web Development',
-    subtitle: 'Modern reactive frontend applications, component architecture, and styling.',
-    icon: Globe,
-    tools: [
-      {
-        name: 'React',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Component-driven interactive web applications with custom hooks and modern state.',
-        howIUseIt: ['Custom Hooks', 'Dynamic State', 'Framer Motion Animations', 'SPA Architecture'],
-        flow: ['Wireframe', 'Component Tree', 'State & Props', 'Virtual DOM', 'Smooth UI']
-      },
-      {
-        name: 'Vue.js',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Reactive SPAs built with Composition API, Pinia state, and Vue Router.',
-        howIUseIt: ['Composition API', 'Pinia Store', 'Reactive Directives', 'Single-File Components'],
-        flow: ['Setup Script', 'Reactive State', 'Directives', 'Router/Pinia', 'Production SPA']
-      },
-      {
         name: 'Tailwind CSS',
         icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
         status: 'WORKING WITH',
         tagline: 'Utility-first modern responsive UI design, glassmorphic themes, and sleek layouts.',
         howIUseIt: ['Responsive Design', 'Custom Themes', 'Glassmorphism', 'Micro-interactions'],
         flow: ['Layout Concept', 'Utility Classes', 'Breakpoints', 'JIT Engine', 'Polished UI']
+      },
+      {
+        name: 'HTML5 & CSS3',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+        status: 'COMFORTABLE',
+        tagline: 'Semantic page structure, responsive flexbox/grid systems, and CSS animations.',
+        howIUseIt: ['Semantic Layouts', 'Flexbox & CSS Grid', 'Custom Keyframes', 'Responsive Breakpoints'],
+        flow: ['Wireframe', 'Semantic HTML', 'CSS Styles', 'Animation Test', 'Cross-browser']
+      }
+    ]
+  },
+  {
+    id: 'devops-tools',
+    title: 'Tooling & DevOps',
+    subtitle: 'Version control, modern build tooling, API testing, and developer workflow.',
+    icon: Wrench,
+    tools: [
+      {
+        name: 'Git & GitHub',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Version control, atomic commits, branching workflows, and open-source collaboration.',
+        howIUseIt: ['Feature Branches', 'Pull Requests', 'Git Rebase & Merge', 'Release Tags'],
+        flow: ['Local Branch', 'Atomic Commits', 'PR Review', 'Merge Main', 'Release Tag']
       },
       {
         name: 'Vite',
@@ -425,90 +401,18 @@ const toolkitCategories: CategoryData[] = [
       {
         name: 'REST APIs & Fetch',
         icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-        status: 'COMFORTABLE',
+        status: 'WORKING WITH',
         tagline: 'Designing, consuming, and handling asynchronous RESTful HTTP endpoints.',
         howIUseIt: ['Async Fetch', 'Error Boundaries', 'JWT Authentication', 'Pagination & Filter'],
         flow: ['API Spec', 'HTTP Query', 'Response Parse', 'State Cache', 'Render']
-      }
-    ]
-  },
-  {
-    id: 'databases',
-    title: 'Databases & Cloud',
-    subtitle: 'Relational schemas, SQL queries, local storage, and cloud deployment.',
-    icon: Database,
-    tools: [
-      {
-        name: 'PostgreSQL',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'Relational database schema design, indexing, constraints, and complex queries.',
-        howIUseIt: ['Relational Schemas', 'Foreign Keys & Joins', 'Index Optimization', 'ACID Transactions'],
-        flow: ['Data Model', 'SQL Migrations', 'Indexing', 'Query Tuning', 'Secure Read/Write']
-      },
-      {
-        name: 'SQLite',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg',
-        status: 'COMFORTABLE',
-        tagline: 'Embedded, zero-configuration local database for desktop, edge devices, and testing.',
-        howIUseIt: ['Local Persistence', 'Edge Storage', 'Lightweight DB', 'Testing Environments'],
-        flow: ['App Init', 'Local Schema', 'CRUD Queries', 'Local Disk Sync', 'Data Ready']
-      },
-      {
-        name: 'Firebase / Supabase',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg',
-        status: 'COMFORTABLE',
-        tagline: 'Realtime database sync, user authentication, and cloud storage buckets.',
-        howIUseIt: ['OAuth & Auth', 'Realtime Sync', 'File Storage', 'Row Level Security'],
-        flow: ['User Action', 'Auth Validation', 'Realtime Stream', 'Storage Write', 'State Update']
-      },
-      {
-        name: 'Netlify & Vercel',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Continuous deployment, global edge delivery, and SPA route rewrites.',
-        howIUseIt: ['Git CI/CD Trigger', 'Custom Domains', 'SPA Redirects', 'SSL Enforcement'],
-        flow: ['Git Push', 'Auto Build', 'CDN Cache', 'Global Edge', 'Live Site']
-      },
-      {
-        name: 'RESTful Backends',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'FastAPI / Node endpoints for real-time model inference and client data routing.',
-        howIUseIt: ['Route Handlers', 'Pydantic Models', 'CORS Config', 'Async Workers'],
-        flow: ['Client Call', 'Endpoint Route', 'Validation', 'Service Logic', 'JSON Payload']
-      }
-    ]
-  },
-  {
-    id: 'devops',
-    title: 'DevOps & Tools',
-    subtitle: 'Version control, Linux terminal environments, scripting, and debugging.',
-    icon: Wrench,
-    tools: [
-      {
-        name: 'Git & GitHub',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Version control, atomic commits, branching workflows, and open-source collaboration.',
-        howIUseIt: ['Feature Branches', 'Pull Requests', 'Git Rebase & Merge', 'Release Tags'],
-        flow: ['Local Branch', 'Atomic Commits', 'PR Review', 'Merge Main', 'Release Tag']
       },
       {
         name: 'Linux & Bash',
         icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
         status: 'WORKING WITH',
         tagline: 'Command-line scripting, server management, package builds, and system administration.',
-        howIUseIt: ['Shell Scripting', 'Process Management', 'SSH & Cron Jobs', 'File Permissions'],
+        howIUseIt: ['Shell Scripting', 'Process Management', 'CLI Tools', 'File Permissions'],
         flow: ['CLI Terminal', 'Script Run', 'Service Daemon', 'Log Monitor', 'Healthy Sys']
-      },
-      {
-        name: 'Docker',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'Containerizing applications for consistent, isolated, and reproducible execution.',
-        howIUseIt: ['Dockerfile Builds', 'Container Isolation', 'Port Forwarding', 'Multi-stage Builds'],
-        flow: ['Code + Deps', 'Build Image', 'Run Container', 'Port Bind', 'Isolated Env']
       },
       {
         name: 'Postman',
@@ -519,7 +423,7 @@ const toolkitCategories: CategoryData[] = [
         flow: ['Endpoint URL', 'Set Headers', 'Send Request', 'Verify Status 200', 'Validate Body']
       },
       {
-        name: 'VS Code & Dev Tools',
+        name: 'VS Code',
         icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',
         status: 'WORKING WITH',
         tagline: 'Advanced developer IDE workflow, breakpoints, linters, and productivity extensions.',
@@ -527,88 +431,38 @@ const toolkitCategories: CategoryData[] = [
         flow: ['Code Base', 'Lint Check', 'Debugger Step', 'Inspect State', 'Clean Code']
       }
     ]
-  },
-  {
-    id: 'robotics',
-    title: 'Robotics & Hardware',
-    subtitle: 'Embedded controllers, microcontrollers, ROS communication, and sensor fusion.',
-    icon: Zap,
-    tools: [
-      {
-        name: 'Espressif (ESP32)',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Dual-core microcontroller programming, WiFi/BLE IoT telemetry, and hardware interrupts.',
-        howIUseIt: ['FreeRTOS Tasks', 'WiFi/BLE Stacks', 'ADC Sensor Reading', 'PWM Actuator Control'],
-        flow: ['Sensor Circuit', 'ESP32 Firmware', 'ADC/I2C Read', 'WiFi Packet', 'Telemetry']
-      },
-      {
-        name: 'Raspberry Pi',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg',
-        status: 'WORKING WITH',
-        tagline: 'Single-board edge computing, camera capture, Linux daemons, and GPIO interfacing.',
-        howIUseIt: ['Edge AI Inference', 'Linux Daemons', 'Camera Capture', 'UART/GPIO Interfaces'],
-        flow: ['Boot Linux', 'Camera Stream', 'Edge Model', 'GPIO Output', 'Motor Control']
-      },
-      {
-        name: 'ROS / ROS 2',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ros/ros-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'Robot Operating System nodes, publishers/subscribers, message queues, and TF trees.',
-        howIUseIt: ['Pub/Sub Nodes', 'Message Queues', 'TF Transforms', 'Sensor Pipelines'],
-        flow: ['Sensor Node', 'Topic Publish', 'Core Pipeline', 'Subscriber', 'Actuator Node']
-      },
-      {
-        name: 'Arduino & Microcontrollers',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg',
-        status: 'COMFORTABLE',
-        tagline: 'Microcontroller logic, sensor interfacing, servo control, and serial debugging.',
-        howIUseIt: ['Interrupt Timers', 'Serial Communication', 'Motor Drivers', 'Sensor Calibration'],
-        flow: ['Power On', 'Setup Routine', 'Loop Execution', 'Sensor Read', 'Driver Output']
-      },
-      {
-        name: 'Circuit & Prototyping',
-        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',
-        status: 'HANDS-ON',
-        tagline: 'Breadboard circuit design, voltage regulation, signal filtering, and sensor integration.',
-        howIUseIt: ['Voltage Regulation', 'I2C/SPI Busses', 'Relay Switching', 'Breadboard Prototyping'],
-        flow: ['Schematic', 'Breadboard Test', 'Voltage Check', 'Firmware Test', 'Enclosure']
-      }
-    ]
   }
 ];
 
 const quickPillsRow1 = [
-  { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'software-dev', toolName: 'Python' },
-  { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', catId: 'software-dev', toolName: 'TypeScript' },
+  { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'ai-agents', toolName: 'Python' },
+  { name: 'LangChain', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'ai-agents', toolName: 'LangChain' },
   { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', catId: 'web-dev', toolName: 'React' },
+  { name: 'Vue.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg', catId: 'web-dev', toolName: 'Vue.js' },
+  { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', catId: 'web-dev', toolName: 'TypeScript' },
   { name: 'PyTorch', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg', catId: 'ai-ml', toolName: 'PyTorch' },
-  { name: 'TensorFlow', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg', catId: 'ai-ml', toolName: 'TensorFlow' },
-  { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', catId: 'web-dev', toolName: 'FastAPI' },
-  { name: 'Docker', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg', catId: 'devops', toolName: 'Docker' },
-  { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', catId: 'devops', toolName: 'Linux & Bash' },
-  { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', catId: 'software-dev', toolName: 'Git & Version Control' },
-  { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', catId: 'data-db', toolName: 'PostgreSQL' },
-  { name: 'ESP32', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg', catId: 'robotics', toolName: 'Espressif (ESP32)' },
+  { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', catId: 'ai-agents', toolName: 'FastAPI Services' },
+  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg', catId: 'web-dev', toolName: 'Tailwind CSS' },
+  { name: 'Git & GitHub', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', catId: 'devops-tools', toolName: 'Git & GitHub' },
+  { name: 'Vite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg', catId: 'devops-tools', toolName: 'Vite' },
 ];
 
 const quickPillsRow2 = [
-  { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', catId: 'software-dev', toolName: 'JavaScript' },
-  { name: 'Vue.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg', catId: 'web-dev', toolName: 'Vue.js' },
-  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg', catId: 'web-dev', toolName: 'Tailwind CSS' },
-  { name: 'Hugging Face', icon: 'https://huggingface.co/front/assets/huggingface_logo-noborder.svg', catId: 'ai-ml', toolName: 'Hugging Face' },
-  { name: 'LangChain', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'ai-agents', toolName: 'LangChain' },
-  { name: 'OpenCV', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg', catId: 'ai-ml', toolName: 'OpenCV' },
-  { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', catId: 'data-db', toolName: 'MongoDB' },
-  { name: 'Raspberry Pi', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg', catId: 'robotics', toolName: 'Raspberry Pi' },
-  { name: 'ROS 2', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ros/ros-original.svg', catId: 'robotics', toolName: 'ROS / ROS 2' },
-  { name: 'C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', catId: 'software-dev', toolName: 'C++' },
-  { name: 'Vite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg', catId: 'web-dev', toolName: 'Vite' },
+  { name: 'scikit-learn', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg', catId: 'ai-ml', toolName: 'scikit-learn' },
+  { name: 'TensorFlow', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg', catId: 'ai-ml', toolName: 'TensorFlow' },
+  { name: 'LLM Agents', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg', catId: 'ai-agents', toolName: 'LLM Agents' },
+  { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', catId: 'web-dev', toolName: 'JavaScript' },
+  { name: 'Pandas', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg', catId: 'ai-ml', toolName: 'Pandas & Data Science' },
+  { name: 'HTML5 & CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', catId: 'web-dev', toolName: 'HTML5 & CSS3' },
+  { name: 'REST APIs', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', catId: 'devops-tools', toolName: 'REST APIs & Fetch' },
+  { name: 'Linux', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', catId: 'devops-tools', toolName: 'Linux & Bash' },
+  { name: 'Postman', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg', catId: 'devops-tools', toolName: 'Postman' },
+  { name: 'VS Code', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg', catId: 'devops-tools', toolName: 'VS Code' },
 ];
 
 function Skills() {
-  const [selectedCatId, setSelectedCatId] = useState<string>('software-dev');
-  const [selectedToolName, setSelectedToolName] = useState<string>('Python');
+  const [selectedCatId, setSelectedCatId] = useState<string>('ai-agents');
+  const [selectedToolName, setSelectedToolName] = useState<string>('LangChain');
 
   const currentCategory = useMemo(() => {
     return toolkitCategories.find(c => c.id === selectedCatId) || toolkitCategories[0];
@@ -885,94 +739,165 @@ function Skills() {
   );
 }
 
-function Projects() {
-  const card = 'bg-white/[0.03] border border-white/[0.07] hover:border-[#00abf0]/30';
-  const ts = 'text-gray-400';
-  const tp = 'text-white';
+interface ProjectCardProps {
+  project: Project;
+  isMobile?: boolean;
+}
 
-  // Tag level → badge style
-  const tagStyle = (level: 'core' | 'supporting' | 'exposure') => {
-    if (level === 'core')       return 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/20';
-    if (level === 'supporting') return 'bg-white/[0.05] text-gray-300 border border-white/10';
-    return 'bg-white/[0.02] text-gray-500 border border-white/5';
-  };
-
+const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: ProjectCardProps) {
   return (
-    <div className="relative z-10 w-full">
-      {/* Header (Mobile Only, Hidden on Desktop) */}
-      <div className="mb-6 md:hidden">
-        <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-2 text-[#00abf0]">04 &nbsp;PORTFOLIO</p>
-        <h2 className={`text-2xl font-bold ${tp}`}>Featured Projects</h2>
+    <div
+      className={`group relative rounded-2xl md:rounded-3xl bg-[#061424] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 pb-5 flex flex-col justify-between transition-colors duration-200 ${
+        isMobile
+          ? 'w-[85vw] max-w-[340px] shrink-0 snap-center shadow-[0_8px_24px_rgba(0,0,0,0.5)]'
+          : 'hover:shadow-[0_8px_24px_rgba(0,171,240,0.12)]'
+      }`}
+    >
+      <div>
+        {/* Project Image Frame (Device/Viewport Look) */}
+        <div className="w-full aspect-video rounded-xl overflow-hidden bg-black/50 border border-white/[0.08] relative mb-4">
+          <img
+            src={project.image}
+            alt={project.title}
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#061424]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
+
+        {/* Title */}
+        <h3 className="text-base font-bold text-white mb-2 text-center group-hover:text-[#00abf0] transition-colors">
+          {project.title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-xs text-gray-400 leading-relaxed text-center mb-4 line-clamp-3 min-h-[48px] px-1">
+          {project.description}
+        </p>
+
+        {/* Tags */}
+        <div className="flex flex-wrap items-center justify-center gap-1.5 mb-5">
+          {project.tags.map((tag: Tag) => (
+            <span
+              key={tag.name}
+              className="text-[10px] px-2.5 py-0.5 rounded-full font-medium bg-white/[0.04] text-gray-300 border border-white/[0.08]"
+            >
+              {tag.name}
+            </span>
+          ))}
+        </div>
       </div>
 
-      {/* Refined layout: Featured project spans full row horizontally, others take 1 column each */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {projectsData.map((project, i) => (
-          <div
-            key={project.title}
-            className={`group relative rounded-2xl overflow-hidden flex transition-all duration-400 hover:-translate-y-1.5 ${card} ${
-              i === 0 ? 'flex-col lg:flex-row lg:col-span-3' : 'flex-col'
+      {/* Action Buttons (Visit Site & Source Code) */}
+      <div className="flex items-center gap-2.5 pt-3 border-t border-white/5 mt-auto">
+        {project.demoLink ? (
+          <>
+            <a
+              href={project.demoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#00abf0]/15 border border-[#00abf0]/30 text-[#00abf0] hover:bg-[#00abf0] hover:text-[#081b29] transition-colors duration-200 shadow-[0_0_12px_rgba(0,171,240,0.1)] hover:shadow-[0_0_18px_rgba(0,171,240,0.4)] cursor-pointer"
+            >
+              <Eye size={14} />
+              <span>Visit Site</span>
+            </a>
+            <a
+              href={project.codeLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-colors duration-200 cursor-pointer"
+            >
+              <Github size={14} />
+              <span>Source Code</span>
+            </a>
+          </>
+        ) : (
+          <a
+            href={project.codeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-[#00abf0]/15 hover:border-[#00abf0]/30 hover:text-[#00abf0] transition-colors duration-200 cursor-pointer"
+          >
+            <Github size={14} />
+            <span>Source Code</span>
+          </a>
+        )}
+      </div>
+    </div>
+  );
+});
+
+function Projects() {
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'ai' | 'fullstack' | 'frontend'>('all');
+
+  const categories = [
+    { id: 'all', label: 'All Projects' },
+    { id: 'fullstack', label: 'Full-Stack' },
+    { id: 'ai', label: 'AI & Machine Learning' },
+    { id: 'frontend', label: 'Frontend / UI' },
+  ];
+
+  const filteredProjects = useMemo(() => {
+    if (selectedCategory === 'all') return projectsData;
+    if (selectedCategory === 'ai') {
+      return projectsData.filter(
+        p => p.tags.some(t => ['TensorFlow', 'PyTorch', 'scikit-learn', 'Python', 'LangChain', 'AI Agents', 'LLMs', 'Pandas'].includes(t.name)) || 
+             p.title.toLowerCase().includes('ai') || 
+             p.title.toLowerCase().includes('learning')
+      );
+    }
+    if (selectedCategory === 'fullstack') {
+      return projectsData.filter(
+        p => p.tags.some(t => ['Vue 3', 'TypeScript', 'React', 'FastAPI', 'LangChain', 'AI Agents', 'DummyJSON'].includes(t.name))
+      );
+    }
+    if (selectedCategory === 'frontend') {
+      return projectsData.filter(
+        p => p.tags.some(t => ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS', 'React', 'Vue 3'].includes(t.name))
+      );
+    }
+    return projectsData;
+  }, [selectedCategory]);
+
+  return (
+    <div className="relative z-10 w-full max-w-7xl mx-auto pb-12">
+      {/* ─── Category Filter Pills (Desktop Only) ─── */}
+      <div className="hidden md:flex items-center justify-center flex-wrap gap-2 mb-8 md:mb-10 pt-2">
+        {categories.map(cat => (
+          <button
+            key={cat.id}
+            type="button"
+            onClick={() => setSelectedCategory(cat.id as any)}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+              selectedCategory === cat.id
+                ? 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/40 shadow-[0_0_12px_rgba(0,171,240,0.2)]'
+                : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-white'
             }`}
           >
-            {/* Project image */}
-            <div className={`${i === 0 ? 'w-full lg:w-3/5 h-60 lg:h-auto min-h-[280px]' : 'w-full h-40'} overflow-hidden relative border-b lg:border-b-0 lg:border-r border-white/[0.08]`}>
-              <img
-                src={project.image}
-                alt={project.title}
-                referrerPolicy="no-referrer"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
-            </div>
+            {cat.label}
+          </button>
+        ))}
+      </div>
 
-            <div className={`p-5 flex flex-col flex-1 ${i === 0 ? 'lg:p-8 lg:w-2/5 justify-center' : ''}`}>
-              {/* Featured badge for first project */}
-              {i === 0 && (
-                <span className="self-start mb-3 text-[10px] px-3 py-1 rounded-full font-bold bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/25">
-                  ★ Featured Project
-                </span>
-              )}
-              <h3 className={`font-bold ${i === 0 ? 'text-2xl' : 'text-base'} mb-2 ${tp}`}>{project.title}</h3>
-              <p className={`text-sm leading-relaxed flex-1 mb-5 lg:mr-2 ${ts}`}>{project.description}</p>
+      {/* ─── Mobile Horizontal Swipe Phase (< md) ─── */}
+      <div className="md:hidden">
+        <div className="flex overflow-x-auto snap-x snap-proximity gap-4 pb-5 px-4 -mx-4 no-scrollbar touch-pan-x overscroll-x-contain">
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.title} project={project} isMobile={true} />
+          ))}
+        </div>
+        
+        {/* Swipe helper & indicator */}
+        <div className="flex items-center justify-center gap-1.5 text-gray-500 text-[11px] pt-1">
+          <Sparkles size={11} className="text-[#00abf0]" />
+          <span>Swipe horizontally to view projects</span>
+        </div>
+      </div>
 
-              {/* Tags — styled by level */}
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag.name}
-                    title={`Role: ${tag.level}`}
-                    className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium ${tagStyle(tag.level)}`}
-                  >
-                    {tag.name}
-                  </span>
-                ))}
-              </div>
-
-              {/* Buttons — conditionally render demo only when demoLink exists */}
-              <div className="flex gap-3 mt-auto">
-                <a
-                  href={project.codeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-colors ${
-                    project.demoLink ? 'flex-1' : 'w-full'
-                  } bg-white/[0.05] hover:bg-white/[0.1] text-white`}
-                >
-                  <Github size={13} /> Code
-                </a>
-                {project.demoLink && (
-                  <a
-                    href={project.demoLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold bg-[#00abf0] hover:bg-[#00abf0]/80 text-white transition-colors"
-                  >
-                    <ExternalLink size={13} /> Live Demo
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
+      {/* ─── Desktop 3-Column Card Grid (>= md) ─── */}
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredProjects.map((project) => (
+          <ProjectCard key={project.title} project={project} isMobile={false} />
         ))}
       </div>
     </div>
@@ -989,7 +914,6 @@ function scrollToSection(id: string) {
 function PortfolioLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('home');
-  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
@@ -1003,21 +927,26 @@ function PortfolioLayout() {
   ], []);
 
   // For mobile devices: scrollspy active indicator
-  // For scroll detection and mobile scrollspy
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.innerWidth < 1024) {
+            const scrollPosition = window.scrollY + 200;
+            const sectionIds = ['home', 'about', 'skills', 'projects', 'contact'];
 
-      if (window.innerWidth >= 1024) return;
-      const scrollPosition = window.scrollY + 200;
-      const sectionIds = ['home', 'about', 'skills', 'projects', 'contact'];
-
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el && scrollPosition >= el.offsetTop) {
-          setActiveSection(sectionIds[i]);
-          break;
-        }
+            for (let i = sectionIds.length - 1; i >= 0; i--) {
+              const el = document.getElementById(sectionIds[i]);
+              if (el && scrollPosition >= el.offsetTop) {
+                setActiveSection((prev) => (prev !== sectionIds[i] ? sectionIds[i] : prev));
+                break;
+              }
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -1078,8 +1007,8 @@ function PortfolioLayout() {
           {/* Desktop Right Controls */}
           <div className="hidden lg:flex items-center space-x-6">
             <a 
-              href="/Resume/Rathishan_Resume_Template.pdf" 
-              download="Rathishan_Resume_Template.pdf" 
+              href="/Resume/Rathishan_Mahendran_Resume_Software.pdf" 
+              download="Rathishan_Mahendran_Resume_Software.pdf" 
               className="border-2 border-[#ff004f] text-[#ff004f] px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)] hover:shadow-[0_0_22px_rgba(255,0,79,0.5)] cursor-pointer"
             >
               Download CV <Download size={16} className="stroke-[2.2]" />
@@ -1149,8 +1078,8 @@ function PortfolioLayout() {
 
         <div className="px-4 pb-6 pt-4 border-t flex flex-col gap-4 border-white/10">
           <a 
-            href="/Resume/Rathishan_Resume_Template.pdf" 
-            download="Rathishan_Resume_Template.pdf" 
+            href="/Resume/Rathishan_Mahendran_Resume_Software.pdf" 
+            download="Rathishan_Mahendran_Resume_Software.pdf" 
             className="w-full border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white"
           >
             Download CV <Download size={15} />

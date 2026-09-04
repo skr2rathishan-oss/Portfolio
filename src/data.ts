@@ -78,7 +78,24 @@ export const profileData: ProfileInfo = {
 // ── Projects (controls order = exact render order in UI) ─────
 export const projectsData: Project[] = [
   {
-    // ★ FEATURED project — full-width hero card
+    // ★ Velora AI Agent (1st)
+    title:       'Velora - E-Commerce AI Agent',
+    description: 'An autonomous multi-tool AI shopping assistant built with Python, LangChain, and LLM function calling to automate product discovery, intelligent recommendations, and cart operations.',
+    image:       '/projects/Velora.jpeg',
+    weight:      3,
+    complexity:  'high',
+    tags: [
+      { name: 'Python',     level: 'core'       },
+      { name: 'LangChain',  level: 'core'       },
+      { name: 'FastAPI',    level: 'supporting' },
+      { name: 'AI Agents',  level: 'core'       },
+      { name: 'LLMs',       level: 'supporting' },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/EcommerceAiagent',
+    demoLink: 'https://drive.google.com/file/d/1Yv_aZXqZv2L50LALfHK6NYD9sxVJM8Xw/view?usp=drive_link',
+  },
+  {
+    // ★ E-Commerce Mini-Project (2nd)
     title:       'E-Commerce Mini-Project',
     description: 'A fully responsive Vue 3 e-commerce SPA featuring real-time product search, cart management, JWT auth, and pagination — consuming the DummyJSON REST API.',
     image:       '/projects/Ecommerce-miniproject.jpg',
@@ -95,22 +112,24 @@ export const projectsData: Project[] = [
     demoLink: 'https://miniproject584.netlify.app/',
   },
   {
+    // ★ Personalized Study Buddy (3rd)
     title:       'Personalized Study Buddy',
     description: 'An AI-driven study companion that personalises learning paths and tracks progress using TypeScript-first architecture.',
     image:       '/projects/StudyBuddy.jpg',
     weight:      2,
     complexity:  'medium',
     tags: [
-      { name: 'TypeScript', level: 'core'       },
-      { name: 'React',      level: 'core'       },
-      { name: 'Vite',       level: 'supporting' },
+      { name: 'TypeScript',   level: 'core'       },
+      { name: 'React',        level: 'core'       },
+      { name: 'Tailwind CSS', level: 'supporting' },
+      { name: 'Vite',         level: 'supporting' },
     ],
     codeLink: 'https://github.com/skr2rathishan-oss/Personalized-Study-Buddy',
-    // no demoLink — only GitHub button will render
   },
   {
+    // ★ Web Dev Collection (4th)
     title:       'Web Dev Collection',
-    description: 'Curated showcase of responsive UI experiments exploring animations, design systems, and modern CSS techniques.',
+    description: 'Curated showcase of responsive UI experiments exploring animations, modern CSS techniques, and interactive frontend components.',
     image:       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     weight:      1,
     complexity:  'low',
@@ -120,22 +139,22 @@ export const projectsData: Project[] = [
       { name: 'JavaScript', level: 'core'       },
     ],
     codeLink: 'https://github.com/skr2rathishan-oss/Web_Development_Projects',
-    // no demoLink
   },
   {
-    title:       'AI & Machine Learning Projects',
-    description: 'Collection of ML experiments covering data analysis, model training, computer vision, and NLP using the Python ML ecosystem.',
-    image:       'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    // ★ Machine Learning Portfolio (5th - Last)
+    title:       'Machine Learning Portfolio',
+    description: 'Comprehensive machine learning portfolio showcasing data preprocessing, exploratory data analysis, feature engineering, regression, classification, clustering, and end-to-end model development.',
+    image:       '/projects/MachineLearning.png',
     weight:      2,
     complexity:  'high',
     tags: [
       { name: 'Python',       level: 'core'       },
-      { name: 'TensorFlow',   level: 'core'       },
+      { name: 'scikit-learn', level: 'core'       },
+      { name: 'TensorFlow',   level: 'supporting' },
       { name: 'PyTorch',      level: 'supporting' },
-      { name: 'scikit-learn', level: 'supporting' },
+      { name: 'Pandas',       level: 'supporting' },
     ],
-    codeLink: 'https://github.com/skr2rathishan-oss/AI-ML--Projects',
-    // no demoLink
+    codeLink: 'https://github.com/skr2rathishan-oss/machine-learning-portfolio',
   },
 ];
 
@@ -198,7 +217,7 @@ export const achievementsData: Achievement[] = [
     title: 'CodeBlast 2025 Hackathon',
     org: 'University of Ruhuna & SLT Mobitel',
     year: '2025',
-    image: 'https://cdn-icons-png.flaticon.com/512/888/888846.png',
+    image: '/about/codeblastRuhuna.jpeg',
     badge: 'Competition',
     badgeColor: '#00abf0',
     link: 'https://www.linkedin.com/posts/rathishan-mahendran-39812b316_codeblast2025-rextro2025-universityofruhuna-activity-7410300981302886402-QD_x',
@@ -221,7 +240,7 @@ export const communityData: CommunityRole[] = [
     role: 'Active Member',
     org: 'IEEE (Global)',
     desc: 'Actively participated in technical workshops and research discussions focused on advancements in AI engineering. Engaged in professional development activities and networking initiatives to foster innovation.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/IEEE_logo.svg/1200px-IEEE_logo.svg.png',
+    image: '/about/IEE.png',
     color: '#00abf0'
   }
 ];
