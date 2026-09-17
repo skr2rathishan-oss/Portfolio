@@ -95,7 +95,24 @@ export const projectsData: Project[] = [
     demoLink: 'https://drive.google.com/file/d/1Yv_aZXqZv2L50LALfHK6NYD9sxVJM8Xw/view?usp=drive_link',
   },
   {
-    // ★ E-Commerce Mini-Project (2nd)
+    // ★ SupportPilot - AI Customer Support Platform (2nd)
+    title:       'SupportPilot - AI Customer Support Platform',
+    description: 'An enterprise-grade AI-powered customer support platform featuring intelligent automated ticket routing, role-based access control (RBAC), multi-tenant onboarding, and a real-time platform admin dashboard.',
+    image:       '/projects/CustomerSupoort.png',
+    weight:      3,
+    complexity:  'high',
+    tags: [
+      { name: 'React',        level: 'core'       },
+      { name: 'TypeScript',   level: 'core'       },
+      { name: 'Node.js',      level: 'core'       },
+      { name: 'AI Routing',   level: 'core'       },
+      { name: 'Tailwind CSS', level: 'supporting' },
+      { name: 'RBAC Auth',    level: 'supporting' },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/Ai-powered-Customer-Support-Platform',
+  },
+  {
+    // ★ E-Commerce Mini-Project (3rd)
     title:       'E-Commerce Mini-Project',
     description: 'A fully responsive Vue 3 e-commerce SPA featuring real-time product search, cart management, JWT auth, and pagination — consuming the DummyJSON REST API.',
     image:       '/projects/Ecommerce-miniproject.jpg',
@@ -112,7 +129,7 @@ export const projectsData: Project[] = [
     demoLink: 'https://miniproject584.netlify.app/',
   },
   {
-    // ★ Personalized Study Buddy (3rd)
+    // ★ Personalized Study Buddy (4th)
     title:       'Personalized Study Buddy',
     description: 'An AI-driven study companion that personalises learning paths and tracks progress using TypeScript-first architecture.',
     image:       '/projects/StudyBuddy.jpg',
@@ -127,21 +144,7 @@ export const projectsData: Project[] = [
     codeLink: 'https://github.com/skr2rathishan-oss/Personalized-Study-Buddy',
   },
   {
-    // ★ Web Dev Collection (4th)
-    title:       'Web Dev Collection',
-    description: 'Curated showcase of responsive UI experiments exploring animations, modern CSS techniques, and interactive frontend components.',
-    image:       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    weight:      1,
-    complexity:  'low',
-    tags: [
-      { name: 'HTML',       level: 'core'       },
-      { name: 'CSS',        level: 'core'       },
-      { name: 'JavaScript', level: 'core'       },
-    ],
-    codeLink: 'https://github.com/skr2rathishan-oss/Web_Development_Projects',
-  },
-  {
-    // ★ Machine Learning Portfolio (5th - Last)
+    // ★ Machine Learning Portfolio (5th)
     title:       'Machine Learning Portfolio',
     description: 'Comprehensive machine learning portfolio showcasing data preprocessing, exploratory data analysis, feature engineering, regression, classification, clustering, and end-to-end model development.',
     image:       '/projects/MachineLearning.png',
@@ -155,6 +158,20 @@ export const projectsData: Project[] = [
       { name: 'Pandas',       level: 'supporting' },
     ],
     codeLink: 'https://github.com/skr2rathishan-oss/machine-learning-portfolio',
+  },
+  {
+    // ★ Web Dev Collection (6th - Last)
+    title:       'Web Dev Collection',
+    description: 'Curated showcase of responsive UI experiments exploring animations, modern CSS techniques, and interactive frontend components.',
+    image:       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    weight:      1,
+    complexity:  'low',
+    tags: [
+      { name: 'HTML',       level: 'core'       },
+      { name: 'CSS',        level: 'core'       },
+      { name: 'JavaScript', level: 'core'       },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/Web_Development_Projects',
   },
 ];
 
