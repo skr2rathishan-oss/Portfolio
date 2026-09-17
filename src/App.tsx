@@ -868,7 +868,7 @@ function Projects() {
     }
     if (selectedCategory === 'fullstack') {
       return projectsData.filter(
-        p => p.tags.some(t => ['Vue 3', 'TypeScript', 'React', 'FastAPI', 'LangChain', 'AI Agents', 'DummyJSON'].includes(t.name))
+        p => p.tags.some(t => ['Vue 3', 'TypeScript', 'React', 'FastAPI', 'LangChain', 'AI Agents', 'DummyJSON', 'Node.js', 'AI Routing', 'RBAC Auth'].includes(t.name))
       );
     }
     if (selectedCategory === 'frontend') {
@@ -1045,8 +1045,8 @@ function PortfolioLayout() {
             <motion.a 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              href="/Resume/Rathishan_Mahendran_Resume_Software.pdf" 
-              download="Rathishan_Mahendran_Resume_Software.pdf" 
+              href="/Resume/Rathishan_Mahendran_CV_FullStack_Intern.pdf" 
+              download="Rathishan_Mahendran_CV_FullStack_Intern.pdf" 
               className="border-2 border-[#ff004f] text-[#ff004f] px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:bg-[#ff004f] hover:text-white shadow-[0_0_15px_rgba(255,0,79,0.2)] hover:shadow-[0_0_22px_rgba(255,0,79,0.5)] cursor-pointer"
             >
               Download CV <Download size={16} className="stroke-[2.2]" />
@@ -1116,8 +1116,8 @@ function PortfolioLayout() {
 
         <div className="px-4 pb-6 pt-4 border-t flex flex-col gap-4 border-white/10">
           <a 
-            href="/Resume/Rathishan_Mahendran_Resume_Software.pdf" 
-            download="Rathishan_Mahendran_Resume_Software.pdf" 
+            href="/Resume/Rathishan_Mahendran_CV_FullStack_Intern.pdf" 
+            download="Rathishan_Mahendran_CV_FullStack_Intern.pdf" 
             className="w-full border-2 px-5 py-2.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 border-[#ff004f]/50 text-[#ff004f] hover:bg-[#ff004f] hover:text-white"
           >
             Download CV <Download size={15} />
