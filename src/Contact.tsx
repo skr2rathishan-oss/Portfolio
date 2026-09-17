@@ -35,9 +35,16 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+    if (!accessKey) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+      return;
+    }
 
     const submitData = new FormData();
-    submitData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
+    submitData.append("access_key", accessKey);
     submitData.append("name", formData.name);
     submitData.append("email", formData.email);
     submitData.append("subject", formData.subject);
