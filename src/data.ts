@@ -45,6 +45,7 @@ export interface Certification {
   year: string;
   image: string;
   color: string;
+  description?: string;
   skillsLearned?: string[];
   credentialLink?: string;
 }
@@ -56,6 +57,7 @@ export interface Achievement {
   image: string;
   badge: string;
   badgeColor: string;
+  description?: string;
   skillsGained?: string[];
   link?: string;
 }
@@ -78,7 +80,24 @@ export const profileData: ProfileInfo = {
 // ── Projects (controls order = exact render order in UI) ─────
 export const projectsData: Project[] = [
   {
-    // ★ Velora AI Agent (1st)
+    // ★ n8n AI Job Discovery & Matching Agent (1st)
+    title:       'n8n AI Job Discovery & Matching Agent',
+    description: 'An AI-powered automated n8n workflow system for autonomous job discovery, resume analysis, and intelligent candidate-job matching powered by NVIDIA Nemotron LLM.',
+    image:       '/projects/n8n-job-matching.png',
+    weight:      3,
+    complexity:  'high',
+    tags: [
+      { name: 'n8n',                 level: 'core'       },
+      { name: 'NVIDIA Nemotron',     level: 'core'       },
+      { name: 'AI Agents',           level: 'core'       },
+      { name: 'LLMs',                level: 'supporting' },
+      { name: 'Workflow Automations', level: 'supporting' },
+      { name: 'Python',              level: 'exposure'   },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/n8n-ai-job-matching',
+  },
+  {
+    // ★ Velora AI Agent (2nd)
     title:       'Velora - E-Commerce AI Agent',
     description: 'An autonomous multi-tool AI shopping assistant built with Python, LangChain, and LLM function calling to automate product discovery, intelligent recommendations, and cart operations.',
     image:       '/projects/Velora.jpeg',
@@ -112,23 +131,6 @@ export const projectsData: Project[] = [
     codeLink: 'https://github.com/skr2rathishan-oss/Ai-powered-Customer-Support-Platform',
   },
   {
-    // ★ E-Commerce Mini-Project (3rd)
-    title:       'E-Commerce Mini-Project',
-    description: 'A fully responsive Vue 3 e-commerce SPA featuring real-time product search, cart management, JWT auth, and pagination — consuming the DummyJSON REST API.',
-    image:       '/projects/Ecommerce-miniproject.jpg',
-    weight:      3,
-    complexity:  'high',
-    tags: [
-      { name: 'Vue 3',        level: 'core'       },
-      { name: 'Tailwind CSS', level: 'core'       },
-      { name: 'TypeScript',   level: 'supporting' },
-      { name: 'DummyJSON',    level: 'supporting' },
-      { name: 'Vite',         level: 'exposure'   },
-    ],
-    codeLink: 'https://github.com/skr2rathishan-oss/Mini-Project',
-    demoLink: 'https://miniproject584.netlify.app/',
-  },
-  {
     // ★ Personalized Study Buddy (4th)
     title:       'Personalized Study Buddy',
     description: 'An AI-driven study companion that personalises learning paths and tracks progress using TypeScript-first architecture.',
@@ -160,7 +162,24 @@ export const projectsData: Project[] = [
     codeLink: 'https://github.com/skr2rathishan-oss/machine-learning-portfolio',
   },
   {
-    // ★ Web Dev Collection (6th - Last)
+    // ★ E-Commerce Mini-Project (6th - before the last)
+    title:       'E-Commerce Mini-Project',
+    description: 'A fully responsive Vue 3 e-commerce SPA featuring real-time product search, cart management, JWT auth, and pagination — consuming the DummyJSON REST API.',
+    image:       '/projects/Ecommerce-miniproject.jpg',
+    weight:      3,
+    complexity:  'high',
+    tags: [
+      { name: 'Vue 3',        level: 'core'       },
+      { name: 'Tailwind CSS', level: 'core'       },
+      { name: 'TypeScript',   level: 'supporting' },
+      { name: 'DummyJSON',    level: 'supporting' },
+      { name: 'Vite',         level: 'exposure'   },
+    ],
+    codeLink: 'https://github.com/skr2rathishan-oss/Mini-Project',
+    demoLink: 'https://miniproject584.netlify.app/',
+  },
+  {
+    // ★ Web Dev Collection (7th - Last)
     title:       'Web Dev Collection',
     description: 'Curated showcase of responsive UI experiments exploring animations, modern CSS techniques, and interactive frontend components.',
     image:       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -193,39 +212,53 @@ export const educationData: Education[] = [
 export const certificationsData: Certification[] = [
   {
     name: 'Generative AI Chatbot Bootcamp',
-    issuer: 'DevTown',
-    year: 'March 2026',
-    image: '/Certificates/Devtown.jpg',
-    color: '#00abf0',
-    credentialLink: 'https://cert.devtown.in/verify/1Deezj',
-    skillsLearned: ['Ai Agent Building']
+    issuer: 'DevTown & Microsoft Student Chapter - MSIT',
+    year: 'Mar 2026',
+    image: '/Certificates/certificates/devtown_screenshot.jpg',
+    color: '#a855f7',
+    description: 'Built and deployed generative AI chatbots using LLMs, prompt engineering, and conversational AI architectures in collaboration with Microsoft Student Chapter.',
+    skillsLearned: ['AI', 'Prompt Engineering', 'LLMs', 'Chatbot Dev'],
+    credentialLink: 'https://cert.devtown.in/verify/ZKOpTH'
   },
   {
-    name: 'GitHub Actions Learning',
-    issuer: 'GitHub Actions Learning (by Nisal Gunawardhana)',
-    year: 'February 2026',
-    image: '/Certificates/Github Actions.png',
-    color: '#00abf0',
-    credentialLink: 'https://github.com/nisalgunawardhana/github-actions-learning/issues/85#issuecomment-3848795415',
-    skillsLearned: ['GitHub']
+    name: 'Microsoft Azure Essentials',
+    issuer: 'Microsoft & LinkedIn',
+    year: 'Sep 2026',
+    image: '/Certificates/certificates/azure.jpg',
+    color: '#0078d4',
+    description: 'Core cloud computing principles, Azure architectural components, resource management, cloud governance, and security fundamentals.',
+    skillsLearned: ['Microsoft Azure', 'Cloud Computing', 'Security'],
+    credentialLink: 'https://www.linkedin.com/learning/certificates/ef7af3cdb93346f07e0245e86a543f87b74892449b540de91ff8a72515a139ec'
   },
   {
-    name: 'Generative AI Handbook',
-    issuer: 'Educative',
-    year: 'December 2025',
-    image: '/Certificates/educative.jpg',
-    color: '#00abf0',
-    credentialLink: 'https://www.educative.io/verify-certificate/985KjktxAO7yklNVyH0jWo6rDgkVhN',
-    skillsLearned: ['LLMs', 'RAGs', 'Fine-tuning', 'Prompt Engineering']
+    name: 'Docker Foundations',
+    issuer: 'Docker & LinkedIn',
+    year: 'Mar 2026',
+    image: '/Certificates/certificates/docker_screenshot.jpg',
+    color: '#2496ed',
+    description: 'Hands-on containerization fundamentals, Dockerfile authoring, multi-container orchestration, and image management.',
+    skillsLearned: ['Containerization', 'Docker Products', 'DevOps'],
+    credentialLink: 'https://www.linkedin.com/learning/certificates/0bba75b6ffea8780fbce41622d99983ff99d4702426d4391841d57215df37a41'
   },
   {
     name: 'AI/ML Engineer - Stage 1',
-    issuer: 'SLIIT',
-    year: 'October 2025',
-    image: '/Certificates/sliit_logo.jpg',
-    color: '#00abf0',
-    credentialLink: 'https://code.sliit.org/certificates/veaysmvojn',
-    skillsLearned: ['Image Processing', 'Computer Vision']
+    issuer: 'SLIIT Faculty of Computing',
+    year: 'Oct 2025',
+    image: '/Certificates/certificates/Slit.jpg',
+    color: '#f59e0b',
+    description: 'Comprehensive training covering machine learning pipelines, deep neural networks, image processing, and computer vision models.',
+    skillsLearned: ['Machine Learning', 'Deep Learning', 'Computer Vision'],
+    credentialLink: 'https://code.sliit.org/certificates/veaysmvojn'
+  },
+  {
+    name: 'Python for Data Science & ML',
+    issuer: 'LinkedIn Learning',
+    year: 'May 2026',
+    image: '/Certificates/certificates/machinlearning.jpg',
+    color: '#10b981',
+    description: 'Exploratory data analysis, statistical model fitting, predictive regression algorithms, and machine learning pipelines in Python.',
+    skillsLearned: ['Machine Learning', 'Python', 'Artificial Intelligence'],
+    credentialLink: 'https://www.linkedin.com/learning/certificates/e8f6a8566a84c4b89f884553037d7c052e9311e85f02e5df834a0d46dbe04d9d'
   }
 ];
 
@@ -234,11 +267,34 @@ export const achievementsData: Achievement[] = [
     title: 'CodeBlast 2025 Hackathon',
     org: 'University of Ruhuna & SLT Mobitel',
     year: '2025',
-    image: '/about/codeblastRuhuna.jpeg',
+    image: '/about/codeblast_square.png',
     badge: 'Competition',
     badgeColor: '#00abf0',
-    link: 'https://www.linkedin.com/posts/rathishan-mahendran-39812b316_codeblast2025-rextro2025-universityofruhuna-activity-7410300981302886402-QD_x',
-    skillsGained: ['MSPACE APIs', 'Microsoft Azure', 'Backend Development', 'Model Training & Inference']
+    description: 'Participated in CodeBlast 2025, a national-level hackathon organized by the University of Ruhuna and SLT Mobitel. Built innovative solutions using modern cloud technologies and AI.',
+    skillsGained: ['MSPACE APIs', 'Microsoft Azure', 'Backend Development', 'Model Training & Inference'],
+    link: 'https://www.linkedin.com/posts/rathishan-mahendran-39812b316_codeblast2025-rextro2025-universityofruhuna-activity-7410300981302886402-QD_x'
+  },
+  {
+    title: 'Kapruka Agent Challenge 2026',
+    org: 'Kapruka Holdings PLC',
+    year: '2026',
+    image: '/about/kapruka_square.png',
+    badge: 'Builder',
+    badgeColor: '#a855f7',
+    description: 'Built and submitted a live AI shopping agent on the Kapruka MCP in the Kapruka Agent Challenge 2026 — joining more than 700 developers across Sri Lanka in pioneering the future of agentic commerce.',
+    skillsGained: ['AI Shopping Agent', 'Kapruka MCP', 'LLMs', 'Agentic Commerce'],
+    link: 'https://github.com/skr2rathishan-oss/EcommerceAiagent'
+  },
+  {
+    title: 'IEEEXtreme 19.0 Programming Competition',
+    org: 'IEEE Global',
+    year: '2025',
+    image: '/about/ieee_square.png',
+    badge: 'Competition',
+    badgeColor: '#00629b',
+    description: 'Participated with team Tamilcoders in IEEEXtreme 19.0, a 24-hour virtual competitive programming challenge that hosted +19,000 participants worldwide.',
+    skillsGained: ['Competitive Programming', 'Algorithms', 'Data Structures', 'Team Problem Solving'],
+    link: '/Certificates/certificates/IEEExtreme.jpg'
   }
 ];
 
