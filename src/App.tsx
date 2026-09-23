@@ -62,7 +62,8 @@ function Home() {
           {/* Developer Code Terminal Pill Badge */}
           <motion.div 
             variants={itemVariants}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-[#00abf0]/25 text-xs font-mono mb-5 shadow-[0_0_15px_rgba(0,171,240,0.1)] backdrop-blur-sm"
+            whileHover={{ scale: 1.04, y: -1, borderColor: 'rgba(0,171,240,0.5)' }}
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-[#00abf0]/25 text-xs font-mono mb-5 shadow-[0_0_15px_rgba(0,171,240,0.1)] backdrop-blur-sm cursor-default transition-colors duration-200"
           >
             <Terminal size={13} className="text-[#00abf0]" />
             <span className="text-gray-400">const</span>
@@ -111,9 +112,9 @@ function Home() {
             <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}>
               <Link
                 to="/projects"
-                className="px-8 py-3.5 rounded-full font-bold bg-[#00abf0] text-[#081b29] transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer border-none shadow-[0_0_20px_rgba(0,171,240,0.3)] hover:shadow-[0_0_25px_rgba(0,171,240,0.5)]"
+                className="group px-8 py-3.5 rounded-full font-bold bg-[#00abf0] text-[#081b29] transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer border-none shadow-[0_0_20px_rgba(0,171,240,0.3)] hover:shadow-[0_0_25px_rgba(0,171,240,0.5)]"
               >
-                View my work <ExternalLink size={16} />
+                View my work <ExternalLink size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
             </motion.div>
 
@@ -158,20 +159,31 @@ function Home() {
         {/* Right: Floating Profile Card */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.85, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="w-full lg:w-[44%] flex justify-center items-center order-1 lg:order-2"
+          animate={{ 
+            opacity: 1, 
+            scale: 1, 
+            filter: 'blur(0px)',
+            y: [0, -10, 0]
+          }}
+          transition={{ 
+            opacity: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
+            scale: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
+            filter: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
+            y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }
+          }}
+          whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
+          className="w-full lg:w-[44%] flex justify-center items-center order-1 lg:order-2 cursor-pointer group"
         >
           <div className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 flex items-center justify-center">
              {/* Glowing Cybernetic Backdrop Accent */}
              <div 
-               className="absolute inset-0 rounded-full blur-2xl opacity-40 animate-pulse pointer-events-none"
+               className="absolute inset-0 rounded-full blur-2xl opacity-40 animate-pulse pointer-events-none group-hover:opacity-60 transition-opacity duration-500"
                style={{ background: 'radial-gradient(circle, #00abf0 0%, #081b29 70%)' }}
              />
 
              {/* Dynamic Organic Outer Ring */}
              <div 
-               className="absolute inset-[-10px] md:inset-[-12px] border border-[#00abf0]/40 transition-transform duration-1000"
+               className="absolute inset-[-10px] md:inset-[-12px] border border-[#00abf0]/40 transition-all duration-700 group-hover:border-[#00abf0]/70 group-hover:inset-[-14px]"
                style={{ 
                  borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
                  animation: 'morphShape 12s ease-in-out infinite alternate',
@@ -181,7 +193,7 @@ function Home() {
 
              {/* Outline Blob */}
              <div
-               className="absolute inset-[-15px] md:inset-[-20px] border-2 border-white opacity-50"
+               className="absolute inset-[-15px] md:inset-[-20px] border-2 border-white opacity-50 group-hover:opacity-80 transition-opacity duration-500"
                style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%', transform: 'rotate(-15deg)' }}
              />
 
@@ -191,7 +203,7 @@ function Home() {
                alt="Rathishan Mahendran"
                loading="eager"
                decoding="async"
-               className="relative z-10 w-full h-full object-cover object-[center_18%] shadow-2xl transition-transform duration-500"
+               className="relative z-10 w-full h-full object-cover object-[center_18%] shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
                style={{ 
                  borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
                }}
@@ -227,6 +239,14 @@ const toolkitCategories: CategoryData[] = [
     subtitle: 'Autonomous agents, tool calling, memory systems, and LangChain orchestration.',
     icon: Bot,
     tools: [
+      {
+        name: 'n8n & AI Workflows',
+        icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+        status: 'WORKING WITH',
+        tagline: 'Autonomous AI workflows, NVIDIA Nemotron LLM orchestration, and automated job matching.',
+        howIUseIt: ['Automated AI Pipelines', 'NVIDIA Nemotron LLMs', 'Resume Analysis & Scoring', 'Webhook Integrations'],
+        flow: ['Job Trigger', 'Resume Ingest', 'Nemotron LLM Match', 'Score & Notify']
+      },
       {
         name: 'LangChain',
         icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
@@ -416,6 +436,7 @@ const toolkitCategories: CategoryData[] = [
 ];
 
 const quickPillsRow1 = [
+  { name: 'n8n & Nemotron', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', catId: 'ai-agents', toolName: 'n8n & AI Workflows' },
   { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'ai-agents', toolName: 'Python' },
   { name: 'LangChain', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', catId: 'ai-agents', toolName: 'LangChain' },
   { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', catId: 'web-dev', toolName: 'React' },
@@ -547,17 +568,24 @@ function Skills() {
                   whileHover={{ x: 3 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleSelectCategory(cat.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 rounded-xl text-left text-xs font-medium transition-all duration-200 cursor-pointer ${
+                  className={`relative w-full flex items-center justify-between px-3.5 py-2.5 md:py-3 rounded-xl text-left text-xs font-medium transition-colors duration-200 cursor-pointer overflow-hidden ${
                     isActive
-                      ? 'bg-[#00abf0]/15 text-white border border-[#00abf0]/40 shadow-[0_0_15px_rgba(0,171,240,0.15)]'
-                      : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.04] border border-transparent'
+                      ? 'text-white font-bold'
+                      : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.04]'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeSkillCatIndicator"
+                      className="absolute inset-0 bg-[#00abf0]/15 border border-[#00abf0]/40 shadow-[0_0_15px_rgba(0,171,240,0.15)] rounded-xl"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <div className="relative z-10 flex items-center gap-2.5 min-w-0">
                     <Icon size={16} className={isActive ? 'text-[#00abf0]' : 'text-gray-500'} />
                     <span className="truncate font-semibold">{cat.title}</span>
                   </div>
-                  <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ml-2 ${
+                  <span className={`relative z-10 text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ml-2 ${
                     isActive ? 'bg-[#00abf0]/20 text-[#00abf0]' : 'text-gray-600 bg-white/[0.02]'
                   }`}>
                     0{cat.tools.length}
@@ -629,9 +657,12 @@ function Skills() {
               >
                 {/* Tool Header: Icon + Title + Status */}
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-2xl bg-white/[0.05] border border-[#00abf0]/40 flex items-center justify-center p-3 shadow-[0_0_20px_rgba(0,171,240,0.15)]">
+                  <motion.div 
+                    whileHover={{ scale: 1.05, rotate: 2 }}
+                    className="w-16 h-16 rounded-2xl bg-white/[0.05] border border-[#00abf0]/40 flex items-center justify-center p-3 shadow-[0_0_20px_rgba(0,171,240,0.15)] transition-shadow duration-300 hover:shadow-[0_0_25px_rgba(0,171,240,0.3)]"
+                  >
                     <img src={currentTool.icon} alt={currentTool.name} className="w-full h-full object-contain" />
-                  </div>
+                  </motion.div>
                   <div>
                     <div className="flex items-center gap-2.5 mb-1">
                       <h3 className="text-xl font-bold text-white">{currentTool.name}</h3>
@@ -652,13 +683,14 @@ function Skills() {
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {currentTool.howIUseIt.map((usage, idx) => (
-                      <span
+                      <motion.span
                         key={idx}
-                        className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-gray-200"
+                        whileHover={{ scale: 1.04, y: -1 }}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-gray-200 hover:border-[#00abf0]/40 hover:bg-white/[0.07] transition-all cursor-default"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00abf0]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00abf0] animate-pulse" />
                         {usage}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
                 </div>
@@ -670,14 +702,18 @@ function Skills() {
                   </h4>
                   <div className="flex items-center flex-wrap gap-1.5 p-3 rounded-xl bg-black/30 border border-white/5">
                     {currentTool.flow.map((step, idx) => (
-                      <div key={idx} className="flex items-center gap-1.5">
-                        <span className="text-xs font-mono font-medium px-2.5 py-1 rounded bg-[#00abf0]/10 text-white border border-[#00abf0]/20">
+                      <motion.div 
+                        key={idx} 
+                        whileHover={{ scale: 1.04, y: -1 }}
+                        className="flex items-center gap-1.5 cursor-default"
+                      >
+                        <span className="text-xs font-mono font-medium px-2.5 py-1 rounded bg-[#00abf0]/10 text-white border border-[#00abf0]/20 hover:border-[#00abf0]/50 hover:bg-[#00abf0]/20 transition-colors">
                           {step}
                         </span>
                         {idx < currentTool.flow.length - 1 && (
                           <span className="text-gray-500 text-xs font-mono px-0.5">&rarr;</span>
                         )}
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
@@ -732,7 +768,7 @@ interface ProjectCardProps {
 const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: ProjectCardProps) {
   const cardBody = (
     <div
-      className={`group relative rounded-2xl md:rounded-3xl bg-[#061424] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 pb-5 flex flex-col justify-between transition-colors duration-200 ${
+      className={`group relative rounded-2xl md:rounded-3xl bg-[#061424] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 pb-5 flex flex-col justify-between transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,171,240,0.12)] ${
         isMobile
           ? 'w-[84vw] max-w-[340px] flex-shrink-0 snap-center min-h-[460px]'
           : 'w-full min-h-[490px]'
@@ -746,13 +782,13 @@ const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: Pro
             alt={project.title}
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#061424]/90 via-transparent to-transparent pointer-events-none" />
           
           {/* Complexity pill badge top-left */}
           <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#061424]/80 backdrop-blur-md border border-white/10 text-[10px] font-mono uppercase tracking-wider text-gray-300">
-            <span className={`w-1.5 h-1.5 rounded-full ${
+            <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
               project.complexity === 'high' ? 'bg-amber-400' : project.complexity === 'medium' ? 'bg-[#00abf0]' : 'bg-emerald-400'
             }`} />
             {project.complexity}
@@ -776,10 +812,10 @@ const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: Pro
             return (
               <span
                 key={tag.name}
-                className={`text-[10px] md:text-[11px] px-2.5 py-1 rounded-lg font-medium ${
+                className={`text-[10px] md:text-[11px] px-2.5 py-1 rounded-lg font-medium transition-all duration-200 hover:scale-105 cursor-default ${
                   isCore
-                    ? 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/30'
-                    : 'bg-white/[0.04] text-gray-400 border border-white/[0.06]'
+                    ? 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/30 hover:bg-[#00abf0]/25'
+                    : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:text-gray-200 hover:bg-white/[0.08]'
                 }`}
               >
                 {tag.name}
@@ -794,25 +830,25 @@ const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: Pro
         {project.demoLink ? (
           <>
             <motion.a
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               href={project.demoLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#00abf0] text-[#081b29] hover:bg-[#00abf0]/90 transition-all duration-200 cursor-pointer shadow-[0_0_12px_rgba(0,171,240,0.25)]"
+              className="group/btn flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#00abf0] text-[#081b29] hover:bg-[#00abf0]/90 transition-all duration-200 cursor-pointer shadow-[0_0_12px_rgba(0,171,240,0.25)] hover:shadow-[0_0_18px_rgba(0,171,240,0.45)]"
             >
-              <Eye size={14} />
+              <Eye size={14} className="transition-transform duration-200 group-hover/btn:scale-110" />
               <span>Visit Site</span>
             </motion.a>
             <motion.a
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               href={project.codeLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-colors duration-200 cursor-pointer"
+              className="group/btn flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-colors duration-200 cursor-pointer"
             >
-              <Github size={14} />
+              <Github size={14} className="transition-transform duration-200 group-hover/btn:rotate-12" />
               <span>Source Code</span>
             </motion.a>
           </>
@@ -823,9 +859,9 @@ const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: Pro
             href={project.codeLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-[#00abf0]/15 hover:border-[#00abf0]/30 hover:text-[#00abf0] transition-colors duration-200 cursor-pointer"
+            className="group/btn w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-[#00abf0]/15 hover:border-[#00abf0]/30 hover:text-[#00abf0] transition-all duration-200 cursor-pointer"
           >
-            <Github size={14} />
+            <Github size={14} className="transition-transform duration-200 group-hover/btn:rotate-12" />
             <span>Source Code</span>
           </motion.a>
         )}
@@ -839,7 +875,7 @@ const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: Pro
 
   return (
     <motion.div
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      whileHover={{ y: -5, transition: { duration: 0.25 } }}
       className="w-full flex"
     >
       {cardBody}
@@ -861,14 +897,15 @@ function Projects() {
     if (selectedCategory === 'all') return projectsData;
     if (selectedCategory === 'ai') {
       return projectsData.filter(
-        p => p.tags.some(t => ['TensorFlow', 'PyTorch', 'scikit-learn', 'Python', 'LangChain', 'AI Agents', 'LLMs', 'Pandas'].includes(t.name)) || 
+        p => p.tags.some(t => ['TensorFlow', 'PyTorch', 'scikit-learn', 'Python', 'LangChain', 'AI Agents', 'LLMs', 'Pandas', 'n8n', 'NVIDIA Nemotron', 'Workflow Automations'].includes(t.name)) || 
              p.title.toLowerCase().includes('ai') || 
-             p.title.toLowerCase().includes('learning')
+             p.title.toLowerCase().includes('learning') ||
+             p.title.toLowerCase().includes('n8n')
       );
     }
     if (selectedCategory === 'fullstack') {
       return projectsData.filter(
-        p => p.tags.some(t => ['Vue 3', 'TypeScript', 'React', 'FastAPI', 'LangChain', 'AI Agents', 'DummyJSON', 'Node.js', 'AI Routing', 'RBAC Auth'].includes(t.name))
+        p => p.tags.some(t => ['Vue 3', 'TypeScript', 'React', 'FastAPI', 'LangChain', 'AI Agents', 'DummyJSON', 'Node.js', 'AI Routing', 'RBAC Auth', 'n8n', 'Workflow Automations'].includes(t.name))
       );
     }
     if (selectedCategory === 'frontend') {
@@ -883,22 +920,32 @@ function Projects() {
     <div className="relative z-10 w-full max-w-7xl mx-auto pb-2 md:pb-12">
       {/* ─── Category Filter Pills (Desktop Only) ─── */}
       <div className="hidden md:flex items-center justify-center flex-wrap gap-2 mb-8 md:mb-10 pt-2">
-        {categories.map(cat => (
-          <motion.button
-            key={cat.id}
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.95 }}
-            type="button"
-            onClick={() => setSelectedCategory(cat.id as any)}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
-              selectedCategory === cat.id
-                ? 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/40 shadow-[0_0_12px_rgba(0,171,240,0.2)]'
-                : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-white'
-            }`}
-          >
-            {cat.label}
-          </motion.button>
-        ))}
+        {categories.map(cat => {
+          const isSelected = selectedCategory === cat.id;
+          return (
+            <motion.button
+              key={cat.id}
+              whileHover={{ scale: 1.05, y: -1 }}
+              whileTap={{ scale: 0.95 }}
+              type="button"
+              onClick={() => setSelectedCategory(cat.id as any)}
+              className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                isSelected
+                  ? 'text-[#00abf0]'
+                  : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-white'
+              }`}
+            >
+              {isSelected && (
+                <motion.div
+                  layoutId="activeProjectCategory"
+                  className="absolute inset-0 rounded-full bg-[#00abf0]/15 border border-[#00abf0]/40 shadow-[0_0_15px_rgba(0,171,240,0.2)]"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{cat.label}</span>
+            </motion.button>
+          );
+        })}
       </div>
 
       {/* ─── Mobile Horizontal Swipe Phase (< md) ─── */}
@@ -916,12 +963,27 @@ function Projects() {
         </div>
       </div>
 
-      {/* ─── Desktop 3-Column Card Grid (>= md) ─── */}
-      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProjects.map((project) => (
-          <ProjectCard key={project.title} project={project} isMobile={false} />
-        ))}
-      </div>
+      {/* ─── Desktop 3-Column Card Grid (>= md) with Fluid Layout Animations ─── */}
+      <motion.div 
+        layout
+        className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project) => (
+            <motion.div
+              layout
+              key={project.title}
+              initial={{ opacity: 0, scale: 0.94, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 15 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full flex"
+            >
+              <ProjectCard project={project} isMobile={false} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }

@@ -110,5 +110,30 @@ body {
   animation: marquee-right 40s linear infinite;
 }
 
+/* Custom Certifications Scrollbar */
+.custom-cert-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 171, 240, 0.45) rgba(255, 255, 255, 0.03);
+}
 
+.custom-cert-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
 
+.custom-cert-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 9999px;
+  margin: 4px 0;
+}
+
+.custom-cert-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 171, 240, 0.45);
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 171, 240, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.custom-cert-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 171, 240, 0.85);
+  box-shadow: 0 0 10px rgba(0, 171, 240, 0.5);
+}

@@ -163,12 +163,12 @@ export default function Contact() {
               whileTap={{ scale: 0.97 }}
               type="submit"
               disabled={status === 'loading'}
-              className="-mt-1 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 bg-[#00abf0] text-[#081b29] hover:shadow-[0_0_20px_rgba(0,171,240,0.5)] cursor-pointer"
+              className="group -mt-1 self-start flex items-center gap-3 px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 disabled:opacity-50 bg-[#00abf0] text-[#081b29] hover:shadow-[0_0_20px_rgba(0,171,240,0.5)] cursor-pointer"
             >
               {status === 'loading' ? (
                 <><span className="w-4 h-4 border-2 border-t-transparent border-[#081b29] rounded-full animate-spin" /> Sending</>
               ) : (
-                <><Send size={15} /> Send Message</>
+                <><Send size={15} className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-0.5" /> Send Message</>
               )}
             </motion.button>
 
@@ -208,11 +208,17 @@ export default function Contact() {
                 whileTap={{ scale: 0.98 }}
                 className={`group relative p-4 rounded-2xl flex flex-col gap-3 transition-all duration-300 ${card}`}
                 style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = `${item.color}40`)}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)')}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = `${item.color}50`;
+                  e.currentTarget.style.boxShadow = `0 0 20px ${item.color}25`;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
                 {/* Icon badge */}
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
                   style={{ background: `${item.color}18`, color: item.color }}>
                   {item.icon}
                 </div>
@@ -224,7 +230,7 @@ export default function Contact() {
 
                 <ArrowUpRight
                   size={14}
-                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   style={{ color: item.color }}
                 />
               </motion.a>
