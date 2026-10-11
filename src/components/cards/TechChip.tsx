@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Technology } from '../../content/types';
-import { cx, Monogram } from './shared';
+import { cx, initials } from './shared';
 
 export interface TechChipProps {
   tech: Technology;
@@ -10,10 +10,21 @@ export interface TechChipProps {
   className?: string;
 }
 
-function TechIcon({ tech }: { tech: Technology }) {
+/** Monochrome-ish icon (full colour on hover/active); a monogram when no icon is set or it fails to load. */
+export function TechIcon({ tech, active = false }: { tech: Technology; active?: boolean }) {
   const [failed, setFailed] = useState(false);
   if (!tech.icon || failed) {
-    return <Monogram text={tech.name} accent={tech.color} className="w-5 h-5 rounded text-[9px]" />;
+    return (
+      <span
+        aria-hidden="true"
+        className={cx(
+          'flex h-5 w-5 shrink-0 items-center justify-center rounded-[4px] border text-[0.5625rem] font-semibold leading-none tracking-tight',
+          active ? 'border-accent/60 text-accent' : 'border-line-strong/50 text-ink-2',
+        )}
+      >
+        {initials(tech.name)}
+      </span>
+    );
   }
   return (
     <img
@@ -24,30 +35,29 @@ function TechIcon({ tech }: { tech: Technology }) {
       loading="lazy"
       decoding="async"
       onError={() => setFailed(true)}
-      className="w-5 h-5 object-contain"
+      className={cx(
+        'h-5 w-5 shrink-0 object-contain transition-[filter,opacity] duration-150',
+        active ? 'opacity-100' : 'opacity-75 grayscale group-hover:opacity-100 group-hover:grayscale-0',
+      )}
     />
   );
 }
 
 export default function TechChip({ tech, count, active = false, onClick, className }: TechChipProps) {
+  const label = count !== undefined ? `${tech.name}, ${count} project${count === 1 ? '' : 's'}` : tech.name;
   const body = (
     <>
-      <TechIcon tech={tech} />
+      <TechIcon tech={tech} active={active} />
       <span>{tech.name}</span>
       {count !== undefined && (
-        <span className="text-[10px] font-mono text-gray-500">
-          <span aria-hidden="true">{count}</span>
-          <span className="sr-only">
-            ({count} project{count === 1 ? '' : 's'})
-          </span>
+        <span
+          aria-hidden="true"
+          className={cx('font-mono text-xs tabular-nums', active ? 'text-accent' : 'text-ink-3')}
+        >
+          {count}
         </span>
       )}
     </>
-  );
-  const base = cx(
-    'inline-flex items-center gap-2 min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors',
-    active ? 'bg-[#00abf0]/15 border-[#00abf0]/60 text-white' : 'bg-white/[0.03] border-white/[0.08] text-gray-300',
-    className,
   );
 
   if (onClick) {
@@ -55,15 +65,29 @@ export default function TechChip({ tech, count, active = false, onClick, classNa
       <button
         type="button"
         aria-pressed={active}
+        aria-label={label}
         onClick={() => onClick(tech)}
         className={cx(
-          base,
-          'cursor-pointer hover:border-[#00abf0]/40 hover:text-white focus-visible:outline-2 focus-visible:outline-[#00abf0]',
+          'group inline-flex min-h-11 shrink-0 items-center gap-2 rounded-control border px-3 text-sm font-medium whitespace-nowrap transition-colors duration-150 pointer-fine:min-h-9',
+          active
+            ? 'border-accent bg-accent-wash text-ink'
+            : 'border-line bg-white/[0.02] text-ink-2 hover:border-white/25 hover:text-ink',
+          className,
         )}
       >
         {body}
       </button>
     );
   }
-  return <span className={base}>{body}</span>;
+  return (
+    <span
+      aria-label={count !== undefined ? label : undefined}
+      className={cx(
+        'group inline-flex min-h-9 shrink-0 items-center gap-2 px-1 text-sm font-medium whitespace-nowrap text-ink-2',
+        className,
+      )}
+    >
+      {body}
+    </span>
+  );
 }

@@ -216,6 +216,8 @@ export interface Role extends Entity {
   description?: string;
   highlights?: string[];
   logo?: MediaUrl;
+  /** Optional photo / banner shown prominently on the card (in addition to the logo). */
+  image?: MediaUrl;
   url?: Url;
   accent?: HexColor;
 }

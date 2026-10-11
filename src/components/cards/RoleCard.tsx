@@ -1,7 +1,7 @@
-import { Calendar, ExternalLink, MapPin } from 'lucide-react';
+import { ArrowUpRight, MapPin } from 'lucide-react';
 import type { Role, RoleKind } from '../../content/types';
 import { formatRange } from '../../content/selectors';
-import { cx, linkProps, MediaImage } from './shared';
+import { cx, linkProps, MediaImage, NewTabHint } from './shared';
 
 export interface RoleCardProps {
   role: Role;
@@ -17,12 +17,12 @@ export const ROLE_KIND_LABEL: Record<RoleKind, string> = {
 };
 
 export default function RoleCard({ role, className }: RoleCardProps) {
-  const accent = role.accent ?? '#00abf0';
   const range = formatRange(role.start, role.end);
+  const current = role.end === 'present';
   return (
     <article
       className={cx(
-        'group relative rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 transition-colors duration-300',
+        'grid gap-5 rounded-card border border-line bg-surface p-4 sm:grid-cols-[8rem_minmax(0,1fr)] sm:p-5 lg:grid-cols-[9rem_minmax(0,1fr)] lg:gap-7',
         className,
       )}
     >
@@ -31,62 +31,67 @@ export default function RoleCard({ role, className }: RoleCardProps) {
         src={role.logo}
         alt={`${role.organization} logo`}
         fallbackText={role.organization}
-        accent={accent}
-        className="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 rounded-2xl bg-white/5 text-2xl"
-        imgClassName="object-contain p-2"
+        width={288}
+        height={288}
+        className="h-28 w-28 self-start rounded-control border border-line bg-raised text-3xl sm:h-32 sm:w-32 lg:h-36 lg:w-36"
+        imgClassName="object-contain p-3"
       />
 
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-1">
-          <span
-            className="text-[11px] px-2.5 py-0.5 rounded-full font-semibold"
-            style={{ background: `${accent}1f`, color: accent }}
-          >
-            {ROLE_KIND_LABEL[role.kind]}
-          </span>
+      <div className="flex min-w-0 flex-col">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+          <span className="rounded-chip border border-line px-2 py-0.5 text-ink-2">{ROLE_KIND_LABEL[role.kind]}</span>
+          {current && (
+            <span className="inline-flex items-center gap-1.5 rounded-chip border border-success/30 px-2 py-0.5 text-success">
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-success" />
+              Current
+            </span>
+          )}
         </div>
-        <h3 className="font-bold text-base sm:text-lg text-white">{role.title}</h3>
-        <p className="text-sm text-gray-300">
+
+        <h3 className="mt-3 text-h3 text-ink text-pretty">{role.title}</h3>
+        <p className="mt-1 text-sm text-ink-2">
           {role.organization}
-          {role.parentOrg && <span className="text-gray-500"> · {role.parentOrg}</span>}
+          {role.parentOrg && <span className="text-ink-3">, {role.parentOrg}</span>}
         </p>
 
         {(range || role.location) && (
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400 mt-1">
-            {range && (
-              <span className="flex items-center gap-1.5">
-                <Calendar size={12} className="text-[#00abf0]" aria-hidden="true" />
-                {range}
-              </span>
-            )}
+          <p className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-3">
+            {range && <span className="font-mono">{range}</span>}
             {role.location && (
-              <span className="flex items-center gap-1.5">
-                <MapPin size={12} className="text-[#00abf0]" aria-hidden="true" />
+              <span className="inline-flex items-center gap-1">
+                <MapPin size={12} aria-hidden="true" />
                 {role.location}
               </span>
             )}
           </p>
         )}
 
-        {role.description && <p className="text-xs sm:text-sm text-gray-400 leading-relaxed mt-2">{role.description}</p>}
+        {role.description && (
+          <p className="mt-3 max-w-[65ch] text-[0.9375rem] leading-relaxed text-ink-2">{role.description}</p>
+        )}
 
         {role.highlights && role.highlights.length > 0 && (
-          <ul className="list-disc pl-4 mt-2 text-xs text-gray-400 space-y-1">
+          <ul className="mt-3 max-w-[65ch] space-y-1.5 text-sm text-ink-2">
             {role.highlights.map((h) => (
-              <li key={h}>{h}</li>
+              <li key={h} className="flex gap-2">
+                <span aria-hidden="true" className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-accent" />
+                <span>{h}</span>
+              </li>
             ))}
           </ul>
         )}
 
         {role.url && (
-          <a
-            {...linkProps(role.url)}
-            className="inline-flex items-center gap-1.5 mt-3 text-xs font-semibold hover:underline underline-offset-2"
-            style={{ color: accent }}
-          >
-            <ExternalLink size={12} aria-hidden="true" />
-            Visit website<span className="sr-only"> of {role.organization}</span>
-          </a>
+          <div className="mt-auto pt-3">
+            <a
+              {...linkProps(role.url)}
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent underline-offset-4 hover:underline"
+            >
+              Visit {role.organization.length > 32 ? 'website' : role.organization}
+              <ArrowUpRight size={15} aria-hidden="true" />
+              <NewTabHint url={role.url} />
+            </a>
+          </div>
         )}
       </div>
     </article>

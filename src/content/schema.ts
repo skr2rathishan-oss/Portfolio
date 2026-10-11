@@ -268,6 +268,7 @@ export const RoleSchema = z.object({
   description: optText(LIMITS.summary),
   highlights: list().optional(),
   logo: MediaUrlSchema.optional(),
+  image: MediaUrlSchema.optional(),
   url: UrlSchema.optional(),
   accent: HexColorSchema.optional(),
 });

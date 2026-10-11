@@ -1,190 +1,169 @@
-import React, { useEffect, useRef } from 'react';
+// Ambient constellation behind the site: the one perpetual animation.
+//  - DPR-aware (capped at 1.5x), ~30fps, pauses while the tab is hidden;
+//  - static single frame for prefers-reduced-motion, Save-Data and small screens;
+//  - particles are regenerated after a significant resize/rotation.
+import { useEffect, useRef } from 'react';
 
 interface Particle {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  radius: number;
-  baseAlpha: number;
-  glow: boolean;
+  r: number;
+  a: number;
 }
 
-export default function NetworkBackground() {
+const FRAME_MS = 1000 / 30;
+
+function shouldAnimate(): boolean {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const small = window.matchMedia('(max-width: 1023px)').matches;
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+  return !reduce && !small && !saveData;
+}
+
+function makeParticles(width: number, height: number): Particle[] {
+  const count = Math.max(18, Math.floor(Math.min(width, 1400) / 44));
+  const particles: Particle[] = [];
+  for (let i = 0; i < count; i++) {
+    // Bias towards the right half, where the hero portrait sits.
+    const right = Math.random() > 0.4;
+    particles.push({
+      x: right ? width * 0.45 + Math.random() * width * 0.55 : Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() > 0.85 ? 2 : Math.random() > 0.5 ? 1.5 : 1.1,
+      a: Math.random() * 0.45 + 0.25,
+    });
+  }
+  return particles;
+}
+
+export default function NetworkBackground({ subdued = false }: { subdued?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
 
-    let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = 0;
+    let height = 0;
+    let particles: Particle[] = [];
+    let frame = 0;
+    let last = 0;
+    let animating = shouldAnimate();
 
-    const handleResize = () => {
-      if (!canvas) return;
-      const newWidth = window.innerWidth;
-      const newHeight = window.innerHeight;
-      // Skip if width is unchanged and height change is small (e.g. mobile URL bar show/hide)
-      if (canvas.width === newWidth && Math.abs(canvas.height - newHeight) < 160) {
-        return;
-      }
-      width = canvas.width = newWidth;
-      height = canvas.height = newHeight;
+    const resize = (force = false) => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      // Ignore small height changes (mobile URL bar show/hide).
+      if (!force && w === width && Math.abs(h - height) < 160) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const significant = Math.abs(w - width) > 120 || Math.abs(h - height) > 200;
+      width = w;
+      height = h;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (force || significant || particles.length === 0) particles = makeParticles(w, h);
+      if (!animating) draw(false);
     };
 
-    window.addEventListener('resize', handleResize);
-
-    // Generate constellation nodes focused on center-right and ambient space
-    const particleCount = Math.floor(Math.min(width, 1400) / 22);
-    const particles: Particle[] = [];
-
-    for (let i = 0; i < particleCount; i++) {
-      const biasRight = Math.random() > 0.35;
-      const x = biasRight
-        ? width * 0.45 + Math.random() * (width * 0.55)
-        : Math.random() * width;
-      const y = Math.random() * height;
-
-      particles.push({
-        x,
-        y,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        radius: Math.random() > 0.85 ? 2.5 : Math.random() > 0.5 ? 1.8 : 1.2,
-        baseAlpha: Math.random() * 0.6 + 0.3,
-        glow: Math.random() > 0.7,
-      });
-    }
-
-    let angle = 0;
-
-    const render = () => {
+    const draw = (move: boolean) => {
       ctx.clearRect(0, 0, width, height);
-
-      // 1. Draw subtle 3D rotating elliptical wireframe rings centered on right-hero area
-      const centerX = width > 1024 ? width * 0.72 : width * 0.5;
-      const centerY = height * 0.45;
-      const ringRadiusX = Math.min(width * 0.22, 220);
-      const ringRadiusY = ringRadiusX * 0.38;
-
-      angle += 0.002;
-
-      ctx.save();
-      ctx.translate(centerX, centerY);
-
-      // Ring 1 (tilted)
-      ctx.save();
-      ctx.rotate(-0.25 + Math.sin(angle * 0.5) * 0.05);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, ringRadiusX, ringRadiusY, 0, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0, 171, 240, 0.12)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // Ring 2 (larger, tilted opposite)
-      ctx.beginPath();
-      ctx.ellipse(0, 0, ringRadiusX * 1.35, ringRadiusY * 1.3, 0.35, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0, 171, 240, 0.06)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // Ring 3 (outer faint)
-      ctx.beginPath();
-      ctx.ellipse(0, 0, ringRadiusX * 1.7, ringRadiusY * 1.6, -0.15, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0, 171, 240, 0.03)';
-      ctx.setLineDash([4, 8]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-
-      ctx.restore();
-
-      // 2. Update and draw connected constellation lines
-      const maxDistance = width > 768 ? 130 : 90;
-
+      const maxDist = width > 768 ? 130 : 90;
       for (let i = 0; i < particles.length; i++) {
-        const p1 = particles[i];
-
-        // Move
-        p1.x += p1.vx;
-        p1.y += p1.vy;
-
-        // Wrap around boundaries smoothly
-        if (p1.x < 0) p1.x = width;
-        if (p1.x > width) p1.x = 0;
-        if (p1.y < 0) p1.y = height;
-        if (p1.y > height) p1.y = 0;
-
-        // Draw connections
+        const p = particles[i];
+        if (move) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = width;
+          else if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          else if (p.y > height) p.y = 0;
+        }
         for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < maxDistance) {
-            const alpha = (1 - dist / maxDistance) * 0.22;
+          const q = particles[j];
+          const dx = p.x - q.x;
+          const dy = p.y - q.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < maxDist * maxDist) {
+            const alpha = (1 - Math.sqrt(d2) / maxDist) * 0.18;
             ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
             ctx.strokeStyle = `rgba(0, 171, 240, ${alpha})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         }
       }
-
-      // 3. Draw particles / nodes
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-
+      for (const p of particles) {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(186, 230, 253, ${p.baseAlpha})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(186, 230, 253, ${p.a})`;
         ctx.fill();
-
-        if (p.glow) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius * 2.8, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(0, 171, 240, ${p.baseAlpha * 0.35})`;
-          ctx.fill();
-        }
       }
-
-      animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    const loop = (t: number) => {
+      frame = requestAnimationFrame(loop);
+      if (t - last < FRAME_MS) return;
+      last = t;
+      draw(true);
+    };
+
+    const start = () => {
+      cancelAnimationFrame(frame);
+      if (animating && !document.hidden) frame = requestAnimationFrame(loop);
+      else draw(false);
+    };
+
+    const onPrefChange = () => {
+      animating = shouldAnimate();
+      start();
+    };
+    const onVisibility = () => {
+      if (document.hidden) cancelAnimationFrame(frame);
+      else start();
+    };
+    const onResize = () => resize(false);
+
+    const mqs = [
+      window.matchMedia('(prefers-reduced-motion: reduce)'),
+      window.matchMedia('(max-width: 1023px)'),
+    ];
+    mqs.forEach((mq) => mq.addEventListener('change', onPrefChange));
+    window.addEventListener('resize', onResize);
+    document.addEventListener('visibilitychange', onVisibility);
+
+    resize(true);
+    start();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(frame);
+      mqs.forEach((mq) => mq.removeEventListener('change', onPrefChange));
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Deep atmospheric backdrop with cyan ambient glow hotspots */}
-      <div 
-        className="absolute inset-0 bg-[#06101c]"
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-canvas">
+      <div
+        className="absolute inset-0"
         style={{
-          backgroundImage: `
-            radial-gradient(circle at 75% 42%, rgba(0, 171, 240, 0.14) 0%, rgba(3, 105, 161, 0.05) 35%, transparent 65%),
-            radial-gradient(circle at 20% 25%, rgba(0, 171, 240, 0.08) 0%, transparent 45%),
-            radial-gradient(circle at 50% 85%, rgba(2, 132, 199, 0.06) 0%, transparent 50%)
-          `
+          backgroundImage:
+            'radial-gradient(circle at 78% 38%, rgba(0, 171, 240, 0.10) 0%, rgba(0, 171, 240, 0.03) 35%, transparent 62%), radial-gradient(circle at 12% 18%, rgba(0, 171, 240, 0.05) 0%, transparent 42%)',
         }}
       />
-
-      {/* Grid Pattern overlay with refined perspective mask */}
-      <div className="absolute inset-0 modern-grid-bg opacity-70" />
-
-      {/* Animated Canvas Constellation Network */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full transition-opacity duration-500"
+        style={{ opacity: subdued ? 0.45 : 1 }}
+      />
     </div>
   );
 }
-

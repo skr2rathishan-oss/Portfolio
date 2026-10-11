@@ -1,109 +1,118 @@
-import { Calendar, ExternalLink, FileText, ZoomIn } from 'lucide-react';
+import { ExternalLink, FileText, Maximize2 } from 'lucide-react';
 import type { Certification } from '../../content/types';
 import { formatDate } from '../../content/selectors';
-import { cx, linkProps, MediaImage, SkillList } from './shared';
+import { cx, linkProps, MediaImage, NewTabHint, SkillList } from './shared';
 
 export interface CertificationCardProps {
   cert: Certification;
-  /** When provided, the certificate image and an "Inspect" button open a preview. */
+  /** When provided, the certificate image and a "View certificate" button open a preview. */
   onPreview?: (cert: Certification) => void;
   className?: string;
 }
 
+/** "Verify on LinkedIn" when the destination is recognisable, otherwise "Verify credential". */
+export function verifyLabel(url: string): string {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, '');
+    if (host.endsWith('linkedin.com')) return 'Verify on LinkedIn';
+    if (host.endsWith('devtown.in')) return 'Verify on DevTown';
+    if (host.endsWith('sliit.org') || host.endsWith('sliit.lk')) return 'Verify on SLIIT';
+    if (host.endsWith('educative.io')) return 'Verify on Educative';
+    if (host.endsWith('github.com')) return 'View on GitHub';
+    if (host.endsWith('credly.com')) return 'Verify on Credly';
+  } catch {
+    // relative or malformed URL: fall through
+  }
+  return 'Verify credential';
+}
+
+const actionClass =
+  'inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold transition-colors underline-offset-4 hover:underline';
+
 export default function CertificationCard({ cert, onPreview, className }: CertificationCardProps) {
-  const accent = cert.accent ?? '#00abf0';
   const issued = formatDate(cert.issued);
   const image = (
     <MediaImage
       src={cert.image}
-      alt={`${cert.name} certificate`}
+      alt={onPreview ? '' : `${cert.name} certificate`}
       fallbackText={cert.issuer}
-      className="w-full h-full rounded-lg bg-white/95 text-3xl"
+      width={800}
+      height={600}
+      className="h-full w-full text-2xl"
       imgClassName="object-contain"
     />
   );
   const frameClass =
-    'relative w-full aspect-[1.4/1] rounded-xl overflow-hidden p-1.5 flex items-center justify-center';
-  const frameStyle = {
-    border: `2px solid ${accent}75`,
-    background: `radial-gradient(ellipse at center, ${accent}15 0%, rgba(6,21,36,0.9) 100%)`,
-  };
+    'relative block w-full aspect-[4/3] overflow-hidden rounded-control border border-line bg-navy p-1.5';
 
   return (
     <article
       className={cx(
-        'group relative rounded-2xl bg-[#061524] border border-white/[0.08] hover:border-[#00abf0]/50 p-4 sm:p-5 flex flex-col transition-colors duration-300',
+        'grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 rounded-card border border-line bg-surface p-4 sm:grid-cols-[9rem_minmax(0,1fr)] md:grid-cols-1 md:p-5',
         className,
       )}
     >
-      <div className="relative mb-4">
+      <div className="self-start">
         {onPreview ? (
           <button
             type="button"
             onClick={() => onPreview(cert)}
-            className={cx(frameClass, 'cursor-zoom-in focus-visible:outline-2 focus-visible:outline-[#00abf0]')}
-            style={frameStyle}
+            className={cx(frameClass, 'cursor-zoom-in transition-colors hover:border-white/25')}
           >
             {image}
-            <span className="sr-only">Open {cert.name} certificate preview</span>
+            <span className="sr-only">View {cert.name} certificate</span>
           </button>
         ) : (
-          <div className={frameClass} style={frameStyle}>
-            {image}
+          <div className={frameClass}>{image}</div>
+        )}
+      </div>
+
+      <div className="flex min-w-0 flex-col">
+        <h3 className="text-base font-semibold leading-snug text-ink text-pretty md:text-h3">{cert.name}</h3>
+        <p className="mt-1 text-sm text-ink-2">{cert.issuer}</p>
+        {issued && (
+          <p className="mt-1 font-mono text-xs text-ink-3">
+            Issued <time dateTime={cert.issued}>{issued}</time>
+            {cert.credentialId && <span> · ID {cert.credentialId}</span>}
+          </p>
+        )}
+        {cert.description && (
+          <p className="mt-3 hidden text-sm leading-relaxed text-ink-2 sm:line-clamp-3">{cert.description}</p>
+        )}
+        {cert.skills.length > 0 && (
+          <div className="mt-3">
+            <SkillList skills={cert.skills} label="Skills covered" max={3} />
           </div>
         )}
-        {issued && (
-          <span className="absolute top-3 right-3 pointer-events-none flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium text-white bg-black/70 border border-white/20">
-            <Calendar size={11} className="text-[#00abf0]" aria-hidden="true" />
-            <time dateTime={cert.issued}>{issued}</time>
-          </span>
+
+        {(onPreview || cert.credentialUrl || cert.pdf) && (
+          <div className="mt-auto flex flex-wrap items-center gap-x-4 pt-3">
+            {cert.credentialUrl && (
+              <a {...linkProps(cert.credentialUrl)} className={cx(actionClass, 'text-accent')}>
+                {verifyLabel(cert.credentialUrl)}
+                <ExternalLink size={14} aria-hidden="true" />
+                <span className="sr-only">: {cert.name}</span>
+                <NewTabHint url={cert.credentialUrl} />
+              </a>
+            )}
+            {onPreview && (
+              <button type="button" onClick={() => onPreview(cert)} className={cx(actionClass, 'text-ink-2 hover:text-ink')}>
+                <Maximize2 size={14} aria-hidden="true" />
+                View
+                <span className="sr-only"> {cert.name} certificate</span>
+              </button>
+            )}
+            {cert.pdf && (
+              <a {...linkProps(cert.pdf)} className={cx(actionClass, 'text-ink-2 hover:text-ink')}>
+                <FileText size={14} aria-hidden="true" />
+                PDF
+                <span className="sr-only"> of {cert.name}</span>
+                <NewTabHint url={cert.pdf} />
+              </a>
+            )}
+          </div>
         )}
       </div>
-
-      <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug mb-1">{cert.name}</h3>
-      <p className="text-xs font-semibold text-gray-300 flex items-center gap-1.5 mb-2.5">
-        <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} aria-hidden="true" />
-        {cert.issuer}
-      </p>
-      {cert.description && <p className="text-xs text-gray-400 leading-relaxed mb-3.5 line-clamp-3">{cert.description}</p>}
-      <div className="mb-4">
-        <SkillList skills={cert.skills} label="Skills" />
-      </div>
-
-      {(onPreview || cert.credentialUrl || cert.pdf) && (
-        <div className="pt-3 border-t border-white/[0.06] flex flex-wrap items-center gap-2.5 mt-auto">
-          {onPreview && (
-            <button
-              type="button"
-              onClick={() => onPreview(cert)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-gray-300 bg-white/[0.04] hover:bg-white/[0.08] hover:text-white border border-white/10 transition-colors cursor-pointer"
-            >
-              <ZoomIn size={13} aria-hidden="true" />
-              <span>Inspect</span>
-            </button>
-          )}
-          {cert.pdf && (
-            <a
-              {...linkProps(cert.pdf)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold text-gray-300 bg-white/[0.04] hover:bg-white/[0.08] hover:text-white border border-white/10 transition-colors"
-            >
-              <FileText size={13} aria-hidden="true" />
-              <span>PDF</span>
-              <span className="sr-only"> of {cert.name}</span>
-            </a>
-          )}
-          {cert.credentialUrl && (
-            <a
-              {...linkProps(cert.credentialUrl)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-semibold bg-[#00abf0]/15 border border-[#00abf0]/50 text-[#00abf0] hover:bg-[#00abf0] hover:text-[#081b29] transition-colors"
-            >
-              <span>Show credential</span>
-              <span className="sr-only"> for {cert.name}</span>
-              <ExternalLink size={13} aria-hidden="true" />
-            </a>
-          )}
-        </div>
-      )}
     </article>
   );
 }

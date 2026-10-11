@@ -1,7 +1,7 @@
-import { Award, Calendar, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, Award } from 'lucide-react';
 import type { Certification, Program, ProgramKind } from '../../content/types';
 import { formatRange } from '../../content/selectors';
-import { cx, linkProps, MediaImage, SkillList } from './shared';
+import { cx, linkProps, MediaImage, NewTabHint, SkillList } from './shared';
 
 export interface ProgramCardProps {
   program: Program;
@@ -22,12 +22,15 @@ export const PROGRAM_KIND_LABEL: Record<ProgramKind, string> = {
 
 const MODE_LABEL = { online: 'Online', 'in-person': 'In person', hybrid: 'Hybrid' } as const;
 
+const linkClass =
+  'inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline';
+
 export default function ProgramCard({ program, certification, className }: ProgramCardProps) {
   const range = formatRange(program.start, program.end);
   return (
     <article
       className={cx(
-        'group relative rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 sm:p-5 flex gap-4 transition-colors duration-300',
+        'grid gap-5 rounded-card border border-line bg-surface p-4 sm:grid-cols-[6rem_minmax(0,1fr)] sm:p-5',
         className,
       )}
     >
@@ -35,44 +38,45 @@ export default function ProgramCard({ program, certification, className }: Progr
         src={program.logo}
         alt={`${program.organizer} logo`}
         fallbackText={program.organizer}
-        className="w-16 h-16 flex-shrink-0 rounded-xl bg-white/5 text-lg"
-        imgClassName="object-contain p-1.5"
+        width={192}
+        height={192}
+        className="h-20 w-20 self-start rounded-control border border-line bg-raised text-xl sm:h-24 sm:w-24"
+        imgClassName="object-contain p-2"
       />
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-1 text-[11px] font-semibold">
-          <span className="px-2.5 py-0.5 rounded-full bg-white/[0.05] text-gray-300 border border-white/10">
-            {PROGRAM_KIND_LABEL[program.kind]}
-          </span>
-          {program.mode && <span className="text-gray-500">{MODE_LABEL[program.mode]}</span>}
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+          <span className="rounded-chip border border-line px-2 py-0.5 text-ink-2">{PROGRAM_KIND_LABEL[program.kind]}</span>
+          {program.mode && <span className="text-ink-3">{MODE_LABEL[program.mode]}</span>}
         </div>
-        <h3 className="font-bold text-base text-white">{program.title}</h3>
-        <p className="text-sm text-gray-300">{program.organizer}</p>
-        {range && (
-          <p className="flex items-center gap-1.5 text-xs text-gray-400 mt-1">
-            <Calendar size={12} className="text-[#00abf0]" aria-hidden="true" />
-            {range}
-          </p>
+        <h3 className="mt-3 text-h3 text-ink text-pretty">{program.title}</h3>
+        <p className="mt-1 text-sm text-ink-2">{program.organizer}</p>
+        {range && <p className="mt-1 font-mono text-xs text-ink-3">{range}</p>}
+        {program.description && (
+          <p className="mt-3 max-w-[65ch] text-[0.9375rem] leading-relaxed text-ink-2">{program.description}</p>
         )}
-        {program.description && <p className="text-xs sm:text-sm text-gray-400 leading-relaxed mt-2">{program.description}</p>}
         {program.skills.length > 0 && (
-          <div className="mt-3">
-            <SkillList skills={program.skills} label="Skills" />
+          <div className="mt-4">
+            <SkillList skills={program.skills} label="Skills covered" />
           </div>
         )}
-        <div className="flex flex-wrap gap-3 mt-3 text-xs font-semibold">
-          {certification?.credentialUrl && (
-            <a {...linkProps(certification.credentialUrl)} className="inline-flex items-center gap-1.5 text-[#00abf0] hover:underline">
-              <Award size={12} aria-hidden="true" />
-              Certificate<span className="sr-only">: {certification.name}</span>
-            </a>
-          )}
-          {program.url && (
-            <a {...linkProps(program.url)} className="inline-flex items-center gap-1.5 text-gray-300 hover:text-white hover:underline">
-              <ExternalLink size={12} aria-hidden="true" />
-              Program page<span className="sr-only"> for {program.title}</span>
-            </a>
-          )}
-        </div>
+        {(certification?.credentialUrl || program.url) && (
+          <div className="mt-2 flex flex-wrap gap-x-5">
+            {certification?.credentialUrl && (
+              <a {...linkProps(certification.credentialUrl)} className={cx(linkClass, 'text-accent')}>
+                <Award size={15} aria-hidden="true" />
+                Certificate<span className="sr-only">: {certification.name}</span>
+                <NewTabHint url={certification.credentialUrl} />
+              </a>
+            )}
+            {program.url && (
+              <a {...linkProps(program.url)} className={cx(linkClass, 'text-ink-2 hover:text-ink')}>
+                Program page<span className="sr-only"> for {program.title}</span>
+                <ArrowUpRight size={15} aria-hidden="true" />
+                <NewTabHint url={program.url} />
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </article>
   );

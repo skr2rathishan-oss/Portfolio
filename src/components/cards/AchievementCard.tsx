@@ -1,10 +1,13 @@
-import { ArrowRight, Calendar, Trophy, Users } from 'lucide-react';
+import { ArrowUpRight, Maximize2 } from 'lucide-react';
 import type { Achievement, AchievementKind } from '../../content/types';
 import { formatDate } from '../../content/selectors';
-import { cx, linkProps, MediaImage, SkillList } from './shared';
+import type { PreviewMedia } from '../ui/Lightbox';
+import { cx, isImageUrl, linkProps, MediaImage, NewTabHint, SkillList } from './shared';
 
 export interface AchievementCardProps {
   item: Achievement;
+  /** When provided, the image (and image links such as certificates) open in a lightbox. */
+  onPreview?: (media: PreviewMedia) => void;
   className?: string;
 }
 
@@ -15,73 +18,101 @@ export const ACHIEVEMENT_KIND_LABEL: Record<AchievementKind, string> = {
   award: 'Award',
 };
 
-export default function AchievementCard({ item, className }: AchievementCardProps) {
-  const accent = item.accent ?? '#00abf0';
+export default function AchievementCard({ item, onPreview, className }: AchievementCardProps) {
+  const date = formatDate(item.date);
+  const imageAlt = `${item.title}`;
+  const linkIsImage = !!item.link && isImageUrl(item.link.url);
+
+  const image = (
+    <MediaImage
+      src={item.image}
+      alt={onPreview ? '' : imageAlt}
+      fallbackText={item.title}
+      width={640}
+      height={640}
+      className="h-full w-full text-4xl"
+      imgClassName="object-cover"
+    />
+  );
+  const frame = 'block w-full aspect-[4/3] overflow-hidden rounded-control border border-line bg-navy sm:aspect-square';
+
   return (
     <article
       className={cx(
-        'group relative rounded-2xl bg-[#061524] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 sm:p-5 flex flex-col gap-4 transition-colors duration-300',
+        'grid gap-5 rounded-card border border-line bg-surface p-4 sm:grid-cols-[12rem_minmax(0,1fr)] sm:p-5 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-7',
         className,
       )}
     >
-      <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
-        {/* Image is a first-class element of this card. */}
-        <MediaImage
-          src={item.image}
-          alt={`${item.title} image`}
-          fallbackText={item.title}
-          accent={accent}
-          className="w-full aspect-square sm:w-36 sm:h-36 flex-shrink-0 rounded-2xl border border-[#00abf0]/40 bg-black/40 text-3xl"
-          imgClassName="object-cover"
-        />
-
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-1.5 text-[11px] font-semibold">
-            <span className="px-2.5 py-0.5 rounded-full bg-white/[0.05] text-gray-300 border border-white/10">
-              {ACHIEVEMENT_KIND_LABEL[item.kind]}
-            </span>
-            {item.result && (
-              <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/30">
-                <Trophy size={12} aria-hidden="true" />
-                {item.result}
-              </span>
-            )}
-          </div>
-          <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">{item.title}</h3>
-
-          <p className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-gray-400 mt-1 mb-2.5">
-            <span>{item.organizer}</span>
-            <span aria-hidden="true">·</span>
-            <span className="flex items-center gap-1.5">
-              <Calendar size={12} className="text-[#00abf0]" aria-hidden="true" />
-              <time dateTime={item.date}>{formatDate(item.date)}</time>
-            </span>
-            {item.team && (
-              <>
-                <span aria-hidden="true">·</span>
-                <span className="flex items-center gap-1.5">
-                  <Users size={12} className="text-[#00abf0]" aria-hidden="true" />
-                  Team {item.team}
-                </span>
-              </>
-            )}
-          </p>
-
-          {item.description && <p className="text-xs sm:text-sm text-gray-400 leading-relaxed mb-3.5">{item.description}</p>}
-          <SkillList skills={item.skills} label="Skills" />
-        </div>
+      <div className="self-start">
+        {onPreview && item.image ? (
+          <button
+            type="button"
+            onClick={() => onPreview({ src: item.image!, alt: imageAlt, title: item.title, caption: item.organizer })}
+            className={cx(frame, 'cursor-zoom-in transition-colors hover:border-white/25')}
+          >
+            {image}
+            <span className="sr-only">Enlarge image: {item.title}</span>
+          </button>
+        ) : (
+          <div className={frame}>{image}</div>
+        )}
       </div>
 
-      {item.link && (
-        <a
-          {...linkProps(item.link.url)}
-          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold border border-[#00abf0]/40 text-white hover:bg-[#00abf0]/10 hover:border-[#00abf0] hover:text-[#00abf0] transition-colors"
-        >
-          <span>{item.link.label || 'Learn more'}</span>
-          <span className="sr-only"> about {item.title}</span>
-          <ArrowRight size={14} aria-hidden="true" />
-        </a>
-      )}
+      <div className="flex min-w-0 flex-col">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+          <span className="rounded-chip border border-line px-2 py-0.5 text-ink-2">{ACHIEVEMENT_KIND_LABEL[item.kind]}</span>
+          {item.result && (
+            <span className="rounded-chip border border-accent/35 bg-accent-wash px-2 py-0.5 text-ink">{item.result}</span>
+          )}
+        </div>
+
+        <h3 className="mt-3 text-h3 text-ink text-pretty">{item.title}</h3>
+        <p className="mt-1 text-sm text-ink-2">
+          {item.organizer}
+          {item.team && <span className="text-ink-3"> — team {item.team}</span>}
+        </p>
+        {date && (
+          <p className="mt-1 font-mono text-xs text-ink-3">
+            <time dateTime={item.date}>{date}</time>
+          </p>
+        )}
+
+        {item.description && <p className="mt-3 max-w-[65ch] text-[0.9375rem] leading-relaxed text-ink-2">{item.description}</p>}
+
+        {item.skills.length > 0 && (
+          <div className="mt-4">
+            <SkillList skills={item.skills} label="Skills used" />
+          </div>
+        )}
+
+        {item.link && (
+          <div className="mt-auto pt-4">
+            {linkIsImage && onPreview ? (
+              <button
+                type="button"
+                onClick={() =>
+                  onPreview({ src: item.link!.url, alt: `${item.title} certificate`, title: item.title, caption: item.organizer })
+                }
+                className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent underline-offset-4 hover:underline"
+              >
+                <Maximize2 size={14} aria-hidden="true" />
+                {item.link.label || 'View certificate'}
+                <span className="sr-only">: {item.title}</span>
+              </button>
+            ) : (
+              <a
+                {...linkProps(item.link.url)}
+                className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent underline-offset-4 hover:underline"
+              >
+                {item.link.label || 'Learn more'}
+                <ArrowUpRight size={15} aria-hidden="true" />
+                <span className="sr-only">: {item.title}</span>
+                <NewTabHint url={item.link.url} />
+              </a>
+            )}
+          </div>
+        )}
+      </div>
     </article>
   );
 }

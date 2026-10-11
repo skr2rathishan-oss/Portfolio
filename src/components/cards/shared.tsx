@@ -14,6 +14,16 @@ export function linkProps(url: string) {
   return isExternal(url) ? { href: url, target: '_blank', rel: 'noopener noreferrer' } : { href: url };
 }
 
+/** Visually hidden "(opens in new tab)" suffix for external links. */
+export function NewTabHint({ url }: { url: string }) {
+  return isExternal(url) ? <span className="sr-only"> (opens in new tab)</span> : null;
+}
+
+/** True when a URL points at an image file (used to open certificate links in a lightbox). */
+export function isImageUrl(url: string | undefined): boolean {
+  return !!url && /\.(png|jpe?g|webp|gif|avif)(\?.*)?$/i.test(url);
+}
+
 export function initials(text: string): string {
   const words = text
     .replace(/[^\p{L}\p{N}\s]/gu, ' ')
@@ -29,8 +39,11 @@ export function Monogram({ text, className, accent }: { text: string; className?
   return (
     <span
       aria-hidden="true"
-      className={cx('flex items-center justify-center font-bold select-none bg-white/[0.06] text-[#00abf0]', className)}
-      style={accent ? { color: accent, backgroundColor: `${accent}1f` } : undefined}
+      className={cx(
+        'flex items-center justify-center font-semibold tracking-tight select-none bg-raised text-ink-2',
+        className,
+      )}
+      style={accent ? { color: accent } : undefined}
     >
       {initials(text)}
     </span>
@@ -46,6 +59,8 @@ export function MediaImage({
   imgClassName,
   accent,
   loading = 'lazy',
+  width,
+  height,
 }: {
   src?: string;
   alt: string;
@@ -54,6 +69,8 @@ export function MediaImage({
   imgClassName?: string;
   accent?: string;
   loading?: 'lazy' | 'eager';
+  width?: number;
+  height?: number;
 }) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) {
@@ -66,6 +83,8 @@ export function MediaImage({
         alt={alt}
         loading={loading}
         decoding="async"
+        width={width}
+        height={height}
         onError={() => setFailed(true)}
         className={cx('w-full h-full', imgClassName ?? 'object-cover')}
       />
@@ -77,7 +96,7 @@ export function Pill({ children, className }: { children: ReactNode; className?:
   return (
     <span
       className={cx(
-        'inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/30',
+        'inline-flex items-center gap-1 rounded-chip border border-line bg-white/[0.03] px-2 py-0.5 text-xs font-medium text-ink-2',
         className,
       )}
     >
@@ -86,15 +105,25 @@ export function Pill({ children, className }: { children: ReactNode; className?:
   );
 }
 
-export function SkillList({ skills, label }: { skills: string[]; label: string }) {
+export function SkillList({ skills, label, max }: { skills: string[]; label: string; max?: number }) {
   if (skills.length === 0) return null;
+  const shown = max ? skills.slice(0, max) : skills;
+  const rest = skills.length - shown.length;
   return (
     <ul aria-label={label} className="flex flex-wrap gap-1.5">
-      {skills.map((s) => (
+      {shown.map((s) => (
         <li key={s}>
           <Pill>{s}</Pill>
         </li>
       ))}
+      {rest > 0 && (
+        <li>
+          <Pill className="text-ink-3">
+            +{rest}
+            <span className="sr-only"> more</span>
+          </Pill>
+        </li>
+      )}
     </ul>
   );
 }
