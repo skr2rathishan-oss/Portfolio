@@ -214,7 +214,7 @@ export const certificationsData: Certification[] = [
     name: 'Generative AI Chatbot Bootcamp',
     issuer: 'DevTown & Microsoft Student Chapter - MSIT',
     year: 'Mar 2026',
-    image: '/Certificates/certificates/devtown_screenshot.jpg',
+    image: '/certificates/devtown_screenshot.jpg',
     color: '#a855f7',
     description: 'Built and deployed generative AI chatbots using LLMs, prompt engineering, and conversational AI architectures in collaboration with Microsoft Student Chapter.',
     skillsLearned: ['AI', 'Prompt Engineering', 'LLMs', 'Chatbot Dev'],
@@ -224,7 +224,7 @@ export const certificationsData: Certification[] = [
     name: 'Microsoft Azure Essentials',
     issuer: 'Microsoft & LinkedIn',
     year: 'Sep 2026',
-    image: '/Certificates/certificates/azure.jpg',
+    image: '/certificates/azure.jpg',
     color: '#0078d4',
     description: 'Core cloud computing principles, Azure architectural components, resource management, cloud governance, and security fundamentals.',
     skillsLearned: ['Microsoft Azure', 'Cloud Computing', 'Security'],
@@ -234,7 +234,7 @@ export const certificationsData: Certification[] = [
     name: 'Docker Foundations',
     issuer: 'Docker & LinkedIn',
     year: 'Mar 2026',
-    image: '/Certificates/certificates/docker_screenshot.jpg',
+    image: '/certificates/docker_screenshot.jpg',
     color: '#2496ed',
     description: 'Hands-on containerization fundamentals, Dockerfile authoring, multi-container orchestration, and image management.',
     skillsLearned: ['Containerization', 'Docker Products', 'DevOps'],
@@ -244,7 +244,7 @@ export const certificationsData: Certification[] = [
     name: 'AI/ML Engineer - Stage 1',
     issuer: 'SLIIT Faculty of Computing',
     year: 'Oct 2025',
-    image: '/Certificates/certificates/Slit.jpg',
+    image: '/certificates/sliit.jpg',
     color: '#f59e0b',
     description: 'Comprehensive training covering machine learning pipelines, deep neural networks, image processing, and computer vision models.',
     skillsLearned: ['Machine Learning', 'Deep Learning', 'Computer Vision'],
@@ -254,7 +254,7 @@ export const certificationsData: Certification[] = [
     name: 'Python for Data Science & ML',
     issuer: 'LinkedIn Learning',
     year: 'May 2026',
-    image: '/Certificates/certificates/machinlearning.jpg',
+    image: '/certificates/machinlearning.jpg',
     color: '#10b981',
     description: 'Exploratory data analysis, statistical model fitting, predictive regression algorithms, and machine learning pipelines in Python.',
     skillsLearned: ['Machine Learning', 'Python', 'Artificial Intelligence'],
@@ -294,7 +294,7 @@ export const achievementsData: Achievement[] = [
     badgeColor: '#00629b',
     description: 'Participated with team Tamilcoders in IEEEXtreme 19.0, a 24-hour virtual competitive programming challenge that hosted +19,000 participants worldwide.',
     skillsGained: ['Competitive Programming', 'Algorithms', 'Data Structures', 'Team Problem Solving'],
-    link: '/Certificates/certificates/IEEExtreme.jpg'
+    link: '/certificates/ieeextreme.jpg'
   }
 ];
 

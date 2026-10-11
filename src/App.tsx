@@ -1,216 +1,22 @@
-import React, { useState, useMemo, useEffect, useCallback, memo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { 
-  Download, Linkedin, Github, ExternalLink, Cpu, Zap, Instagram, Facebook, Menu, X, 
-  Terminal, Code2, Sparkles, Bot, Globe, Database, Wrench, Layers, CheckCircle2, Activity, Eye 
+import {
+  Download, Cpu, Menu, X, Terminal, Sparkles, Bot, Globe, Wrench, Layers, CheckCircle2, Activity,
 } from 'lucide-react';
-import { motion, AnimatePresence, type Variants } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import About from './About';
 import Contact from './Contact';
 import NetworkBackground from './NetworkBackground';
-import { projectsData, profileData, type Project, type Tag } from './data';
+import { ContentProvider, useContent } from './content/ContentProvider';
+import { indexById } from './content/selectors';
+import Hero from './components/sections/Hero';
+import ProjectCard from './components/cards/ProjectCard';
 
 function Home() {
-  // Motion variants for smooth orchestrated entry
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: {
-        duration: 0.7,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
-  const socialVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.6, y: 15 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
+  const content = useContent();
   return (
-    <main className="relative z-10 flex-1 max-w-7xl mx-auto px-6 md:px-12 py-4 lg:py-16 flex flex-col justify-center w-full lg:min-h-[calc(100vh-140px)]">
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-14 w-full my-auto">
-        {/* Left: Content with orchestrated staggered entry */}
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="w-full lg:w-[56%] flex flex-col items-start text-left order-2 lg:order-1"
-        >
-          {/* Developer Code Terminal Pill Badge */}
-          <motion.div 
-            variants={itemVariants}
-            whileHover={{ scale: 1.04, y: -1, borderColor: 'rgba(0,171,240,0.5)' }}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-[#00abf0]/25 text-xs font-mono mb-5 shadow-[0_0_15px_rgba(0,171,240,0.1)] backdrop-blur-sm cursor-default transition-colors duration-200"
-          >
-            <Terminal size={13} className="text-[#00abf0]" />
-            <span className="text-gray-400">const</span>
-            <span className="text-[#00abf0] font-semibold">engineer</span>
-            <span className="text-gray-400">=</span>
-            <span className="text-emerald-400 font-medium">"AI &amp; Software Developer"</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-1" />
-          </motion.div>
-
-          {/* Category tags */}
-          <motion.p 
-            variants={itemVariants}
-            className="text-xs md:text-sm font-bold tracking-[0.25em] uppercase mb-4 text-[#00abf0] font-mono flex items-center gap-2"
-          >
-            <Code2 size={14} className="text-[#00abf0]" />
-            AI &nbsp;&middot;&nbsp; AI Agents &nbsp;&middot;&nbsp; Software &nbsp;&middot;&nbsp; Robotics
-          </motion.p>
-
-          {/* Main heading */}
-          <motion.h1 
-            variants={itemVariants}
-            className="text-4xl md:text-5xl lg:text-[3.2rem] xl:text-[3.6rem] font-bold mb-5 tracking-tight leading-[1.15]"
-          >
-            <span className="text-white">Building intelligent systems,</span>
-            <br />
-            <span className="text-[#00abf0]">
-              one project at a time.
-            </span>
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p 
-            variants={itemVariants}
-            className="text-sm md:text-base leading-relaxed mb-8 max-w-xl text-gray-400"
-          >
-            I'm Rathishan Mahendran &mdash; a Computer Engineering student
-            at the University of Ruhuna who builds real software: AI
-            agents, full-stack products and autonomous hardware.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div 
-            variants={itemVariants}
-            className="flex items-center flex-wrap gap-4 mb-8"
-          >
-            <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}>
-              <Link
-                to="/projects"
-                className="group px-8 py-3.5 rounded-full font-bold bg-[#00abf0] text-[#081b29] transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer border-none shadow-[0_0_20px_rgba(0,171,240,0.3)] hover:shadow-[0_0_25px_rgba(0,171,240,0.5)]"
-              >
-                View my work <ExternalLink size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}>
-              <Link
-                to="/contact"
-                className="px-8 py-3.5 rounded-full font-bold border border-[#00abf0]/40 text-white hover:bg-[#00abf0]/10 transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer hover:border-[#00abf0] hover:shadow-[0_0_15px_rgba(0,171,240,0.2)]"
-              >
-                Let's talk
-              </Link>
-            </motion.div>
-          </motion.div>
-
-          {/* Social Links with Staggered Motion */}
-          <motion.div 
-            variants={itemVariants}
-            className="flex items-center space-x-4 text-gray-400"
-          >
-            {[
-              { href: "https://linkedin.com/in/rathishan-mahendran", icon: <Linkedin size={18} />, label: "LinkedIn", color: "hover:text-[#0A66C2] hover:border-[#0A66C2]/40" },
-              { href: "https://github.com/skr2rathishan-oss", icon: <Github size={18} />, label: "GitHub", color: "hover:text-white hover:border-white/40" },
-              { href: "https://instagram.com/rathishan._", icon: <Instagram size={18} />, label: "Instagram", color: "hover:text-[#E4405F] hover:border-[#E4405F]/40" },
-              { href: "https://facebook.com/rathishan.21", icon: <Facebook size={18} />, label: "Facebook", color: "hover:text-[#1877F2] hover:border-[#1877F2]/40" }
-            ].map((social, i) => (
-              <motion.a
-                key={social.label}
-                variants={socialVariants}
-                whileHover={{ scale: 1.15, y: -3 }}
-                whileTap={{ scale: 0.9 }}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.label}
-                className={`w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition-colors duration-200 bg-white/[0.02] cursor-pointer ${social.color}`}
-              >
-                {social.icon}
-              </motion.a>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        {/* Right: Floating Profile Card */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.85, filter: 'blur(8px)' }}
-          animate={{ 
-            opacity: 1, 
-            scale: 1, 
-            filter: 'blur(0px)',
-            y: [0, -10, 0]
-          }}
-          transition={{ 
-            opacity: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
-            scale: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
-            filter: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
-            y: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }
-          }}
-          whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
-          className="w-full lg:w-[44%] flex justify-center items-center order-1 lg:order-2 cursor-pointer group"
-        >
-          <div className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 flex items-center justify-center">
-             {/* Glowing Cybernetic Backdrop Accent */}
-             <div 
-               className="absolute inset-0 rounded-full blur-2xl opacity-40 animate-pulse pointer-events-none group-hover:opacity-60 transition-opacity duration-500"
-               style={{ background: 'radial-gradient(circle, #00abf0 0%, #081b29 70%)' }}
-             />
-
-             {/* Dynamic Organic Outer Ring */}
-             <div 
-               className="absolute inset-[-10px] md:inset-[-12px] border border-[#00abf0]/40 transition-all duration-700 group-hover:border-[#00abf0]/70 group-hover:inset-[-14px]"
-               style={{ 
-                 borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-                 animation: 'morphShape 12s ease-in-out infinite alternate',
-                 background: 'linear-gradient(135deg, rgba(0,171,240,0.15) 0%, rgba(8,27,41,0.4) 100%)'
-               }}
-             />
-
-             {/* Outline Blob */}
-             <div
-               className="absolute inset-[-15px] md:inset-[-20px] border-2 border-white opacity-50 group-hover:opacity-80 transition-opacity duration-500"
-               style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%', transform: 'rotate(-15deg)' }}
-             />
-
-             {/* High-Clarity Scaled & Positioned Image */}
-             <img
-               src={profileData.homeImage}
-               alt="Rathishan Mahendran"
-               loading="eager"
-               decoding="async"
-               className="relative z-10 w-full h-full object-cover object-[center_18%] shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
-               style={{ 
-                 borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-               }}
-             />
-          </div>
-        </motion.div>
-      </div>
+    <main className="relative z-10 flex-1 w-full flex flex-col justify-center lg:min-h-[calc(100vh-140px)]">
+      <Hero profile={content.profile} socials={content.socials} cvUrl={content.site.cv?.url} />
     </main>
   );
 }
@@ -760,230 +566,52 @@ function Skills() {
   );
 }
 
-interface ProjectCardProps {
-  project: Project;
-  isMobile?: boolean;
-}
-
-const ProjectCard = memo(function ProjectCard({ project, isMobile = false }: ProjectCardProps) {
-  const cardBody = (
-    <div
-      className={`group relative rounded-2xl md:rounded-3xl bg-[#061424] border border-white/[0.08] hover:border-[#00abf0]/40 p-4 pb-5 flex flex-col justify-between transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,171,240,0.12)] ${
-        isMobile
-          ? 'w-[84vw] max-w-[340px] flex-shrink-0 snap-center min-h-[460px]'
-          : 'w-full min-h-[490px]'
-      }`}
-    >
-      <div>
-        {/* Project Thumbnail Image */}
-        <div className="relative w-full h-44 rounded-xl md:rounded-2xl overflow-hidden mb-4 bg-black/40 border border-white/5">
-          <img
-            src={project.image}
-            alt={project.title}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#061424]/90 via-transparent to-transparent pointer-events-none" />
-          
-          {/* Complexity pill badge top-left */}
-          <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#061424]/80 backdrop-blur-md border border-white/10 text-[10px] font-mono uppercase tracking-wider text-gray-300">
-            <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-              project.complexity === 'high' ? 'bg-amber-400' : project.complexity === 'medium' ? 'bg-[#00abf0]' : 'bg-emerald-400'
-            }`} />
-            {project.complexity}
-          </div>
-        </div>
-
-        {/* Title */}
-        <h3 className="text-lg md:text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-[#00abf0] transition-colors duration-200">
-          {project.title}
-        </h3>
-
-        {/* Description */}
-        <p className="text-xs md:text-sm text-gray-400 leading-relaxed mb-4 line-clamp-3">
-          {project.description}
-        </p>
-
-        {/* Structured Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {project.tags.map((tag: Tag) => {
-            const isCore = tag.level === 'core';
-            return (
-              <span
-                key={tag.name}
-                className={`text-[10px] md:text-[11px] px-2.5 py-1 rounded-lg font-medium transition-all duration-200 hover:scale-105 cursor-default ${
-                  isCore
-                    ? 'bg-[#00abf0]/15 text-[#00abf0] border border-[#00abf0]/30 hover:bg-[#00abf0]/25'
-                    : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:text-gray-200 hover:bg-white/[0.08]'
-                }`}
-              >
-                {tag.name}
-              </span>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex items-center gap-2 pt-3 border-t border-white/5 mt-auto">
-        {project.demoLink ? (
-          <>
-            <motion.a
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              href={project.demoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group/btn flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#00abf0] text-[#081b29] hover:bg-[#00abf0]/90 transition-all duration-200 cursor-pointer shadow-[0_0_12px_rgba(0,171,240,0.25)] hover:shadow-[0_0_18px_rgba(0,171,240,0.45)]"
-            >
-              <Eye size={14} className="transition-transform duration-200 group-hover/btn:scale-110" />
-              <span>Visit Site</span>
-            </motion.a>
-            <motion.a
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              href={project.codeLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group/btn flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-colors duration-200 cursor-pointer"
-            >
-              <Github size={14} className="transition-transform duration-200 group-hover/btn:rotate-12" />
-              <span>Source Code</span>
-            </motion.a>
-          </>
-        ) : (
-          <motion.a
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            href={project.codeLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/btn w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold bg-white/[0.05] border border-white/10 text-gray-300 hover:bg-[#00abf0]/15 hover:border-[#00abf0]/30 hover:text-[#00abf0] transition-all duration-200 cursor-pointer"
-          >
-            <Github size={14} className="transition-transform duration-200 group-hover/btn:rotate-12" />
-            <span>Source Code</span>
-          </motion.a>
-        )}
-      </div>
-    </div>
-  );
-
-  if (isMobile) {
-    return cardBody;
-  }
-
-  return (
-    <motion.div
-      whileHover={{ y: -5, transition: { duration: 0.25 } }}
-      className="w-full flex"
-    >
-      {cardBody}
-    </motion.div>
-  );
-});
-
 function Projects() {
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'ai' | 'fullstack' | 'frontend'>('all');
+  const content = useContent();
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const techById = useMemo(() => indexById(content.technologies), [content.technologies]);
 
-  const categories = [
-    { id: 'all', label: 'All Projects' },
-    { id: 'fullstack', label: 'Full-Stack' },
-    { id: 'ai', label: 'AI & Machine Learning' },
-    { id: 'frontend', label: 'Frontend / UI' },
-  ];
+  const categories = useMemo(
+    () => [{ id: 'all', label: 'All Projects' }, ...content.projectCategories.map((c) => ({ id: c.id, label: c.label }))],
+    [content.projectCategories],
+  );
 
-  const filteredProjects = useMemo(() => {
-    if (selectedCategory === 'all') return projectsData;
-    if (selectedCategory === 'ai') {
-      return projectsData.filter(
-        p => p.tags.some(t => ['TensorFlow', 'PyTorch', 'scikit-learn', 'Python', 'LangChain', 'AI Agents', 'LLMs', 'Pandas', 'n8n', 'NVIDIA Nemotron', 'Workflow Automations'].includes(t.name)) || 
-             p.title.toLowerCase().includes('ai') || 
-             p.title.toLowerCase().includes('learning') ||
-             p.title.toLowerCase().includes('n8n')
-      );
-    }
-    if (selectedCategory === 'fullstack') {
-      return projectsData.filter(
-        p => p.tags.some(t => ['Vue 3', 'TypeScript', 'React', 'FastAPI', 'LangChain', 'AI Agents', 'DummyJSON', 'Node.js', 'AI Routing', 'RBAC Auth', 'n8n', 'Workflow Automations'].includes(t.name))
-      );
-    }
-    if (selectedCategory === 'frontend') {
-      return projectsData.filter(
-        p => p.tags.some(t => ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS', 'React', 'Vue 3'].includes(t.name))
-      );
-    }
-    return projectsData;
-  }, [selectedCategory]);
+  const filteredProjects = useMemo(
+    () =>
+      selectedCategory === 'all'
+        ? content.projects
+        : content.projects.filter((p) => p.categoryIds.includes(selectedCategory)),
+    [content.projects, selectedCategory],
+  );
 
   return (
     <div className="relative z-10 w-full max-w-7xl mx-auto pb-2 md:pb-12">
-      {/* ─── Category Filter Pills (Desktop Only) ─── */}
-      <div className="hidden md:flex items-center justify-center flex-wrap gap-2 mb-8 md:mb-10 pt-2">
-        {categories.map(cat => {
+      <div className="flex items-center justify-center flex-wrap gap-2 mb-8 md:mb-10 pt-2" role="group" aria-label="Filter projects by category">
+        {categories.map((cat) => {
           const isSelected = selectedCategory === cat.id;
           return (
-            <motion.button
+            <button
               key={cat.id}
-              whileHover={{ scale: 1.05, y: -1 }}
-              whileTap={{ scale: 0.95 }}
               type="button"
-              onClick={() => setSelectedCategory(cat.id as any)}
-              className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+              aria-pressed={isSelected}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer border ${
                 isSelected
-                  ? 'text-[#00abf0]'
-                  : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.08] hover:text-white'
+                  ? 'text-[#00abf0] bg-[#00abf0]/15 border-[#00abf0]/40'
+                  : 'bg-white/[0.04] text-gray-400 border-white/[0.06] hover:bg-white/[0.08] hover:text-white'
               }`}
             >
-              {isSelected && (
-                <motion.div
-                  layoutId="activeProjectCategory"
-                  className="absolute inset-0 rounded-full bg-[#00abf0]/15 border border-[#00abf0]/40 shadow-[0_0_15px_rgba(0,171,240,0.2)]"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">{cat.label}</span>
-            </motion.button>
+              {cat.label}
+            </button>
           );
         })}
       </div>
 
-      {/* ─── Mobile Horizontal Swipe Phase (< md) ─── */}
-      <div className="md:hidden">
-        <div className="flex overflow-x-auto snap-x snap-proximity gap-4 pb-5 px-4 -mx-4 no-scrollbar touch-pan-x overscroll-x-contain">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.title} project={project} isMobile={true} />
-          ))}
-        </div>
-        
-        {/* Swipe helper & indicator */}
-        <div className="flex items-center justify-center gap-1.5 text-gray-500 text-[11px] pt-1">
-          <Sparkles size={11} className="text-[#00abf0]" />
-          <span>Swipe horizontally to view projects</span>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredProjects.map((project) => (
+          <ProjectCard key={project.id} project={project} techById={techById} />
+        ))}
       </div>
-
-      {/* ─── Desktop 3-Column Card Grid (>= md) with Fluid Layout Animations ─── */}
-      <motion.div 
-        layout
-        className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project) => (
-            <motion.div
-              layout
-              key={project.title}
-              initial={{ opacity: 0, scale: 0.94, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: 15 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full flex"
-            >
-              <ProjectCard project={project} isMobile={false} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
     </div>
   );
 }
@@ -1256,10 +884,29 @@ function PortfolioLayout() {
   );
 }
 
+const AdminApp = lazy(() => import('./admin/AdminApp'));
+
 export default function App() {
   return (
     <Router>
-      <PortfolioLayout />
+      <Routes>
+        <Route
+          path="/admin/*"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-[#081524]" />}>
+              <AdminApp />
+            </Suspense>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <ContentProvider fallback={<div className="min-h-screen bg-[#081524]" />}>
+              <PortfolioLayout />
+            </ContentProvider>
+          }
+        />
+      </Routes>
     </Router>
   );
 }
