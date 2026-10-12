@@ -1,30 +1,55 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Code2, ExternalLink, Terminal } from 'lucide-react';
 import { motion, type Variants } from 'motion/react';
 import { Link } from 'react-router-dom';
 import type { Profile, SocialLink } from '../../content/types';
 import { SOCIAL_ICONS } from '../../content/icons';
-import { cx, isExternal, linkProps, NewTabHint } from '../cards/shared';
-import { btnPrimary, btnSecondary } from '../ui/styles';
+import { cx, isExternal, linkProps, Monogram, NewTabHint } from '../cards/shared';
 
 export interface HeroProps {
   profile: Profile;
   socials: SocialLink[];
+  /** Kept for API compatibility; the CV link lives in the site header. */
   cvUrl?: string;
   className?: string;
+  /** Fill the first screen (below the header) from the lg breakpoint. Only the public Home passes it. */
+  fullHeight?: boolean;
 }
 
 const HERO_SEEN_KEY = 'hero-intro-played';
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-const containerVariants: Variants = {
+const container: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+const item: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
 };
+
+const socialList: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.05 } },
+};
+
+const socialItem: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } },
+};
+
+const ctaPrimary =
+  'group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-accent px-7 sm:px-8 text-sm sm:text-[0.9375rem] font-bold text-on-accent ' +
+  'shadow-[0_0_20px_rgb(0_171_240/0.3)] transition-[background-color,box-shadow,translate] duration-200 ' +
+  'hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-[0_0_26px_rgb(0_171_240/0.5)] active:translate-y-px';
+
+const ctaSecondary =
+  'inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-accent/40 px-7 sm:px-8 text-sm sm:text-[0.9375rem] font-bold text-ink ' +
+  'transition-[background-color,border-color,box-shadow,translate] duration-200 ' +
+  'hover:-translate-y-0.5 hover:border-accent hover:bg-accent/10 hover:shadow-[0_0_15px_rgb(0_171_240/0.2)] active:translate-y-px';
+
+const ctaIcon = 'transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5';
 
 /** The entrance plays once per browser session, not on every return to Home. */
 function useIntroOnce(): boolean {
@@ -46,161 +71,166 @@ function useIntroOnce(): boolean {
 }
 
 function Cta({ to, label, primary }: { to: string; label: string; primary?: boolean }) {
-  const className = primary ? btnPrimary : btnSecondary;
-  const content = (
-    <>
-      {label}
-      {primary && <ArrowRight size={16} aria-hidden="true" />}
-    </>
-  );
+  const className = primary ? ctaPrimary : ctaSecondary;
   if (/^\/(?!\/)/.test(to)) {
     return (
       <Link to={to} className={className}>
-        {content}
+        {label}
+        {primary && <ArrowRight size={16} aria-hidden="true" className={ctaIcon} />}
       </Link>
     );
   }
   return (
     <a {...linkProps(to)} className={className}>
-      {content}
+      {label}
+      {primary && <ExternalLink size={16} aria-hidden="true" className={ctaIcon} />}
       <NewTabHint url={to} />
     </a>
   );
 }
 
-export default function Hero({ profile, socials, cvUrl, className }: HeroProps) {
-  const { hero, contact } = profile;
+export default function Hero({ profile, socials, className, fullHeight }: HeroProps) {
+  const { hero, fullName } = profile;
   const heroSocials = socials.filter((s) => s.showInHero && s.url);
-  const statement = [hero.headline, hero.headlineAccent].filter(Boolean).join(' ');
-  const availability = contact.availability.enabled ? contact.availability.title : '';
-  const place = [contact.location, contact.timezone].filter(Boolean).join(', ');
   const animate = useIntroOnce();
   const motionProps = animate ? { initial: 'hidden' as const, animate: 'visible' as const } : {};
+  const [imageFailed, setImageFailed] = useState(false);
+
+  // A new image (admin preview) gets a fresh chance to load.
+  useEffect(() => setImageFailed(false), [hero.image]);
 
   return (
     <section
       aria-labelledby="hero-heading"
       className={cx(
-        'grid items-center gap-10 py-10 sm:py-14 lg:min-h-[calc(100dvh-var(--header-h)-4rem)] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 lg:py-16',
+        'grid items-center gap-12 pt-8 pb-14 sm:gap-14 sm:pt-12 sm:pb-16',
+        'lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-12 lg:py-12 xl:gap-16',
+        fullHeight && 'lg:min-h-[min(calc(100svh-var(--header-h)),56rem)]',
         className,
       )}
     >
-      <motion.div variants={containerVariants} {...motionProps} className="flex min-w-0 flex-col items-start">
-        {(availability || hero.roleBadge) && (
-          <motion.p variants={itemVariants} className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink-2">
-            {hero.roleBadge && <span className="font-medium text-ink">{hero.roleBadge}</span>}
-            {availability && (
-              <span className="inline-flex items-center gap-2">
-                <span aria-hidden="true" className="h-2 w-2 rounded-full bg-success" />
-                {availability}
-              </span>
-            )}
-          </motion.p>
-        )}
-
-        <motion.h1
-          id="hero-heading"
-          variants={itemVariants}
-          className="mt-4 text-display text-ink text-balance"
-        >
-          {profile.fullName}
-        </motion.h1>
-
-        {statement && (
+      <motion.div variants={container} {...motionProps} className="flex min-w-0 flex-col items-start">
+        {hero.roleBadge && (
           <motion.p
-            variants={itemVariants}
-            className="mt-4 max-w-[34ch] text-balance text-[clamp(1.25rem,1.05rem+0.9vw,1.625rem)] font-medium leading-snug tracking-[-0.01em] text-ink"
+            variants={item}
+            className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-accent/25 bg-white/[0.04] px-3 py-1.5 font-mono text-xs shadow-[0_0_15px_rgb(0_171_240/0.1)] backdrop-blur-sm sm:gap-2 sm:px-3.5"
           >
-            {statement}
+            <Terminal size={13} aria-hidden="true" className="shrink-0 text-accent" />
+            <span aria-hidden="true" className="hidden text-ink-3 sm:inline">
+              const
+            </span>
+            <span aria-hidden="true" className="font-semibold text-accent">
+              engineer
+            </span>
+            <span aria-hidden="true" className="text-ink-3">
+              =
+            </span>
+            <span className="min-w-0 truncate font-medium text-success">
+              <span aria-hidden="true">"</span>
+              {hero.roleBadge}
+              <span aria-hidden="true">"</span>
+            </span>
+            <span aria-hidden="true" className="ml-0.5 size-1.5 shrink-0 rounded-full bg-success motion-safe:animate-pulse" />
           </motion.p>
         )}
 
-        {hero.intro && (
-          <motion.p variants={itemVariants} className="mt-4 max-w-[60ch] text-base leading-relaxed text-ink-2 sm:text-lead">
-            {hero.intro}
-          </motion.p>
-        )}
-
-        <motion.div variants={itemVariants} className="mt-7 flex flex-wrap items-center gap-3">
-          <Cta to={hero.primaryCta.to} label={hero.primaryCta.label} primary />
-          <Cta to={hero.secondaryCta.to} label={hero.secondaryCta.label} />
-          {cvUrl && (
-            <a
-              href={cvUrl}
-              {...(isExternal(cvUrl) ? { target: '_blank', rel: 'noopener noreferrer' } : { download: true })}
-              className="inline-flex min-h-11 items-center gap-2 px-2 text-sm font-semibold text-ink-2 underline-offset-4 transition-colors hover:text-ink hover:underline"
-            >
-              <Download size={16} aria-hidden="true" />
-              Download résumé
-              <NewTabHint url={cvUrl} />
-            </a>
-          )}
-        </motion.div>
-
-        {(hero.focusAreas.length > 0 || heroSocials.length > 0) && (
+        {hero.focusAreas.length > 0 && (
           <motion.div
-            variants={itemVariants}
-            className="mt-8 flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-4 border-t border-line pt-5"
+            variants={item}
+            className="mt-5 flex items-start gap-2 font-mono text-xs font-bold uppercase tracking-[0.25em] text-accent lg:text-[0.8125rem] xl:text-sm"
           >
-            {hero.focusAreas.length > 0 && (
-              <ul aria-label="Focus areas" className="flex flex-wrap gap-1.5">
+            <Code2 size={14} aria-hidden="true" className="mt-px shrink-0" />
+            {/* Every item carries a separator dot; the list is pulled left by (dot + gap) and clipped,
+                so the dot that starts each visual line is hidden and wraps never leave an orphaned dot. */}
+            <div className="min-w-0 overflow-x-clip">
+              <ul
+                aria-label="Focus areas"
+                className="-ml-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:-ml-5 sm:gap-x-4 xl:-ml-6 xl:gap-x-5"
+              >
                 {hero.focusAreas.map((area) => (
-                  <li key={area} className="rounded-chip border border-line px-2 py-0.5 text-xs font-medium text-ink-2">
+                  <li
+                    key={area}
+                    className="flex items-center gap-3 before:block before:size-1 before:shrink-0 before:rounded-full before:bg-accent/60 before:content-[''] sm:gap-4 xl:gap-5"
+                  >
                     {area}
                   </li>
                 ))}
               </ul>
-            )}
-            {heroSocials.length > 0 && (
-              <ul className="-mx-1.5 flex items-center gap-1" aria-label="Profiles">
-                {heroSocials.map((s) => {
-                  const Icon = SOCIAL_ICONS[s.platform];
-                  return (
-                    <li key={s.id}>
-                      <a
-                        {...linkProps(s.url!)}
-                        aria-label={`${s.label}${isExternal(s.url!) ? ' (opens in new tab)' : ''}`}
-                        className="inline-flex h-11 w-11 items-center justify-center rounded-control text-ink-2 transition-colors hover:bg-white/[0.05] hover:text-ink"
-                      >
-                        <Icon size={19} aria-hidden="true" />
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            </div>
           </motion.div>
+        )}
+
+        <motion.h1 id="hero-heading" variants={item} className="mt-4 text-hero text-pretty sm:mt-5">
+          <span className="sr-only">{fullName}: </span>
+          <span className="block text-ink">{hero.headline}</span>{' '}
+          {hero.headlineAccent && <span className="block text-accent">{hero.headlineAccent}</span>}
+        </motion.h1>
+
+        {hero.intro && (
+          <motion.p variants={item} className="mt-5 max-w-[36rem] text-base leading-relaxed text-ink-2">
+            {hero.intro}
+          </motion.p>
+        )}
+
+        <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
+          <Cta to={hero.primaryCta.to} label={hero.primaryCta.label} primary />
+          <Cta to={hero.secondaryCta.to} label={hero.secondaryCta.label} />
+        </motion.div>
+
+        {heroSocials.length > 0 && (
+          <motion.ul variants={socialList} aria-label="Profiles" className="mt-8 flex flex-wrap items-center gap-3">
+            {heroSocials.map((s) => {
+              const Icon = SOCIAL_ICONS[s.platform];
+              return (
+                <motion.li key={s.id} variants={socialItem}>
+                  <a
+                    {...linkProps(s.url!)}
+                    aria-label={`${s.label}${isExternal(s.url!) ? ' (opens in new tab)' : ''}`}
+                    className="inline-flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.02] text-ink-2 transition-[color,border-color,background-color,translate] duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent-wash hover:text-ink"
+                  >
+                    <Icon size={18} aria-hidden="true" />
+                  </a>
+                </motion.li>
+              );
+            })}
+          </motion.ul>
         )}
       </motion.div>
 
       <motion.figure
-        initial={animate ? { opacity: 0 } : false}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-        className="mx-auto w-full max-w-[22rem] sm:max-w-[26rem] lg:mx-0 lg:max-w-none"
+        initial={animate ? { opacity: 0, scale: 0.95 } : false}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+        className="relative mx-auto grid place-items-center py-6 sm:py-8 lg:py-0"
       >
-        <div className="relative">
-          {/* A single offset outline: the one decorative gesture in the hero. */}
+        <div className="group relative size-64 motion-safe:animate-hero-float sm:size-76 md:size-84 xl:size-96">
           <div
             aria-hidden="true"
-            className="absolute inset-0 translate-x-3 translate-y-3 rounded-panel border border-accent/45"
+            className="pointer-events-none absolute -inset-[18%] rounded-full bg-[radial-gradient(closest-side,rgb(0_171_240/0.32),rgb(0_171_240/0.08)_55%,transparent)] opacity-80 transition-opacity duration-500 group-hover:opacity-100"
           />
-          <img
-            src={hero.image}
-            alt={hero.imageAlt}
-            width={768}
-            height={960}
-            loading="eager"
-            fetchPriority="high"
-            className="relative aspect-[4/5] w-full rounded-panel border border-line bg-surface object-cover object-[center_18%]"
+          <div
+            aria-hidden="true"
+            className="absolute -inset-2.5 rounded-blob border border-accent/40 bg-[linear-gradient(135deg,rgb(0_171_240/0.15),rgb(8_27_41/0.4))] transition-[border-color,scale] duration-500 group-hover:scale-[1.015] group-hover:border-accent/70 md:-inset-3"
           />
+          <div
+            aria-hidden="true"
+            className="absolute -inset-4 rotate-[-15deg] rounded-blob-alt border-[1.5px] border-white/45 transition-colors duration-500 group-hover:border-white/70 md:-inset-5"
+          />
+          {hero.image && !imageFailed ? (
+            <img
+              src={hero.image}
+              alt={hero.imageAlt}
+              width={768}
+              height={768}
+              loading="eager"
+              fetchPriority="high"
+              onError={() => setImageFailed(true)}
+              className="relative z-10 size-full rounded-blob bg-surface object-cover object-[center_18%] shadow-[0_24px_48px_-16px_rgb(2_8_16/0.8)] transition-[scale] duration-500 group-hover:scale-[1.02]"
+            />
+          ) : (
+            <Monogram text={fullName} className="relative z-10 size-full rounded-blob text-5xl" />
+          )}
         </div>
-        {place && (
-          <figcaption className="mt-6 flex items-center justify-between gap-4 font-mono text-xs text-ink-3">
-            <span>{place}</span>
-            {contact.email && <span className="hidden truncate sm:inline">{contact.email}</span>}
-          </figcaption>
-        )}
       </motion.figure>
     </section>
   );

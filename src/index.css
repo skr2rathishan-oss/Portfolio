@@ -66,6 +66,26 @@
   /* Motion */
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-quad: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Home hero */
+  --color-signal: #ff004f; /* header CV button only (4.69:1 on navy; hover text must be dark) */
+  --text-hero: clamp(2.25rem, 1.6rem + 2.2vw, 3.5rem);
+  --text-hero--line-height: 1.12;
+  --text-hero--letter-spacing: -0.025em;
+  --text-hero--font-weight: 700;
+  --radius-blob: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  --radius-blob-alt: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  --animate-hero-float: hero-float 7s ease-in-out 1s infinite;
+
+  @keyframes hero-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 }
 
 :root {

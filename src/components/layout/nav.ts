@@ -2,11 +2,14 @@
 export interface NavItem {
   to: string;
   label: string;
+  /** Match the route exactly (Home), so it is not active on every page. */
+  end?: boolean;
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { to: '/about', label: 'About' },
+  { to: '/', label: 'Home', end: true },
+  { to: '/about', label: 'About Me' },
   { to: '/projects', label: 'Projects' },
   { to: '/achievements', label: 'Achievements' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/contact', label: 'Connect' },
 ];

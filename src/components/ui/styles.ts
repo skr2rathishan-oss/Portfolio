@@ -10,10 +10,11 @@ export const btnSecondary =
   'inline-flex items-center justify-center gap-2 min-h-11 px-5 rounded-full border border-line-strong text-ink text-sm font-semibold ' +
   'transition-colors duration-150 hover:border-ink hover:bg-white/[0.04] active:translate-y-px';
 
-/** Accent-outlined button (Résumé). */
-export const btnAccentOutline =
-  'inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-full border border-accent/70 text-accent text-sm font-semibold ' +
-  'transition-colors duration-150 hover:bg-accent hover:text-on-accent active:translate-y-px';
+/** Pink-outlined header CV button. Hover fills pink with dark text (white on pink fails contrast). */
+export const btnSignalOutline =
+  'inline-flex items-center justify-center gap-2 min-h-11 rounded-full border-2 border-signal text-signal text-sm font-semibold ' +
+  'shadow-[0_0_15px_rgb(255_0_79/0.2)] transition-[background-color,color,box-shadow] duration-200 ' +
+  'hover:bg-signal hover:text-canvas hover:shadow-[0_0_22px_rgb(255_0_79/0.5)] active:translate-y-px';
 
 /** Quiet text action with a 44px hit area. */
 export const btnQuiet =

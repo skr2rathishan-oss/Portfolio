@@ -52,7 +52,7 @@ function HeroTab() {
     e.preventDefault();
     e.stopPropagation();
     if (target.closest('img')) return focusRegion('image');
-    if (target.closest('h1')) return focusRegion('name');
+    if (target.closest('h1')) return focusRegion('headline');
     if (link) {
       const href = link.getAttribute('href') ?? '';
       const text = link.textContent ?? '';
@@ -60,7 +60,7 @@ function HeroTab() {
       if (doc.site.cv && href === doc.site.cv.url) return navigate('/admin/site');
       return focusRegion('ctas');
     }
-    const text = (target.closest('p, li, span') ?? target).textContent ?? '';
+    const text = (target.closest('li, p') ?? target).textContent ?? '';
     if (h.focusAreas.some((a) => text.trim() === a)) return focusRegion('focus');
     if (h.intro && text.includes(h.intro.slice(0, 40))) return focusRegion('intro');
     if (h.headline && text.includes(h.headline)) return focusRegion('headline');
@@ -93,7 +93,7 @@ function HeroTab() {
             <TextField label="Full name" required value={draft.fullName} onChange={(v) => update({ fullName: v })} error={errors.fullName} maxLength={LIMITS.title} />
             </div>
             <div data-region="badge">
-            <TextField label="Role badge" value={h.roleBadge} onChange={(v) => setHero('roleBadge', v)} error={errors['hero.roleBadge']} maxLength={LIMITS.short} hint="Short role line above your name." />
+            <TextField label="Role badge" value={h.roleBadge} onChange={(v) => setHero('roleBadge', v)} error={errors['hero.roleBadge']} maxLength={LIMITS.short} hint="Shown as the code-style badge at the top of the hero." />
             </div>
             <div data-region="focus" className="sm:col-span-2">
             <TagInput label="Focus areas" value={h.focusAreas} onChange={(v) => setHero('focusAreas', v)} max={8} error={errors['hero.focusAreas']} />

@@ -54,11 +54,6 @@ export default function SiteFooter({ content }: { content: Content }) {
 
         <nav aria-label="Footer">
           <ul className="grid grid-cols-2 gap-x-10 sm:grid-cols-3 md:gap-x-12">
-            <li>
-              <Link to="/" className="inline-flex min-h-11 items-center text-sm text-ink-2 transition-colors hover:text-ink">
-                Home
-              </Link>
-            </li>
             {NAV_ITEMS.map((item) => (
               <li key={item.to}>
                 <Link

@@ -59,7 +59,7 @@ export default function Home() {
 
   return (
     <div className="page-container">
-      <Hero profile={profile} socials={socials} cvUrl={site.cv?.url} />
+      <Hero profile={profile} socials={socials} cvUrl={site.cv?.url} fullHeight />
 
       {coreStack.length > 0 && (
         <section aria-labelledby="core-stack-heading" className="section-gap">

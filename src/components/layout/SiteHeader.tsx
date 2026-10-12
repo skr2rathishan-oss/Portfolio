@@ -5,7 +5,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { Content } from '../../content/types';
 import { SOCIAL_ICONS } from '../../content/icons';
 import { cx, isExternal, linkProps } from '../cards/shared';
-import { btnAccentOutline } from '../ui/styles';
+import { btnSignalOutline } from '../ui/styles';
 import { NAV_ITEMS } from './nav';
 
 function Brand({ site, fullName, onClick }: { site: Content['site']; fullName: string; onClick?: () => void }) {
@@ -14,25 +14,34 @@ function Brand({ site, fullName, onClick }: { site: Content['site']; fullName: s
       to="/"
       onClick={onClick}
       aria-label={`${fullName}, home`}
-      className="inline-flex min-h-11 items-center text-lg font-semibold tracking-[-0.02em] text-ink"
+      className="inline-flex min-h-11 items-center text-xl font-bold tracking-[-0.02em] text-ink sm:text-2xl"
     >
       {site.brand.primary}
       <span className="text-accent">.</span>
-      {site.brand.suffix}
+      {site.brand.suffix && <span className="ml-1.5 font-medium text-ink-2">{site.brand.suffix}</span>}
     </Link>
   );
 }
 
-function ResumeLink({ cv, className }: { cv: NonNullable<Content['site']['cv']>; className?: string }) {
+/** CV download. `compact` collapses it to a 44px icon circle below sm (the label stays for screen readers). */
+function CvButton({
+  cv,
+  className,
+  compact,
+}: {
+  cv: NonNullable<Content['site']['cv']>;
+  className?: string;
+  compact?: boolean;
+}) {
   const external = isExternal(cv.url);
   return (
     <a
       href={cv.url}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : { download: cv.fileName || true })}
-      className={cx(btnAccentOutline, className)}
+      className={cx(btnSignalOutline, className)}
     >
-      <Download size={16} aria-hidden="true" />
-      Résumé
+      <span className={compact ? 'sr-only sm:not-sr-only' : undefined}>Download CV</span>
+      <Download size={16} strokeWidth={2.2} aria-hidden="true" />
       <span className="sr-only">{external ? ' (opens in new tab)' : ' (PDF download)'}</span>
     </a>
   );
@@ -58,9 +67,9 @@ export default function SiteHeader({ content }: { content: Content }) {
     setOpen(false);
   }, [pathname]);
 
-  // Close if the viewport grows past the mobile breakpoint.
+  // Close if the viewport grows past the mobile breakpoint (lg).
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 48rem)');
+    const mq = window.matchMedia('(min-width: 64rem)');
     const onChange = () => mq.matches && setOpen(false);
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
@@ -105,19 +114,22 @@ export default function SiteHeader({ content }: { content: Content }) {
   return (
     <>
       <header className="header-glass sticky top-0 z-40 h-(--header-h) border-b border-line bg-navy/85 backdrop-blur-md">
-        <div className="page-container flex h-full items-center justify-between gap-6">
-          <Brand site={site} fullName={profile.fullName} />
+        <div className="page-container flex h-full items-center justify-between gap-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+          <div className="lg:justify-self-start">
+            <Brand site={site} fullName={profile.fullName} />
+          </div>
 
-          <nav aria-label="Primary" className="hidden md:block">
-            <ul className="flex items-center gap-1 lg:gap-2">
+          <nav aria-label="Primary" className="hidden lg:block">
+            <ul className="flex items-center gap-2">
               {NAV_ITEMS.map((item) => (
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
+                    end={item.end}
                     className={({ isActive }) =>
                       cx(
-                        'relative inline-flex min-h-11 items-center px-3 text-sm font-medium transition-colors',
-                        isActive ? 'text-ink' : 'text-ink-2 hover:text-ink',
+                        'relative inline-flex min-h-11 items-center px-3 text-[0.9375rem] font-semibold transition-colors',
+                        isActive ? 'text-accent' : 'text-ink/85 hover:text-ink',
                       )
                     }
                   >
@@ -129,7 +141,7 @@ export default function SiteHeader({ content }: { content: Content }) {
                             layoutId="nav-active"
                             transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                             aria-hidden="true"
-                            className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-accent"
+                            className="absolute inset-x-3 bottom-1.5 h-0.5 rounded-full bg-accent shadow-[0_0_8px_rgb(0_171_240/0.8)]"
                           />
                         )}
                       </>
@@ -140,12 +152,8 @@ export default function SiteHeader({ content }: { content: Content }) {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2">
-            {site.cv && (
-              <span className="hidden sm:contents">
-                <ResumeLink cv={site.cv} />
-              </span>
-            )}
+          <div className="flex items-center gap-2 lg:justify-self-end">
+            {site.cv && <CvButton cv={site.cv} compact className="size-11 sm:size-auto sm:px-6" />}
             <button
               ref={toggleRef}
               type="button"
@@ -153,7 +161,7 @@ export default function SiteHeader({ content }: { content: Content }) {
               aria-controls={menuId}
               aria-label="Open menu"
               onClick={() => setOpen(true)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-control text-ink transition-colors hover:bg-white/[0.06] md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-control text-ink transition-colors hover:bg-white/[0.06] lg:hidden"
             >
               <Menu size={22} aria-hidden="true" />
             </button>
@@ -171,7 +179,7 @@ export default function SiteHeader({ content }: { content: Content }) {
         inert={!open}
         aria-hidden={!open}
         className={cx(
-          'fixed inset-0 z-50 flex flex-col bg-canvas duration-200 ease-out md:hidden',
+          'fixed inset-0 z-50 flex flex-col bg-canvas duration-200 ease-out lg:hidden',
           // Visibility flips instantly on open (so focus can move in) and only after the fade on close.
           open
             ? 'visible translate-y-0 opacity-100 transition-[opacity,transform]'
@@ -193,25 +201,11 @@ export default function SiteHeader({ content }: { content: Content }) {
         <div className="page-container flex flex-1 flex-col overflow-y-auto pb-8 pt-4">
           <nav aria-label="Menu">
             <ul>
-              <li>
-                <NavLink
-                  to="/"
-                  end
-                  onClick={() => close(false)}
-                  className={({ isActive }) =>
-                    cx(
-                      'flex min-h-14 items-center border-b border-line text-h2 transition-colors',
-                      isActive ? 'text-accent' : 'text-ink',
-                    )
-                  }
-                >
-                  Home
-                </NavLink>
-              </li>
               {NAV_ITEMS.map((item) => (
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
+                    end={item.end}
                     onClick={() => close(false)}
                     className={({ isActive }) =>
                       cx(
@@ -228,7 +222,7 @@ export default function SiteHeader({ content }: { content: Content }) {
           </nav>
 
           <div className="mt-auto pt-10">
-            {site.cv && <ResumeLink cv={site.cv} className="w-full" />}
+            {site.cv && <CvButton cv={site.cv} className="w-full px-5" />}
             {menuSocials.length > 0 && (
               <ul className="mt-4 flex items-center justify-center gap-2" aria-label="Profiles">
                 {menuSocials.map((s) => {
