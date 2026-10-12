@@ -1,6 +1,6 @@
 // Properties for page sections and content blocks.
 import { ArrowDown, ArrowUp, ImagePlus, Plus, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BLOCK_LABEL, CUSTOM_SECTION_META, LAYOUT_LIMITS, SECTION_META } from '../../../content/layout';
 import { BlockSchema, LIMITS } from '../../../content/schema';
 import { BLOCK_STYLE_SUPPORT } from '../../../content/styleClasses';
@@ -56,10 +56,16 @@ function SectionForm({ section }: { section: Section }) {
   const { apply, page, setLibraryOpen } = useEditor();
   const keys: (keyof BuiltinSectionProps)[] =
     section.type === 'custom' ? ['title', 'lead'] : [...SECTION_META[section.type].props];
-  const source: SectionDraft =
-    section.type === 'custom'
-      ? { title: section.props.title ?? '', lead: section.props.lead ?? '', arrangement: section.props.arrangement }
-      : Object.fromEntries(keys.map((k) => [k, section.props?.[k] ?? ''])) as SectionDraft;
+  // resolvePage() may return fresh section objects on every render: key the draft source on content.
+  const propsKey = JSON.stringify(section.props ?? {});
+  const source = useMemo<SectionDraft>(
+    () =>
+      section.type === 'custom'
+        ? { title: section.props.title ?? '', lead: section.props.lead ?? '', arrangement: section.props.arrangement }
+        : (Object.fromEntries(keys.map((k) => [k, section.props?.[k] ?? ''])) as SectionDraft),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [propsKey, section.type],
+  );
 
   const d = useDraft<SectionDraft>({
     id: `panel:section:${section.id}`,

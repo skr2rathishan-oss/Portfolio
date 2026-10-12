@@ -1,5 +1,5 @@
 // Editor dialogs: confirm (focus starts on Cancel), replace image, keyboard shortcuts.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ImageField } from '../fields/MediaField';
 import { patchBlockProps, patchGalleryImage } from '../lib/layoutReducers';
 import { patchItem, setProfile, type CollectionKey, type Reducer } from '../lib/reducers';
@@ -10,6 +10,13 @@ import { describeTarget, findBlock, findItem, galleryImageId, parseTarget } from
 export function EditorConfirm() {
   const { confirm, askConfirm } = useEditor();
   const [busy, setBusy] = useState(false);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  // showModal() focuses the first focusable control (Close); start on Cancel instead.
+  useEffect(() => {
+    if (!confirm) return;
+    const raf = requestAnimationFrame(() => cancelRef.current?.focus());
+    return () => cancelAnimationFrame(raf);
+  }, [confirm]);
   if (!confirm) return null;
   return (
     <Modal
@@ -18,7 +25,7 @@ export function EditorConfirm() {
       size="sm"
       footer={
         <>
-          <Button variant="ghost" autoFocus onClick={() => askConfirm(null)}>
+          <Button ref={cancelRef} variant="ghost" onClick={() => askConfirm(null)}>
             Cancel
           </Button>
           <Button

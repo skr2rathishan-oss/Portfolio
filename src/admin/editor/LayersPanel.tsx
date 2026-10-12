@@ -123,8 +123,8 @@ function Row({
         onClick={() => select(target, { scroll: true })}
         className={cx('flex h-8 min-w-0 flex-1 items-center gap-1.5 rounded px-1 text-left', hidden && 'text-[#5f7a93] line-through decoration-[#3f5d79]', focusRing)}
       >
-        <span className="truncate">{label}</span>
-        {sub && <span className="shrink-0 text-[11px] text-[#5f7a93] no-underline">{sub}</span>}
+        <span className={sub ? "shrink-0" : "truncate"}>{label}</span>
+        {sub && <span className="min-w-0 truncate text-[11px] text-[#5f7a93] no-underline">{sub}</span>}
       </button>
       {(onUp !== undefined || onDown !== undefined) && (
         <span className={cx('flex shrink-0 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100', isSel && 'opacity-100')}>

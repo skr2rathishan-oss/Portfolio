@@ -156,10 +156,9 @@ export function ComponentLibrary() {
     if (before.current) recordExternal(before.current);
     const host = ENTITY_HOST[coll];
     const hostPage = host ? SECTION_META[host].page : page;
-    if (hostPage !== page) setPage(hostPage);
     const target = `item:${coll}:${item.id}`;
-    // Select after the page switch has rendered.
-    setTimeout(() => select(target, { scroll: true }), 0);
+    if (hostPage !== page) setPage(hostPage, { select: target });
+    else select(target, { scroll: true });
     const hostSection = host ? resolvePage(doc, hostPage).find((s) => s.type === host) : undefined;
     if (hostSection && !hostSection.visible) {
       askConfirm({

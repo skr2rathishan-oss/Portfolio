@@ -81,7 +81,11 @@ export function EntityDialog<K extends CollectionKey>({
 
   const save = async () => {
     setFormError(null);
-    const checked = validateItem(config.schema, draft);
+    // New items get their real id before validation (blank() starts with id '', which the schema rejects).
+    const candidate = isNew
+      ? ({ ...draft, id: newId(config.idPrefix, String((draft as unknown as Record<string, unknown>)[config.titleField] ?? '')) } as ItemOf<K>)
+      : draft;
+    const checked = validateItem(config.schema, candidate);
     if (!checked.ok) {
       setErrors(checked.errors);
       setFormError('Fix the highlighted fields.');
@@ -89,8 +93,7 @@ export function EntityDialog<K extends CollectionKey>({
     }
     let item = checked.data as ItemOf<K>;
     if (isNew) {
-      const title = String((item as unknown as Record<string, unknown>)[config.titleField] ?? '');
-      item = { ...item, id: newId(config.idPrefix, title), order: nextOrder(doc[config.key] as { order: number }[]) };
+      item = { ...item, order: nextOrder(doc[config.key] as { order: number }[]) };
     }
     const techs = newTechnologies.filter((t) =>
       JSON.stringify(item).includes(`"${t.id}"`),

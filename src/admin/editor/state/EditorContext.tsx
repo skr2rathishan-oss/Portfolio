@@ -47,7 +47,8 @@ export interface ConfirmRequest {
 interface EditorValue {
   doc: Content;
   page: PageKey;
-  setPage: (p: PageKey) => void;
+  /** `select`: target to select (and scroll to) once the new page is shown. */
+  setPage: (p: PageKey, opts?: { select?: string }) => void;
   device: Device;
   setDevice: (d: Device) => void;
   mode: CanvasMode;
@@ -123,8 +124,10 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [params, setParams] = useSearchParams();
   const pageParam = params.get('page');
   const page: PageKey = (PAGE_KEYS as readonly string[]).includes(pageParam ?? '') ? (pageParam as PageKey) : 'home';
+  const afterPageSelect = useRef<string | null>(null);
   const setPage = useCallback(
-    (p: PageKey) => {
+    (p: PageKey, opts?: { select?: string }) => {
+      afterPageSelect.current = opts?.select ?? null;
       setParams(
         (prev) => {
           const next = new URLSearchParams(prev);
@@ -158,8 +161,11 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (lastPage.current !== page) {
       lastPage.current = page;
-      setSelected(null);
+      const next = afterPageSelect.current;
+      afterPageSelect.current = null;
+      setSelected(next);
       setHovered(null);
+      if (next) setScrollNonce((n) => n + 1);
     }
   }, [page]);
 
