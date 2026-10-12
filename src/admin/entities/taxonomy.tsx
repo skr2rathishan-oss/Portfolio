@@ -21,13 +21,13 @@ export const PROFICIENCY_LABEL: Record<Proficiency, string> = {
 };
 
 // ── Technologies ─────────────────────────────────────────────
-function TechnologyForm({ value: t, set, errors, doc }: FormProps<Technology>) {
+function TechnologyForm({ embedded, value: t, set, errors, doc }: FormProps<Technology>) {
   const cats = [...doc.techCategories].sort((a, b) => a.order - b.order);
   return (
     <>
-      <TextField label="Name" required value={t.name} onChange={(v) => set('name', v)} error={errors.name} maxLength={LIMITS.short} autoFocus />
+      <TextField name="name" label="Name" required value={t.name} onChange={(v) => set('name', v)} error={errors.name} maxLength={LIMITS.short} autoFocus={!embedded} />
       <div className="grid gap-4 sm:grid-cols-2">
-        <SelectField
+        <SelectField name="categoryId"
           label="Category"
           required
           value={t.categoryId || undefined}
@@ -36,7 +36,7 @@ function TechnologyForm({ value: t, set, errors, doc }: FormProps<Technology>) {
           options={cats.map((c) => ({ value: c.id, label: c.visible ? c.title : `${c.title} (hidden)` }))}
           error={errors.categoryId}
         />
-        <SelectField
+        <SelectField name="proficiency"
           label="Proficiency"
           required
           value={t.proficiency}
@@ -45,7 +45,7 @@ function TechnologyForm({ value: t, set, errors, doc }: FormProps<Technology>) {
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
-        <UrlField
+        <UrlField name="icon"
           label="Icon URL"
           media
           value={t.icon}
@@ -59,13 +59,13 @@ function TechnologyForm({ value: t, set, errors, doc }: FormProps<Technology>) {
           </span>
         )}
       </div>
-      <ColorField label="Brand colour" value={t.color} onChange={(v) => set('color', v)} error={errors.color} />
-      <TextArea label="Summary" value={t.summary} onChange={(v) => set('summary', v)} error={errors.summary} maxLength={LIMITS.summary} rows={2} hint="How you use it, in one sentence." />
-      <ListEditor label="How I use it" value={t.highlights ?? []} onChange={(v) => set('highlights', v)} itemLabel="Point" />
+      <ColorField name="color" label="Brand colour" value={t.color} onChange={(v) => set('color', v)} error={errors.color} />
+      <TextArea name="summary" label="Summary" value={t.summary} onChange={(v) => set('summary', v)} error={errors.summary} maxLength={LIMITS.summary} rows={2} hint="How you use it, in one sentence." />
+      <ListEditor name="highlights" label="How I use it" value={t.highlights ?? []} onChange={(v) => set('highlights', v)} itemLabel="Point" />
       <div className="grid gap-3 sm:grid-cols-2">
-        <Toggle label="Show in tech stack" hint="Off for concept tags used only on projects." checked={t.showInStack} onChange={(v) => set('showInStack', v)} />
-        <Toggle label="Featured" hint="Quick pills on the home page." checked={t.featured} onChange={(v) => set('featured', v)} />
-        <Toggle label="Visible on site" checked={t.visible} onChange={(v) => set('visible', v)} />
+        <Toggle name="showInStack" label="Show in tech stack" hint="Off for concept tags used only on projects." checked={t.showInStack} onChange={(v) => set('showInStack', v)} />
+        <Toggle name="featured" label="Featured" hint="Quick pills on the home page." checked={t.featured} onChange={(v) => set('featured', v)} />
+        <Toggle name="visible" label="Visible on site" checked={t.visible} onChange={(v) => set('visible', v)} />
       </div>
     </>
   );
@@ -108,13 +108,13 @@ export const technologyConfig: EntityConfig<'technologies'> = {
 };
 
 // ── Tech categories ──────────────────────────────────────────
-function TechCategoryForm({ value: c, set, errors }: FormProps<TechCategory>) {
+function TechCategoryForm({ embedded, value: c, set, errors }: FormProps<TechCategory>) {
   return (
     <>
-      <TextField label="Title" required value={c.title} onChange={(v) => set('title', v)} error={errors.title} maxLength={LIMITS.title} autoFocus />
-      <TextArea label="Subtitle" value={c.subtitle} onChange={(v) => set('subtitle', v)} error={errors.subtitle} maxLength={LIMITS.summary} rows={2} />
-      <IconSelect label="Icon" value={c.icon} onChange={(v) => set('icon', v)} error={errors.icon} />
-      <Toggle label="Visible on site" hint="Hidden categories keep their technologies usable on projects." checked={c.visible} onChange={(v) => set('visible', v)} />
+      <TextField name="title" label="Title" required value={c.title} onChange={(v) => set('title', v)} error={errors.title} maxLength={LIMITS.title} autoFocus={!embedded} />
+      <TextArea name="subtitle" label="Subtitle" value={c.subtitle} onChange={(v) => set('subtitle', v)} error={errors.subtitle} maxLength={LIMITS.summary} rows={2} />
+      <IconSelect name="icon" label="Icon" value={c.icon} onChange={(v) => set('icon', v)} error={errors.icon} />
+      <Toggle name="visible" label="Visible on site" hint="Hidden categories keep their technologies usable on projects." checked={c.visible} onChange={(v) => set('visible', v)} />
     </>
   );
 }
@@ -155,11 +155,11 @@ export const techCategoryConfig: EntityConfig<'techCategories'> = {
 };
 
 // ── Project categories ───────────────────────────────────────
-function ProjectCategoryForm({ value: c, set, errors }: FormProps<ProjectCategory>) {
+function ProjectCategoryForm({ embedded, value: c, set, errors }: FormProps<ProjectCategory>) {
   return (
     <>
-      <TextField label="Label" required value={c.label} onChange={(v) => set('label', v)} error={errors.label} maxLength={LIMITS.short} autoFocus />
-      <Toggle label="Visible on site" checked={c.visible} onChange={(v) => set('visible', v)} />
+      <TextField name="label" label="Label" required value={c.label} onChange={(v) => set('label', v)} error={errors.label} maxLength={LIMITS.short} autoFocus={!embedded} />
+      <Toggle name="visible" label="Visible on site" checked={c.visible} onChange={(v) => set('visible', v)} />
     </>
   );
 }
@@ -204,11 +204,11 @@ export const PLATFORM_LABEL: Record<SocialPlatform, string> = {
   other: 'Other',
 };
 
-function SocialForm({ value: s, set, errors }: FormProps<SocialLink>) {
+function SocialForm({ embedded, value: s, set, errors }: FormProps<SocialLink>) {
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-2">
-        <SelectField
+        <SelectField name="platform"
           label="Platform"
           required
           value={s.platform}
@@ -219,10 +219,10 @@ function SocialForm({ value: s, set, errors }: FormProps<SocialLink>) {
           }}
           options={(Object.keys(PLATFORM_LABEL) as SocialPlatform[]).map((p) => ({ value: p, label: PLATFORM_LABEL[p] }))}
         />
-        <TextField label="Label" required value={s.label} onChange={(v) => set('label', v)} error={errors.label} maxLength={LIMITS.short} />
+        <TextField name="label" label="Label" required value={s.label} onChange={(v) => set('label', v)} error={errors.label} maxLength={LIMITS.short} />
       </div>
-      <TextField label="Handle or display text" value={s.handle} onChange={(v) => set('handle', v)} error={errors.handle} placeholder="@username or email address" />
-      <UrlField
+      <TextField name="handle" label="Handle or display text" value={s.handle} onChange={(v) => set('handle', v)} error={errors.handle} placeholder="@username or email address" />
+      <UrlField name="url"
         label="Link"
         allowMailto
         value={s.url}
@@ -230,11 +230,11 @@ function SocialForm({ value: s, set, errors }: FormProps<SocialLink>) {
         error={errors.url}
         placeholder={s.platform === 'email' ? 'mailto:you@example.com' : 'https://'}
       />
-      <ColorField label="Accent colour" value={s.accent} onChange={(v) => set('accent', v)} error={errors.accent} />
+      <ColorField name="accent" label="Accent colour" value={s.accent} onChange={(v) => set('accent', v)} error={errors.accent} />
       <div className="grid gap-3 sm:grid-cols-2">
-        <Toggle label="Show in hero" hint="Icon row on the home page (needs a link)." checked={s.showInHero} onChange={(v) => set('showInHero', v)} />
-        <Toggle label="Show on contact page" checked={s.showInContact} onChange={(v) => set('showInContact', v)} />
-        <Toggle label="Visible on site" checked={s.visible} onChange={(v) => set('visible', v)} />
+        <Toggle name="showInHero" label="Show in hero" hint="Icon row on the home page (needs a link)." checked={s.showInHero} onChange={(v) => set('showInHero', v)} />
+        <Toggle name="showInContact" label="Show on contact page" checked={s.showInContact} onChange={(v) => set('showInContact', v)} />
+        <Toggle name="visible" label="Visible on site" checked={s.visible} onChange={(v) => set('visible', v)} />
       </div>
     </>
   );

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import type { Technology } from '../../content/types';
+import { T, useEd } from '../../content/editable';
+import { applyStyle } from '../sections/sectionStyle';
 import { cx, initials } from './shared';
 
 export interface TechChipProps {
@@ -45,6 +47,8 @@ export function TechIcon({ tech, active = false }: { tech: Technology; active?: 
 
 export default function TechChip({ tech, count, active = false, onClick, className }: TechChipProps) {
   const label = count !== undefined ? `${tech.name}, ${count} project${count === 1 ? '' : 's'}` : tech.name;
+  const ed = useEd();
+  const attrs = ed(T.item('technologies', tech.id), 'item');
   const body = (
     <>
       <TechIcon tech={tech} active={active} />
@@ -63,6 +67,7 @@ export default function TechChip({ tech, count, active = false, onClick, classNa
   if (onClick) {
     return (
       <button
+        {...attrs}
         type="button"
         aria-pressed={active}
         aria-label={label}
@@ -71,7 +76,9 @@ export default function TechChip({ tech, count, active = false, onClick, classNa
           'group inline-flex min-h-11 shrink-0 items-center gap-2 rounded-control border px-3 text-sm font-medium whitespace-nowrap transition-colors duration-150 pointer-fine:min-h-9',
           active
             ? 'border-accent bg-accent-wash text-ink'
-            : 'border-line bg-white/[0.02] text-ink-2 hover:border-white/25 hover:text-ink',
+            : applyStyle('border-line bg-white/[0.02] text-ink-2 hover:border-white/25 hover:text-ink', tech.style, [
+                { key: 'emphasis', tokens: 'border-line bg-white/[0.02]' },
+              ]),
           className,
         )}
       >
@@ -81,9 +88,11 @@ export default function TechChip({ tech, count, active = false, onClick, classNa
   }
   return (
     <span
+      {...attrs}
       aria-label={count !== undefined ? label : undefined}
       className={cx(
         'group inline-flex min-h-9 shrink-0 items-center gap-2 px-1 text-sm font-medium whitespace-nowrap text-ink-2',
+        tech.style?.emphasis === 'accent' && 'rounded-control border border-accent/50 bg-accent-wash px-2',
         className,
       )}
     >

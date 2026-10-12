@@ -9,25 +9,25 @@ import { FileField, ImageField } from '../fields/MediaField';
 import { Badge } from '../ui/primitives';
 
 // ── Certifications ───────────────────────────────────────────
-function CertificationForm({ value: c, set, errors }: FormProps<Certification>) {
+function CertificationForm({ embedded, value: c, set, errors }: FormProps<Certification>) {
   return (
     <>
-      <TextField label="Certificate name" required value={c.name} onChange={(v) => set('name', v)} error={errors.name} maxLength={LIMITS.title} autoFocus />
+      <TextField name="name" label="Certificate name" required value={c.name} onChange={(v) => set('name', v)} error={errors.name} maxLength={LIMITS.title} autoFocus={!embedded} />
       <div className="grid gap-4 sm:grid-cols-2">
-        <TextField label="Issuer" required value={c.issuer} onChange={(v) => set('issuer', v)} error={errors.issuer} maxLength={LIMITS.title} />
-        <TextField label="Credential ID" value={c.credentialId} onChange={(v) => set('credentialId', v)} error={errors.credentialId} />
-        <MonthField label="Issued" required value={c.issued} onChange={(v) => set('issued', v ?? '')} error={errors.issued} />
-        <MonthField label="Expires" value={c.expires} onChange={(v) => set('expires', v)} error={errors.expires} />
+        <TextField name="issuer" label="Issuer" required value={c.issuer} onChange={(v) => set('issuer', v)} error={errors.issuer} maxLength={LIMITS.title} />
+        <TextField name="credentialId" label="Credential ID" value={c.credentialId} onChange={(v) => set('credentialId', v)} error={errors.credentialId} />
+        <MonthField name="issued" label="Issued" required value={c.issued} onChange={(v) => set('issued', v ?? '')} error={errors.issued} />
+        <MonthField name="expires" label="Expires" value={c.expires} onChange={(v) => set('expires', v)} error={errors.expires} />
       </div>
-      <ImageField label="Certificate image" required value={c.image || undefined} onChange={(v) => set('image', v ?? '')} error={errors.image} maxDim={2400} aspect="wide" />
-      <FileField label="Certificate PDF" value={c.pdf} onChange={(v) => set('pdf', v)} error={errors.pdf} hint="Optional. PDF, up to 4 MB." />
-      <UrlField label="Credential link" value={c.credentialUrl} onChange={(v) => set('credentialUrl', v)} error={errors.credentialUrl} hint="Verification page (LinkedIn, Credly, issuer site…)." />
-      <TextArea label="Description" value={c.description} onChange={(v) => set('description', v)} error={errors.description} maxLength={LIMITS.summary} rows={3} />
-      <TagInput label="Skills" value={c.skills} onChange={(v) => set('skills', v)} error={errors.skills} />
-      <ColorField label="Accent colour" value={c.accent} onChange={(v) => set('accent', v)} error={errors.accent} />
+      <ImageField name="image" label="Certificate image" required value={c.image || undefined} onChange={(v) => set('image', v ?? '')} error={errors.image} maxDim={2400} aspect="wide" />
+      <FileField name="pdf" label="Certificate PDF" value={c.pdf} onChange={(v) => set('pdf', v)} error={errors.pdf} hint="Optional. PDF, up to 4 MB." />
+      <UrlField name="credentialUrl" label="Credential link" value={c.credentialUrl} onChange={(v) => set('credentialUrl', v)} error={errors.credentialUrl} hint="Verification page (LinkedIn, Credly, issuer site…)." />
+      <TextArea name="description" label="Description" value={c.description} onChange={(v) => set('description', v)} error={errors.description} maxLength={LIMITS.summary} rows={3} />
+      <TagInput name="skills" label="Skills" value={c.skills} onChange={(v) => set('skills', v)} error={errors.skills} />
+      <ColorField name="accent" label="Accent colour" value={c.accent} onChange={(v) => set('accent', v)} error={errors.accent} />
       <div className="grid gap-3 sm:grid-cols-2">
-        <Toggle label="Featured" checked={c.featured} onChange={(v) => set('featured', v)} />
-        <Toggle label="Visible on site" checked={c.visible} onChange={(v) => set('visible', v)} />
+        <Toggle name="featured" label="Featured" checked={c.featured} onChange={(v) => set('featured', v)} />
+        <Toggle name="visible" label="Visible on site" checked={c.visible} onChange={(v) => set('visible', v)} />
       </div>
     </>
   );
@@ -57,16 +57,16 @@ export const certificationConfig: EntityConfig<'certifications'> = {
 };
 
 // ── Education ────────────────────────────────────────────────
-function EducationForm({ value: e, set, errors }: FormProps<Education>) {
+function EducationForm({ embedded, value: e, set, errors }: FormProps<Education>) {
   return (
     <>
-      <TextField label="Degree" required value={e.degree} onChange={(v) => set('degree', v)} error={errors.degree} maxLength={LIMITS.title} placeholder="B.Sc. (Hons) in Engineering" autoFocus />
-      <TextField label="Field of study" value={e.field} onChange={(v) => set('field', v)} error={errors.field} placeholder="Computer Engineering" />
-      <TextField label="Institution" required value={e.institution} onChange={(v) => set('institution', v)} error={errors.institution} />
+      <TextField name="degree" label="Degree" required value={e.degree} onChange={(v) => set('degree', v)} error={errors.degree} maxLength={LIMITS.title} placeholder="B.Sc. (Hons) in Engineering" autoFocus={!embedded} />
+      <TextField name="field" label="Field of study" value={e.field} onChange={(v) => set('field', v)} error={errors.field} placeholder="Computer Engineering" />
+      <TextField name="institution" label="Institution" required value={e.institution} onChange={(v) => set('institution', v)} error={errors.institution} />
       <div className="grid gap-4 sm:grid-cols-2">
-        <MonthField label="Start" required value={e.start} onChange={(v) => set('start', v ?? '')} error={errors.start} />
-        <MonthField label="End (or expected)" value={e.end} onChange={(v) => set('end', v)} error={errors.end} />
-        <SelectField
+        <MonthField name="start" label="Start" required value={e.start} onChange={(v) => set('start', v ?? '')} error={errors.start} />
+        <MonthField name="end" label="End (or expected)" value={e.end} onChange={(v) => set('end', v)} error={errors.end} />
+        <SelectField name="status"
           label="Status"
           required
           value={e.status}
@@ -76,12 +76,12 @@ function EducationForm({ value: e, set, errors }: FormProps<Education>) {
             { value: 'completed', label: 'Completed' },
           ]}
         />
-        <TextField label="Grade" value={e.grade} onChange={(v) => set('grade', v)} error={errors.grade} placeholder="GPA 3.6 / First class" />
+        <TextField name="grade" label="Grade" value={e.grade} onChange={(v) => set('grade', v)} error={errors.grade} placeholder="GPA 3.6 / First class" />
       </div>
-      <ImageField label="Logo" value={e.logo} onChange={(v) => set('logo', v)} error={errors.logo} maxDim={512} aspect="square" />
-      <UrlField label="Website" value={e.url} onChange={(v) => set('url', v)} error={errors.url} />
-      <TextArea label="Description" value={e.description} onChange={(v) => set('description', v)} error={errors.description} maxLength={LIMITS.summary} rows={3} />
-      <Toggle label="Visible on site" checked={e.visible} onChange={(v) => set('visible', v)} />
+      <ImageField name="logo" label="Logo" value={e.logo} onChange={(v) => set('logo', v)} error={errors.logo} maxDim={512} aspect="square" />
+      <UrlField name="url" label="Website" value={e.url} onChange={(v) => set('url', v)} error={errors.url} />
+      <TextArea name="description" label="Description" value={e.description} onChange={(v) => set('description', v)} error={errors.description} maxLength={LIMITS.summary} rows={3} />
+      <Toggle name="visible" label="Visible on site" checked={e.visible} onChange={(v) => set('visible', v)} />
     </>
   );
 }
@@ -107,18 +107,18 @@ export const educationConfig: EntityConfig<'education'> = {
 };
 
 // ── Academic pathway milestones ──────────────────────────────
-function MilestoneForm({ value: m, set, errors }: FormProps<Milestone>) {
+function MilestoneForm({ embedded, value: m, set, errors }: FormProps<Milestone>) {
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-[8rem_1fr]">
-        <TextField label="Year" required value={m.year} onChange={(v) => set('year', v)} error={errors.year} placeholder="2024" maxLength={16} autoFocus />
-        <TextField label="Milestone" required value={m.label} onChange={(v) => set('label', v)} error={errors.label} placeholder="Entered Computer Engineering" />
+        <TextField name="year" label="Year" required value={m.year} onChange={(v) => set('year', v)} error={errors.year} placeholder="2024" maxLength={16} autoFocus={!embedded} />
+        <TextField name="label" label="Milestone" required value={m.label} onChange={(v) => set('label', v)} error={errors.label} placeholder="Entered Computer Engineering" />
       </div>
-      <TextField label="Detail" value={m.sub} onChange={(v) => set('sub', v)} error={errors.sub} placeholder="University of Ruhuna" />
-      <UrlField label="Link" value={m.url} onChange={(v) => set('url', v)} error={errors.url} />
+      <TextField name="sub" label="Detail" value={m.sub} onChange={(v) => set('sub', v)} error={errors.sub} placeholder="University of Ruhuna" />
+      <UrlField name="url" label="Link" value={m.url} onChange={(v) => set('url', v)} error={errors.url} />
       <div className="grid gap-3 sm:grid-cols-2">
-        <Toggle label="Reached" hint="Off for upcoming milestones." checked={m.done} onChange={(v) => set('done', v)} />
-        <Toggle label="Visible on site" checked={m.visible} onChange={(v) => set('visible', v)} />
+        <Toggle name="done" label="Reached" hint="Off for upcoming milestones." checked={m.done} onChange={(v) => set('done', v)} />
+        <Toggle name="visible" label="Visible on site" checked={m.visible} onChange={(v) => set('visible', v)} />
       </div>
     </>
   );

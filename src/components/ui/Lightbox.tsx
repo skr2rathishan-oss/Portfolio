@@ -1,7 +1,7 @@
 // Accessible image preview built on the native <dialog> (modal: the page behind is inert,
 // Tab stays inside, Esc closes). Focus returns to the element that opened it and body
 // scroll is locked while it is open.
-import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { createContext, useEffect, useId, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 
 export interface PreviewMedia {
@@ -10,6 +10,9 @@ export interface PreviewMedia {
   title: string;
   caption?: string;
 }
+
+/** Page-scoped lightbox opener: the page owns the <Lightbox>, its sections call this. */
+export const PreviewContext = createContext<((media: PreviewMedia) => void) | undefined>(undefined);
 
 export interface LightboxProps {
   media: PreviewMedia | null;

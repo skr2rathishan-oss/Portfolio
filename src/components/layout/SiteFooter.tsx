@@ -2,6 +2,7 @@ import { ArrowUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Content } from '../../content/types';
 import { SOCIAL_ICONS } from '../../content/icons';
+import { T, useEd } from '../../content/editable';
 import { isExternal, linkProps } from '../cards/shared';
 import { NAV_ITEMS } from './nav';
 
@@ -17,6 +18,7 @@ export default function SiteFooter({ content }: { content: Content }) {
   const profileLinks = socials.filter((s) => s.url && s.showInContact && s.platform !== 'email');
   const place = [contact.location, contact.timezone].filter(Boolean).join(', ');
   const year = new Date().getFullYear();
+  const ed = useEd();
 
   return (
     <footer className="relative z-10 mt-24 border-t border-line bg-canvas">
@@ -37,7 +39,7 @@ export default function SiteFooter({ content }: { content: Content }) {
               {profileLinks.map((s) => {
                 const Icon = SOCIAL_ICONS[s.platform];
                 return (
-                  <li key={s.id}>
+                  <li key={s.id} {...ed(T.item('socials', s.id), 'item')}>
                     <a
                       {...linkProps(s.url!)}
                       aria-label={`${s.label}${isExternal(s.url!) ? ' (opens in new tab)' : ''}`}
@@ -81,7 +83,7 @@ export default function SiteFooter({ content }: { content: Content }) {
 
       <div className="border-t border-line">
         <div className="page-container flex flex-col-reverse gap-2 py-5 text-sm text-ink-3 sm:flex-row sm:items-center sm:justify-between">
-          <p>
+          <p {...ed(T.site('footerText'), 'field')}>
             &copy; {year} {profile.fullName}
             {site.footerText ? `. ${site.footerText.replace(/^\s*[.·-]\s*/, '')}` : ''}
           </p>

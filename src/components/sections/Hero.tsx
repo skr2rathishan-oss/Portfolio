@@ -4,7 +4,9 @@ import { motion, type Variants } from 'motion/react';
 import { Link } from 'react-router-dom';
 import type { Profile, SocialLink } from '../../content/types';
 import { SOCIAL_ICONS } from '../../content/icons';
+import { T, useEd } from '../../content/editable';
 import { cx, isExternal, linkProps, Monogram, NewTabHint } from '../cards/shared';
+import { applyStyle } from './sectionStyle';
 
 export interface HeroProps {
   profile: Profile;
@@ -14,7 +16,12 @@ export interface HeroProps {
   className?: string;
   /** Fill the first screen (below the header) from the lg breakpoint. Only the public Home passes it. */
   fullHeight?: boolean;
+  /** Edit-target attributes for the section root (visual editor only). */
+  attrs?: Record<string, string>;
 }
+
+const socialClass =
+  'inline-flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.02] text-ink-2 transition-[color,border-color,background-color,translate] duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent-wash hover:text-ink';
 
 const HERO_SEEN_KEY = 'hero-intro-played';
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -70,18 +77,28 @@ function useIntroOnce(): boolean {
   return play;
 }
 
-function Cta({ to, label, primary }: { to: string; label: string; primary?: boolean }) {
+function Cta({
+  to,
+  label,
+  primary,
+  attrs,
+}: {
+  to: string;
+  label: string;
+  primary?: boolean;
+  attrs?: Record<string, string>;
+}) {
   const className = primary ? ctaPrimary : ctaSecondary;
   if (/^\/(?!\/)/.test(to)) {
     return (
-      <Link to={to} className={className}>
+      <Link {...attrs} to={to} className={className}>
         {label}
         {primary && <ArrowRight size={16} aria-hidden="true" className={ctaIcon} />}
       </Link>
     );
   }
   return (
-    <a {...linkProps(to)} className={className}>
+    <a {...attrs} {...linkProps(to)} className={className}>
       {label}
       {primary && <ExternalLink size={16} aria-hidden="true" className={ctaIcon} />}
       <NewTabHint url={to} />
@@ -89,8 +106,9 @@ function Cta({ to, label, primary }: { to: string; label: string; primary?: bool
   );
 }
 
-export default function Hero({ profile, socials, className, fullHeight }: HeroProps) {
+export default function Hero({ profile, socials, className, fullHeight, attrs }: HeroProps) {
   const { hero, fullName } = profile;
+  const ed = useEd();
   const heroSocials = socials.filter((s) => s.showInHero && s.url);
   const animate = useIntroOnce();
   const motionProps = animate ? { initial: 'hidden' as const, animate: 'visible' as const } : {};
@@ -101,6 +119,7 @@ export default function Hero({ profile, socials, className, fullHeight }: HeroPr
 
   return (
     <section
+      {...attrs}
       aria-labelledby="hero-heading"
       className={cx(
         'grid items-center gap-12 pt-8 pb-14 sm:gap-14 sm:pt-12 sm:pb-16',
@@ -112,6 +131,7 @@ export default function Hero({ profile, socials, className, fullHeight }: HeroPr
       <motion.div variants={container} {...motionProps} className="flex min-w-0 flex-col items-start">
         {hero.roleBadge && (
           <motion.p
+            {...ed(T.profile('hero.roleBadge'), 'text')}
             variants={item}
             className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-accent/25 bg-white/[0.04] px-3 py-1.5 font-mono text-xs shadow-[0_0_15px_rgb(0_171_240/0.1)] backdrop-blur-sm sm:gap-2 sm:px-3.5"
           >
@@ -136,6 +156,7 @@ export default function Hero({ profile, socials, className, fullHeight }: HeroPr
 
         {hero.focusAreas.length > 0 && (
           <motion.div
+            {...ed(T.profile('hero.focusAreas'), 'field')}
             variants={item}
             className="mt-5 flex items-start gap-2 font-mono text-xs font-bold uppercase tracking-[0.25em] text-accent lg:text-[0.8125rem] xl:text-sm"
           >
@@ -162,19 +183,34 @@ export default function Hero({ profile, socials, className, fullHeight }: HeroPr
 
         <motion.h1 id="hero-heading" variants={item} className="mt-4 text-hero text-pretty sm:mt-5">
           <span className="sr-only">{fullName}: </span>
-          <span className="block text-ink">{hero.headline}</span>{' '}
-          {hero.headlineAccent && <span className="block text-accent">{hero.headlineAccent}</span>}
+          <span {...ed(T.profile('hero.headline'), 'text')} className="block text-ink">
+            {hero.headline}
+          </span>{' '}
+          {hero.headlineAccent && (
+            <span {...ed(T.profile('hero.headlineAccent'), 'text')} className="block text-accent">
+              {hero.headlineAccent}
+            </span>
+          )}
         </motion.h1>
 
         {hero.intro && (
-          <motion.p variants={item} className="mt-5 max-w-[36rem] text-base leading-relaxed text-ink-2">
+          <motion.p
+            {...ed(T.profile('hero.intro'), 'text')}
+            variants={item}
+            className="mt-5 max-w-[36rem] text-base leading-relaxed text-ink-2"
+          >
             {hero.intro}
           </motion.p>
         )}
 
         <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
-          <Cta to={hero.primaryCta.to} label={hero.primaryCta.label} primary />
-          <Cta to={hero.secondaryCta.to} label={hero.secondaryCta.label} />
+          <Cta
+            to={hero.primaryCta.to}
+            label={hero.primaryCta.label}
+            primary
+            attrs={ed(T.profile('hero.primaryCta'), 'link')}
+          />
+          <Cta to={hero.secondaryCta.to} label={hero.secondaryCta.label} attrs={ed(T.profile('hero.secondaryCta'), 'link')} />
         </motion.div>
 
         {heroSocials.length > 0 && (
@@ -182,11 +218,13 @@ export default function Hero({ profile, socials, className, fullHeight }: HeroPr
             {heroSocials.map((s) => {
               const Icon = SOCIAL_ICONS[s.platform];
               return (
-                <motion.li key={s.id} variants={socialItem}>
+                <motion.li key={s.id} {...ed(T.item('socials', s.id), 'item')} variants={socialItem}>
                   <a
                     {...linkProps(s.url!)}
                     aria-label={`${s.label}${isExternal(s.url!) ? ' (opens in new tab)' : ''}`}
-                    className="inline-flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.02] text-ink-2 transition-[color,border-color,background-color,translate] duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent-wash hover:text-ink"
+                    className={applyStyle(socialClass, s.style, [
+                      { key: 'emphasis', tokens: 'border-white/15 bg-white/[0.02]' },
+                    ])}
                   >
                     <Icon size={18} aria-hidden="true" />
                   </a>
@@ -218,6 +256,7 @@ export default function Hero({ profile, socials, className, fullHeight }: HeroPr
           />
           {hero.image && !imageFailed ? (
             <img
+              {...ed(T.profile('hero.image'), 'image')}
               src={hero.image}
               alt={hero.imageAlt}
               width={768}
@@ -228,7 +267,11 @@ export default function Hero({ profile, socials, className, fullHeight }: HeroPr
               className="relative z-10 size-full rounded-blob bg-surface object-cover object-[center_18%] shadow-[0_24px_48px_-16px_rgb(2_8_16/0.8)] transition-[scale] duration-500 group-hover:scale-[1.02]"
             />
           ) : (
-            <Monogram text={fullName} className="relative z-10 size-full rounded-blob text-5xl" />
+            <Monogram
+              text={fullName}
+              className="relative z-10 size-full rounded-blob text-5xl"
+              attrs={ed(T.profile('hero.image'), 'image')}
+            />
           )}
         </div>
       </motion.figure>

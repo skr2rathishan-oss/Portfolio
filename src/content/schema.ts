@@ -88,7 +88,7 @@ export const StylePresetsSchema = z.object({
   titleSize: styleEnum('titleSize'),
   titleColor: styleEnum('titleColor'),
   emphasis: styleEnum('emphasis'),
-}) satisfies z.ZodType<StylePresets>;
+}).strict() satisfies z.ZodType<StylePresets>;
 
 // ── Sections ─────────────────────────────────────────────────
 export const SiteSettingsSchema = z.object({

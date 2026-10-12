@@ -35,9 +35,21 @@ export function initials(text: string): string {
 }
 
 /** Lettermark used when an image is missing or fails to load. */
-export function Monogram({ text, className, accent }: { text: string; className?: string; accent?: string }) {
+export function Monogram({
+  text,
+  className,
+  accent,
+  attrs,
+}: {
+  text: string;
+  className?: string;
+  accent?: string;
+  /** Edit-target attributes (visual editor only; undefined on the public site). */
+  attrs?: Record<string, string>;
+}) {
   return (
     <span
+      {...attrs}
       aria-hidden="true"
       className={cx(
         'flex items-center justify-center font-semibold tracking-tight select-none bg-raised text-ink-2',
@@ -61,6 +73,7 @@ export function MediaImage({
   loading = 'lazy',
   width,
   height,
+  attrs,
 }: {
   src?: string;
   alt: string;
@@ -71,13 +84,15 @@ export function MediaImage({
   loading?: 'lazy' | 'eager';
   width?: number;
   height?: number;
+  /** Edit-target attributes spread on the wrapper (visual editor only). */
+  attrs?: Record<string, string>;
 }) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) {
-    return <Monogram text={fallbackText} accent={accent} className={className} />;
+    return <Monogram text={fallbackText} accent={accent} className={className} attrs={attrs} />;
   }
   return (
-    <span className={cx('block overflow-hidden', className)}>
+    <span {...attrs} className={cx('block overflow-hidden', className)}>
       <img
         src={src}
         alt={alt}

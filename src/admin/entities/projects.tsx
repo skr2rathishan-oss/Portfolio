@@ -8,14 +8,14 @@ import { ImageField } from '../fields/MediaField';
 import { TechPicker } from '../fields/TechPicker';
 import { Badge } from '../ui/primitives';
 
-function ProjectForm({ value: p, set, errors, doc, extras }: FormProps<Project>) {
+function ProjectForm({ embedded, value: p, set, errors, doc, extras }: FormProps<Project>) {
   const categories = [...doc.projectCategories].sort((a, b) => a.order - b.order);
   const technologies = [...doc.technologies].sort((a, b) => a.name.localeCompare(b.name));
   return (
     <>
-      <TextField label="Title" required value={p.title} onChange={(v) => set('title', v)} error={errors.title} maxLength={LIMITS.title} autoFocus />
-      <TextArea label="Description" required value={p.summary} onChange={(v) => set('summary', v)} error={errors.summary} maxLength={LIMITS.summary} rows={4} hint="One or two sentences: what it does and how it is built." />
-      <ImageField
+      <TextField name="title" label="Title" required value={p.title} onChange={(v) => set('title', v)} error={errors.title} maxLength={LIMITS.title} autoFocus={!embedded} />
+      <TextArea name="summary" label="Description" required value={p.summary} onChange={(v) => set('summary', v)} error={errors.summary} maxLength={LIMITS.summary} rows={4} hint="One or two sentences: what it does and how it is built." />
+      <ImageField name="image"
         label="Image"
         required
         value={p.image || undefined}
@@ -25,12 +25,12 @@ function ProjectForm({ value: p, set, errors, doc, extras }: FormProps<Project>)
         alt={{ value: p.imageAlt, onChange: (v) => set('imageAlt', v), error: errors.imageAlt }}
       />
       <div className="grid gap-4 sm:grid-cols-2">
-        <UrlField label="GitHub / source link" value={p.sourceUrl} onChange={(v) => set('sourceUrl', v)} error={errors.sourceUrl} placeholder="https://github.com/…" />
-        <UrlField label="Demo link" value={p.demoUrl} onChange={(v) => set('demoUrl', v)} error={errors.demoUrl} />
-        <TextField label="Demo button label" value={p.demoLabel} onChange={(v) => set('demoLabel', v)} error={errors.demoLabel} placeholder="Live demo" maxLength={LIMITS.short} hint="e.g. “Video demo” for a recording." />
-        <MonthField label="Date" value={p.date} onChange={(v) => set('date', v)} error={errors.date} />
+        <UrlField name="sourceUrl" label="GitHub / source link" value={p.sourceUrl} onChange={(v) => set('sourceUrl', v)} error={errors.sourceUrl} placeholder="https://github.com/…" />
+        <UrlField name="demoUrl" label="Demo link" value={p.demoUrl} onChange={(v) => set('demoUrl', v)} error={errors.demoUrl} />
+        <TextField name="demoLabel" label="Demo button label" value={p.demoLabel} onChange={(v) => set('demoLabel', v)} error={errors.demoLabel} placeholder="Live demo" maxLength={LIMITS.short} hint="e.g. “Video demo” for a recording." />
+        <MonthField name="date" label="Date" value={p.date} onChange={(v) => set('date', v)} error={errors.date} />
       </div>
-      <TechPicker
+      <TechPicker name="stack"
         label="Tech stack"
         value={p.stack}
         onChange={(v) => set('stack', v)}
@@ -39,7 +39,7 @@ function ProjectForm({ value: p, set, errors, doc, extras }: FormProps<Project>)
         error={errors.stack ?? Object.entries(errors).find(([k]) => k.startsWith('stack.'))?.[1]}
       />
       {categories.length > 0 && (
-        <CheckboxGroup
+        <CheckboxGroup name="categoryIds"
           label="Categories"
           options={categories.map((c) => ({ value: c.id, label: c.label, muted: !c.visible }))}
           value={p.categoryIds}
@@ -48,10 +48,10 @@ function ProjectForm({ value: p, set, errors, doc, extras }: FormProps<Project>)
           hint="Used by the category filter on the Projects page."
         />
       )}
-      <ListEditor label="Highlights" value={p.highlights ?? []} onChange={(v) => set('highlights', v)} itemLabel="Highlight" error={errors.highlights ?? Object.entries(errors).find(([k]) => k.startsWith('highlights.'))?.[1]} hint="Optional short bullet points." />
+      <ListEditor name="highlights" label="Highlights" value={p.highlights ?? []} onChange={(v) => set('highlights', v)} itemLabel="Highlight" error={errors.highlights ?? Object.entries(errors).find(([k]) => k.startsWith('highlights.'))?.[1]} hint="Optional short bullet points." />
       <div className="grid gap-3 sm:grid-cols-2">
-        <Toggle label="Featured" hint="Shown first and on the home page." checked={p.featured} onChange={(v) => set('featured', v)} />
-        <Toggle label="Visible on site" checked={p.visible} onChange={(v) => set('visible', v)} />
+        <Toggle name="featured" label="Featured" hint="Shown first and on the home page." checked={p.featured} onChange={(v) => set('featured', v)} />
+        <Toggle name="visible" label="Visible on site" checked={p.visible} onChange={(v) => set('visible', v)} />
       </div>
     </>
   );

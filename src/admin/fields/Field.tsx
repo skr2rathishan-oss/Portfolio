@@ -17,6 +17,8 @@ const invalidClass = 'border-[#ff6b6b]/70 hover:border-[#ff6b6b]';
 
 interface FieldShellProps {
   label: string;
+  /** Form field name; rendered as `data-field` so the visual editor can focus it. */
+  name?: string;
   required?: boolean;
   hint?: ReactNode;
   error?: string;
@@ -27,7 +29,7 @@ interface FieldShellProps {
   group?: boolean;
 }
 
-export function FieldShell({ label, required, hint, error, counter, children, className, group }: FieldShellProps) {
+export function FieldShell({ name, label, required, hint, error, counter, children, className, group }: FieldShellProps) {
   const id = useId();
   const hintId = `${id}-hint`;
   const errId = `${id}-err`;
@@ -70,14 +72,14 @@ export function FieldShell({ label, required, hint, error, counter, children, cl
   );
   if (group) {
     return (
-      <fieldset className={cx('min-w-0', className)}>
+      <fieldset className={cx('min-w-0', className)} data-field={name}>
         <legend className="mb-1.5 w-full">{labelEl}</legend>
         {body}
       </fieldset>
     );
   }
   return (
-    <div className={cx('min-w-0', className)}>
+    <div className={cx('min-w-0', className)} data-field={name}>
       <label htmlFor={id} className="mb-1.5 block">
         {labelEl}
       </label>
@@ -88,6 +90,7 @@ export function FieldShell({ label, required, hint, error, counter, children, cl
 
 interface TextProps {
   label: string;
+  name?: string;
   value: string | undefined;
   onChange: (value: string) => void;
   required?: boolean;
@@ -101,10 +104,11 @@ interface TextProps {
   inputMode?: 'text' | 'url' | 'email';
 }
 
-export function TextField({ label, value, onChange, required, hint, error, placeholder, maxLength, type = 'text', className, autoFocus, inputMode }: TextProps) {
+export function TextField({ name, label, value, onChange, required, hint, error, placeholder, maxLength, type = 'text', className, autoFocus, inputMode }: TextProps) {
   const v = value ?? '';
   return (
     <FieldShell
+      name={name}
       label={label}
       required={required}
       hint={hint}
@@ -141,6 +145,7 @@ export function UrlField(props: Omit<TextProps, 'type'> & { allowMailto?: boolea
 }
 
 export function TextArea({
+  name,
   label,
   value,
   onChange,
@@ -155,6 +160,7 @@ export function TextArea({
   const v = value ?? '';
   return (
     <FieldShell
+      name={name}
       label={label}
       required={required}
       hint={hint}
@@ -180,6 +186,7 @@ export function TextArea({
 }
 
 export function SelectField<T extends string>({
+  name,
   label,
   value,
   onChange,
@@ -191,6 +198,7 @@ export function SelectField<T extends string>({
   placeholder,
 }: {
   label: string;
+  name?: string;
   value: T | undefined;
   onChange: (value: T | undefined) => void;
   options: { value: T; label: string }[];
@@ -202,7 +210,7 @@ export function SelectField<T extends string>({
   placeholder?: string;
 }) {
   return (
-    <FieldShell label={label} required={required} hint={hint} error={error} className={className}>
+    <FieldShell name={name} label={label} required={required} hint={hint} error={error} className={className}>
       {({ id, describedBy, invalid }) => (
         <select
           id={id}
@@ -226,6 +234,7 @@ export function SelectField<T extends string>({
 }
 
 export function Toggle({
+  name,
   label,
   checked,
   onChange,
@@ -233,6 +242,7 @@ export function Toggle({
   className,
 }: {
   label: string;
+  name?: string;
   checked: boolean;
   onChange: (value: boolean) => void;
   hint?: string;
@@ -240,7 +250,7 @@ export function Toggle({
 }) {
   const id = useId();
   return (
-    <div className={cx('flex items-start justify-between gap-4 rounded-lg border border-[#1b3550] bg-[#0a1a2b]/60 px-3 py-2.5', className)}>
+    <div data-field={name} className={cx('flex items-start justify-between gap-4 rounded-lg border border-[#1b3550] bg-[#0a1a2b]/60 px-3 py-2.5', className)}>
       <div className="min-w-0">
         <label htmlFor={id} className="text-[13px] font-medium text-[#cfdbe6] cursor-pointer">
           {label}
@@ -280,6 +290,7 @@ const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 
 /** "YYYY" | "YYYY-MM" editor (+ optional "Present"). */
 export function MonthField({
+  name,
   label,
   value,
   onChange,
@@ -290,6 +301,7 @@ export function MonthField({
   className,
 }: {
   label: string;
+  name?: string;
   value: string | undefined;
   onChange: (value: string | undefined) => void;
   required?: boolean;
@@ -305,7 +317,7 @@ export function MonthField({
   const thisYear = new Date().getFullYear();
   const set = (y: string, mo: string) => onChange(y ? (mo ? `${y}-${mo}` : y) : undefined);
   return (
-    <FieldShell label={label} required={required} hint={hint} error={error} className={className} group>
+    <FieldShell name={name} label={label} required={required} hint={hint} error={error} className={className} group>
       {({ id, describedBy, invalid }) => (
         <div className="flex flex-wrap items-center gap-2">
           <label htmlFor={`${id}-y`} className="sr-only">
@@ -365,6 +377,7 @@ export function MonthField({
 }
 
 export function ColorField({
+  name,
   label,
   value,
   onChange,
@@ -373,6 +386,7 @@ export function ColorField({
   className,
 }: {
   label: string;
+  name?: string;
   value: string | undefined;
   onChange: (value: string | undefined) => void;
   hint?: ReactNode;
@@ -380,7 +394,7 @@ export function ColorField({
   className?: string;
 }) {
   return (
-    <FieldShell label={label} hint={hint ?? 'Optional accent colour'} error={error} className={className}>
+    <FieldShell name={name} label={label} hint={hint ?? 'Optional accent colour'} error={error} className={className}>
       {({ id, describedBy, invalid }) => (
         <div className="flex items-center gap-2">
           <input
@@ -412,6 +426,7 @@ export function ColorField({
 
 /** Chips with free text entry (Enter or comma adds). */
 export function TagInput({
+  name,
   label,
   value,
   onChange,
@@ -423,6 +438,7 @@ export function TagInput({
   className,
 }: {
   label: string;
+  name?: string;
   value: string[];
   onChange: (value: string[]) => void;
   hint?: ReactNode;
@@ -445,7 +461,7 @@ export function TagInput({
     setDraft('');
   };
   return (
-    <FieldShell label={label} hint={hint ?? `Press Enter or comma to add (${value.length} of ${max})`} error={error} className={className}>
+    <FieldShell name={name} label={label} hint={hint ?? `Press Enter or comma to add (${value.length} of ${max})`} error={error} className={className}>
       {({ id, describedBy, invalid }) => (
         <div className={cx(inputClass, 'flex flex-wrap items-center gap-1.5 px-2 py-1.5 focus-within:border-[#00abf0] focus-within:ring-2 focus-within:ring-[#00abf0]/30', invalid && invalidClass)}>
           <ul className="contents" aria-label={`${label} list`}>
@@ -500,6 +516,7 @@ export function TagInput({
 
 /** Ordered list of short strings (e.g. highlights) with add / remove / move. */
 export function ListEditor({
+  name,
   label,
   value,
   onChange,
@@ -511,6 +528,7 @@ export function ListEditor({
   className,
 }: {
   label: string;
+  name?: string;
   value: string[];
   onChange: (value: string[]) => void;
   hint?: ReactNode;
@@ -526,7 +544,7 @@ export function ListEditor({
     onChange(next);
   };
   return (
-    <FieldShell label={label} hint={hint} error={error} className={className} group>
+    <FieldShell name={name} label={label} hint={hint} error={error} className={className} group>
       {() => (
         <div className="space-y-2">
           {value.map((item, i) => (
@@ -565,6 +583,7 @@ export function ListEditor({
 }
 
 export function IconSelect({
+  name,
   label,
   value,
   onChange,
@@ -572,13 +591,14 @@ export function IconSelect({
   className,
 }: {
   label: string;
+  name?: string;
   value: IconName;
   onChange: (value: IconName) => void;
   error?: string;
   className?: string;
 }) {
   return (
-    <FieldShell label={label} error={error} className={className} group>
+    <FieldShell name={name} label={label} error={error} className={className} group>
       {() => (
         <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-1.5">
           {ICON_NAMES.map((name) => {
@@ -610,6 +630,7 @@ export function IconSelect({
 }
 
 export function CheckboxGroup({
+  name,
   label,
   options,
   value,
@@ -619,6 +640,7 @@ export function CheckboxGroup({
   className,
 }: {
   label: string;
+  name?: string;
   options: { value: string; label: string; muted?: boolean }[];
   value: string[];
   onChange: (value: string[]) => void;
@@ -627,7 +649,7 @@ export function CheckboxGroup({
   className?: string;
 }) {
   return (
-    <FieldShell label={label} hint={hint} error={error} className={className} group>
+    <FieldShell name={name} label={label} hint={hint} error={error} className={className} group>
       {() => (
         <div className="flex flex-wrap gap-2">
           {options.map((o) => {

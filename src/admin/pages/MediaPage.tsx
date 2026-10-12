@@ -71,7 +71,7 @@ export function MediaPage() {
     <>
       <PageHeader
         title="Media"
-        description="Every image and PDF you have uploaded. Files still used by your content are marked “In use”."
+        description="Every image and PDF you have uploaded. Files used by the live site or your draft are marked “In use”. Unused uploads (for example from a discarded draft) are never deleted automatically."
         actions={
           <>
             <Button variant="ghost" icon={<RefreshCw size={15} aria-hidden="true" />} onClick={() => void load()}>
@@ -153,7 +153,7 @@ export function MediaPage() {
           title="Delete this file?"
           message={
             deleting.referenced
-              ? 'This file is still used by your content. Deleting it will leave a broken image or link until you replace it there.'
+              ? 'This file is used by the live site or your draft. Deleting it will leave a broken image or link until you replace it there.'
               : 'This file is not used anywhere. Deleting it cannot be undone.'
           }
           confirmLabel={deleting.referenced ? 'Delete anyway' : 'Delete'}

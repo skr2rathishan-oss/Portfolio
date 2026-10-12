@@ -1,6 +1,8 @@
 import { ExternalLink, Github, PlayCircle } from 'lucide-react';
 import type { ID, Project, Technology } from '../../content/types';
 import { formatDate } from '../../content/selectors';
+import { T, useEd } from '../../content/editable';
+import { applyStyle, cardRules } from '../sections/sectionStyle';
 import { cx, linkProps, MediaImage, NewTabHint } from './shared';
 
 export interface ProjectCardProps {
@@ -38,11 +40,19 @@ export default function ProjectCard({
   const isVideo = !!project.demoUrl && (/video/i.test(project.demoLabel ?? '') || /drive\.google|youtu|loom|vimeo/i.test(project.demoUrl));
   const demoLabel = project.demoLabel?.trim() || (isVideo ? 'Watch demo' : 'Live demo');
   const date = formatDate(project.date);
+  const ed = useEd();
+  const { style } = project;
+  const f = (name: string) => T.field('projects', project.id, name);
 
   return (
     <article
+      {...ed(T.item('projects', project.id), 'item')}
       className={cx(
-        'group relative flex flex-col rounded-card bg-surface border border-line overflow-hidden transition-colors duration-150 hover:border-white/20',
+        applyStyle(
+          'group relative flex flex-col rounded-card bg-surface border border-line overflow-hidden transition-colors duration-150 hover:border-white/20',
+          style,
+          cardRules({ background: 'bg-surface', border: 'border border-line', radius: 'rounded-card' }),
+        ),
         featured && 'md:grid md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-stretch',
         variant === 'carousel' ? 'w-[84vw] max-w-[340px] flex-shrink-0 snap-center' : 'w-full h-full',
         className,
@@ -56,11 +66,19 @@ export default function ProjectCard({
         width={1200}
         height={750}
         className={cx(
-          'relative w-full aspect-[16/10] bg-navy text-3xl border-b border-line',
+          featured
+            ? 'relative w-full aspect-[16/10] bg-navy text-3xl border-b border-line'
+            : applyStyle('relative w-full aspect-[16/10] bg-navy text-3xl border-b border-line', style, [
+                { key: 'imageAspect', tokens: 'aspect-[16/10]' },
+              ]),
           featured && 'md:aspect-auto md:h-full md:min-h-[18rem] md:border-b-0',
           featured && (reverse ? 'md:order-2 md:border-l' : 'md:border-r'),
         )}
-        imgClassName="object-cover object-top"
+        imgClassName={applyStyle('object-cover object-top', style, [
+          { key: 'imageFit', tokens: 'object-cover' },
+          { key: 'imagePosition', tokens: 'object-top' },
+        ])}
+        attrs={ed(f('image'), 'image')}
       />
 
       <div className={cx('flex flex-1 flex-col p-5', featured && 'md:p-7 lg:p-8')}>
@@ -75,14 +93,28 @@ export default function ProjectCard({
           </p>
         )}
 
-        <h3 className={cx('text-h3 text-ink text-pretty', featured && 'md:text-h2')}>{project.title}</h3>
+        <h3
+          {...ed(f('title'), 'text')}
+          className={cx(
+            applyStyle('text-h3 text-ink text-pretty', style, [
+              { key: 'titleSize', tokens: 'text-h3' },
+              { key: 'titleColor', tokens: 'text-ink' },
+            ]),
+            featured && (!style?.titleSize || style.titleSize === 'md') && 'md:text-h2',
+          )}
+        >
+          {project.title}
+        </h3>
 
-        <p className={cx('mt-2 text-[0.9375rem] leading-relaxed text-ink-2', !featured && 'line-clamp-4')}>
+        <p
+          {...ed(f('summary'), 'text')}
+          className={cx('mt-2 text-[0.9375rem] leading-relaxed text-ink-2', !featured && 'line-clamp-4')}
+        >
           {project.summary}
         </p>
 
         {project.highlights && project.highlights.length > 0 && (
-          <ul className="mt-3 space-y-1.5 text-sm text-ink-2">
+          <ul {...ed(f('highlights'), 'field')} className="mt-3 space-y-1.5 text-sm text-ink-2">
             {project.highlights.map((h) => (
               <li key={h} className="flex gap-2">
                 <span aria-hidden="true" className="mt-[0.6em] h-1 w-1 flex-shrink-0 rounded-full bg-accent" />
@@ -93,7 +125,7 @@ export default function ProjectCard({
         )}
 
         {shownStack.length > 0 && (
-          <ul aria-label="Tech stack" className="mt-4 flex flex-wrap gap-1.5">
+          <ul {...ed(f('stack'), 'field')} aria-label="Tech stack" className="mt-4 flex flex-wrap gap-1.5">
             {shownStack.map(({ techId, level, tech }) => (
               <li
                 key={techId}
@@ -119,6 +151,7 @@ export default function ProjectCard({
           <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
             {project.demoUrl && (
               <a
+                {...ed(f('demoUrl'), 'link')}
                 {...linkProps(project.demoUrl)}
                 className="inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover active:translate-y-px"
               >
@@ -130,6 +163,7 @@ export default function ProjectCard({
             )}
             {project.sourceUrl && (
               <a
+                {...ed(f('sourceUrl'), 'link')}
                 {...linkProps(project.sourceUrl)}
                 className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink-2 underline-offset-4 transition-colors hover:text-ink hover:underline"
               >

@@ -70,13 +70,17 @@ function Progress({ value, onCancel }: { value: number; onCancel: () => void }) 
 export function MediaLibraryDialog({
   purpose,
   onPick,
+  onPickMany,
   onClose,
 }: {
   purpose: 'image' | 'document';
   onPick: (url: string) => void;
+  /** Multi-select mode: checkboxes plus an "Add N" button (gallery). */
+  onPickMany?: (urls: string[]) => void;
   onClose: () => void;
 }) {
   const [items, setItems] = useState<api.MediaItem[] | null>(null);
+  const [picked, setPicked] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     api
@@ -85,7 +89,23 @@ export function MediaLibraryDialog({
       .catch((e: Error) => setError(e.message));
   }, [purpose]);
   return (
-    <Modal title={purpose === 'image' ? 'Choose an uploaded image' : 'Choose an uploaded PDF'} onClose={onClose} size="lg">
+    <Modal
+      title={onPickMany ? 'Choose uploaded images' : purpose === 'image' ? 'Choose an uploaded image' : 'Choose an uploaded PDF'}
+      onClose={onClose}
+      size="lg"
+      footer={
+        onPickMany ? (
+          <>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button variant="primary" disabled={picked.length === 0} onClick={() => onPickMany(picked)}>
+              {picked.length ? `Add ${picked.length} image${picked.length === 1 ? '' : 's'}` : 'Add images'}
+            </Button>
+          </>
+        ) : undefined
+      }
+    >
       {error && <p className="text-sm text-[#ff8a8a]">{error}</p>}
       {!items && !error && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -101,8 +121,17 @@ export function MediaLibraryDialog({
             <li key={m.key}>
               <button
                 type="button"
-                onClick={() => onPick(m.url)}
-                className={cx('group block w-full overflow-hidden rounded-xl border border-[#27496b] bg-[#0a1a2b] text-left hover:border-[#00abf0]', focusRing)}
+                onClick={() =>
+                  onPickMany
+                    ? setPicked((list) => (list.includes(m.url) ? list.filter((u) => u !== m.url) : [...list, m.url]))
+                    : onPick(m.url)
+                }
+                aria-pressed={onPickMany ? picked.includes(m.url) : undefined}
+                className={cx(
+                  'group block w-full overflow-hidden rounded-xl border bg-[#0a1a2b] text-left hover:border-[#00abf0]',
+                  onPickMany && picked.includes(m.url) ? 'border-[#00abf0] ring-2 ring-[#00abf0]/40' : 'border-[#27496b]',
+                  focusRing,
+                )}
               >
                 {m.purpose === 'image' ? (
                   <img src={m.url} alt="" loading="lazy" className="aspect-square w-full object-cover" />
@@ -122,6 +151,7 @@ export function MediaLibraryDialog({
 }
 
 export function ImageField({
+  name,
   label,
   value,
   onChange,
@@ -134,6 +164,7 @@ export function ImageField({
   className,
 }: {
   label: string;
+  name?: string;
   value: string | undefined;
   onChange: (url: string | undefined) => void;
   required?: boolean;
@@ -166,7 +197,7 @@ export function ImageField({
 
   return (
     <div className={cx('space-y-3', className)}>
-      <FieldShell label={label} required={required} error={(required && !value && error ? 'Add an image' : error) ?? up.error ?? undefined} hint={hint ?? `Drop, choose or paste a link. Images are resized to ${maxDim}px and converted to WebP.`} group>
+      <FieldShell name={name} label={label} required={required} error={(required && !value && error ? 'Add an image' : error) ?? up.error ?? undefined} hint={hint ?? `Drop, choose or paste a link. Images are resized to ${maxDim}px and converted to WebP.`} group>
         {({ id, describedBy }) => (
           <div className="space-y-2">
             <input
@@ -282,6 +313,7 @@ export function ImageField({
 }
 
 export function FileField({
+  name,
   label,
   value,
   onChange,
@@ -291,6 +323,7 @@ export function FileField({
   className,
 }: {
   label: string;
+  name?: string;
   value: string | undefined;
   onChange: (url: string | undefined) => void;
   /** Called instead of onChange after an upload, with the original file name. */
@@ -307,7 +340,7 @@ export function FileField({
     else onChange(r.url);
   });
   return (
-    <FieldShell label={label} error={error ?? up.error ?? undefined} hint={hint ?? 'PDF, up to 4 MB.'} className={className} group>
+    <FieldShell name={name} label={label} error={error ?? up.error ?? undefined} hint={hint ?? 'PDF, up to 4 MB.'} className={className} group>
       {({ id, describedBy }) => (
         <div className="space-y-2">
           <input

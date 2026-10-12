@@ -2,11 +2,12 @@
 //   POST   /api/admin/upload          multipart: file, purpose=image|document
 //                                     -> 201 { key, url, contentType, size, width?, height? } | 413 | 415
 //   GET    /api/admin/media           -> [{ key, url, contentType, size, purpose, originalName, uploadedAt, width?, height?, referenced }]
-//   DELETE /api/admin/media/<key>     -> 204 | 409 when referenced by the content (unless ?force=1)
+//   DELETE /api/admin/media/<key>     -> 204 | 409 when referenced by the published content or the draft (unless ?force=1)
 import { createHash } from 'node:crypto';
 import type { Config } from '@netlify/functions';
 import { requireSession } from '../lib/auth';
 import { loadContent, referencedMediaKeys } from '../lib/content';
+import { loadDraft } from '../lib/draft';
 import { adminJson, assertSameOrigin, handle, HttpError, methodNotAllowed, noContent, notFound } from '../lib/http';
 import {
   MAX_UPLOAD_BYTES,
@@ -87,13 +88,19 @@ async function upload(req: Request, context: FnContext): Promise<Response> {
   );
 }
 
+/** Media keys used by the published document or the draft (a draft-only upload is "in use" too). */
+async function referencedKeys(context: FnContext): Promise<Set<string>> {
+  const store = openStore('content', context);
+  const published = await loadContent(store);
+  const { draft } = await loadDraft(store, published);
+  const keys = referencedMediaKeys(published.envelope.content);
+  for (const key of referencedMediaKeys(draft.content)) keys.add(key);
+  return keys;
+}
+
 async function list(context: FnContext): Promise<Response> {
   const store = openStore('media', context);
-  const [{ blobs }, { envelope }] = await Promise.all([
-    store.list({ prefix: 'uploads/' }),
-    loadContent(openStore('content', context)),
-  ]);
-  const referenced = referencedMediaKeys(envelope.content);
+  const [{ blobs }, referenced] = await Promise.all([store.list({ prefix: 'uploads/' }), referencedKeys(context)]);
   const items = await Promise.all(
     blobs
       .filter((b) => MEDIA_KEY_RE.test(b.key))
@@ -121,8 +128,7 @@ async function remove(req: Request, context: FnContext, key: string): Promise<Re
   if (!MEDIA_KEY_RE.test(key)) return notFound('Media not found');
   const force = new URL(req.url).searchParams.get('force') === '1';
   if (!force) {
-    const { envelope } = await loadContent(openStore('content', context));
-    if (referencedMediaKeys(envelope.content).has(key)) {
+    if ((await referencedKeys(context)).has(key)) {
       throw new HttpError(409, 'in_use', 'This file is still used by your content. Remove it there first or force delete.');
     }
   }

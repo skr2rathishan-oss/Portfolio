@@ -1,5 +1,5 @@
 // Draft editing for single objects (profile.hero, profile.about, site, …):
-// edit locally, then Save publishes in one change. A sticky bar shows unsaved state.
+// edit locally, then Save writes it to the shared draft in one change. A sticky bar shows unsaved state.
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { z } from 'zod';
@@ -87,14 +87,14 @@ export function SaveBar({ dirty, saving, onSave, onDiscard, errorCount }: { dirt
         ) : dirty ? (
           'You have unsaved changes.'
         ) : (
-          'All changes are live.'
+          'All changes are saved to your draft.'
         )}
       </p>
       <Button variant="ghost" onClick={onDiscard} disabled={!dirty || saving}>
         Discard
       </Button>
       <Button variant="primary" onClick={onSave} disabled={!dirty} busy={saving}>
-        Save and publish
+        Save to draft
       </Button>
     </div>
   );

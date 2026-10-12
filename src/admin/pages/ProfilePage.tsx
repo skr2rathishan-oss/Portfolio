@@ -39,7 +39,7 @@ function HeroTab() {
     source,
     HeroDraftSchema,
     (v) => setProfile((p) => ({ ...p, fullName: v.fullName, hero: v.hero })),
-    'Hero published',
+    'Hero saved to draft',
     'profile.',
   );
   const h = draft.hero;
@@ -147,7 +147,7 @@ function AboutTab() {
     doc.profile.about,
     ProfileSchema.shape.about,
     (v) => setProfile((p) => ({ ...p, about: v })),
-    'About published',
+    'About saved to draft',
     'profile.about.',
   );
   const rowError = (prefix: string, i: number, field: string) => errors[`${prefix}.${i}.${field}`];
@@ -227,7 +227,7 @@ function ContactTab() {
     doc.profile.contact,
     ProfileSchema.shape.contact,
     (v) => setProfile((p) => ({ ...p, contact: v })),
-    'Contact page published',
+    'Contact page saved to draft',
     'profile.contact.',
   );
   return (

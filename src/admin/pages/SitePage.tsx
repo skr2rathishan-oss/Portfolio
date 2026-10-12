@@ -15,7 +15,7 @@ export function SitePage() {
     doc.site,
     SiteSettingsSchema,
     (v) => setSite(() => v),
-    'Site settings published',
+    'Site settings saved to draft',
     'site.',
   );
 
@@ -73,7 +73,7 @@ export function SitePage() {
           heading={
             <div>
               <h2 className="text-lg font-semibold text-white">Project categories</h2>
-              <p className="text-sm text-[#8ea6bd]">Filters on the Projects page. Deleting one removes it from every project. These save immediately.</p>
+              <p className="text-sm text-[#8ea6bd]">Filters on the Projects page. Deleting one removes it from every project. These save to your draft immediately.</p>
             </div>
           }
         />

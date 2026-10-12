@@ -2,7 +2,8 @@
 //
 // Store layout (portfolio-content[-preview|-dev]):
 //   content                                    -> ContentEnvelope { rev, updatedAt, content }
-//   revisions/<rev:8>_<updatedAtMs>_<bytes>    -> ContentEnvelope snapshot written by every save (newest 30 kept)
+//   revisions/<rev:8>_<updatedAtMs>_<bytes>    -> ContentEnvelope snapshot written by every publish (newest 30 kept)
+//   draft, draft-backups/*                      -> the private working copy (see draft.ts)
 import { createHash } from 'node:crypto';
 import seedJson from '../../src/content/seed.json';
 import { validateContent, type ValidationIssue } from '../../src/content/schema';
@@ -103,6 +104,24 @@ export async function loadRevision(store: BlobStore, id: string): Promise<Conten
 }
 
 /**
+ * Compare-and-set write: `isNew` -> only when the key does not exist yet; otherwise only when the
+ * stored Blobs etag still equals `blobEtag`. Returns false when the write lost a race.
+ * (The local `netlify dev` blobs server returns no etag on reads; there callers rely on their own
+ * revision check, as before.)
+ */
+export async function casSetJSON(
+  store: BlobStore,
+  key: string,
+  value: unknown,
+  isNew: boolean,
+  blobEtag: string | undefined,
+): Promise<boolean> {
+  const options = isNew ? { onlyIfNew: true as const } : blobEtag ? { onlyIfMatch: blobEtag } : {};
+  const result = await store.setJSON(key, value, options);
+  return result.modified;
+}
+
+/**
  * Atomically replaces the content document when `expectedRev` matches the stored revision.
  * Throws 412 (with the current rev) on a mismatch or a lost race. Records a revision snapshot.
  */
@@ -121,16 +140,7 @@ export async function writeContent(
   const now = new Date();
   const updatedAt = now.toISOString();
   const envelope: ContentEnvelope = { rev: currentRev + 1, updatedAt, content: { ...content, updatedAt } };
-  // Compare-and-set on the Blobs etag. (The local `netlify dev` blobs server returns no etag on
-  // reads; there we fall back to the revision check above.)
-  const options =
-    current.source === 'seed'
-      ? { onlyIfNew: true as const }
-      : current.blobEtag
-        ? { onlyIfMatch: current.blobEtag }
-        : {};
-  const result = await store.setJSON(CONTENT_KEY, envelope, options);
-  if (!result.modified) {
+  if (!(await casSetJSON(store, CONTENT_KEY, envelope, current.source === 'seed', current.blobEtag))) {
     throw new HttpError(412, 'stale_revision', 'The content changed while saving', { currentRev: currentRev + 1 });
   }
 

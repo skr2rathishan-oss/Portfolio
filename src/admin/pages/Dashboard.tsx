@@ -1,7 +1,7 @@
-import { AlertTriangle, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, ArrowRight, CheckCircle2, MousePointerClick } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Content } from '../../content/types';
-import { NAV } from '../shell/Layout';
+import { NAV, PublishControls } from '../shell/Layout';
 import { useAdminContent, useDoc } from '../state/AdminContentContext';
 import { cx, focusRing, PageHeader, Panel } from '../ui/primitives';
 
@@ -29,7 +29,7 @@ const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', tim
 
 export function Dashboard() {
   const doc = useDoc();
-  const { rev, source, updatedAt } = useAdminContent();
+  const { publishedRev, publishedUpdatedAt, updatedAt, hasUnpublishedChanges } = useAdminContent();
   const checks = contentChecks(doc);
   const sections = NAV.filter((n) => n.count);
   const hiddenCount = (
@@ -40,17 +40,47 @@ export function Dashboard() {
     <>
       <PageHeader
         title={`Hi, ${doc.profile.fullName.split(' ')[0] || 'there'}`}
-        description="Edit any section from the menu. Every save is published to the live site straight away."
+        description="Edit in the visual editor or any section from the menu. Changes save to your private draft; visitors see them after you publish."
       />
+
+      <section
+        aria-labelledby="publish-status-title"
+        className={cx(
+          'mb-4 flex flex-wrap items-center gap-4 rounded-2xl border p-5',
+          hasUnpublishedChanges ? 'border-[#f5b544]/40 bg-[#f5b544]/[0.06]' : 'border-[#1b3550] bg-[#0b1c2e]',
+        )}
+      >
+        <div className="min-w-0 flex-1">
+          <h2 id="publish-status-title" className="text-base font-semibold text-white">
+            {hasUnpublishedChanges ? 'Your draft has unpublished changes' : 'The live site is up to date'}
+          </h2>
+          <p className="mt-1 text-sm text-[#8ea6bd]">
+            {hasUnpublishedChanges
+              ? `Draft saved ${updatedAt ? dateFormat.format(new Date(updatedAt)) : 'recently'}. Publish to show it to visitors, or discard it to go back to the live version.`
+              : 'Your draft matches what visitors see.'}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/admin/editor"
+            className={cx('inline-flex h-8 items-center gap-1.5 rounded-lg border border-[#27496b] bg-[#11263d] px-3 text-[13px] text-[#e8f0f7] hover:border-[#3a6690]', focusRing)}
+          >
+            <MousePointerClick size={14} aria-hidden="true" /> Open visual editor
+          </Link>
+          <PublishControls showStatus={false} />
+        </div>
+      </section>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-[#1b3550] bg-[#0b1c2e] p-5">
           <p className="text-sm text-[#8ea6bd]">Live content</p>
-          <p className="mt-1 text-lg font-semibold text-white">{source === 'seed' ? 'Built-in content' : `Revision ${rev}`}</p>
+          <p className="mt-1 text-lg font-semibold text-white">{publishedRev === 0 ? 'Built-in content' : `Revision ${publishedRev}`}</p>
         </div>
         <div className="rounded-2xl border border-[#1b3550] bg-[#0b1c2e] p-5">
           <p className="text-sm text-[#8ea6bd]">Last published</p>
-          <p className="mt-1 text-lg font-semibold text-white">{updatedAt ? dateFormat.format(new Date(updatedAt)) : 'Never'}</p>
+          <p className="mt-1 text-lg font-semibold text-white">
+            {publishedRev > 0 && publishedUpdatedAt ? dateFormat.format(new Date(publishedUpdatedAt)) : 'Never'}
+          </p>
         </div>
         <div className="rounded-2xl border border-[#1b3550] bg-[#0b1c2e] p-5">
           <p className="text-sm text-[#8ea6bd]">Hidden items</p>

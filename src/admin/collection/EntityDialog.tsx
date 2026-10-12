@@ -17,11 +17,14 @@ export function EntityDialog<K extends CollectionKey>({
   initial,
   isNew,
   onClose,
+  onSaved,
 }: {
   config: EntityConfig<K>;
   initial: ItemOf<K>;
   isNew: boolean;
   onClose: () => void;
+  /** Called with the saved item (final id and order) before the dialog closes. */
+  onSaved?: (item: ItemOf<K>) => void;
 }) {
   const doc = useDoc();
   const { mutate } = useAdminContent();
@@ -99,6 +102,7 @@ export function EntityDialog<K extends CollectionKey>({
     );
     setSaving(false);
     if (res.ok) {
+      onSaved?.(item);
       onClose();
       return;
     }

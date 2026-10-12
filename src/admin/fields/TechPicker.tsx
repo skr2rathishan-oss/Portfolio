@@ -13,6 +13,7 @@ const LEVELS: { value: StackLevel; label: string }[] = [
 ];
 
 export function TechPicker({
+  name,
   label,
   value,
   onChange,
@@ -22,6 +23,7 @@ export function TechPicker({
   max = 20,
 }: {
   label: string;
+  name?: string;
   value: { techId: ID; level: StackLevel }[];
   onChange: (value: { techId: ID; level: StackLevel }[]) => void;
   technologies: Technology[];
@@ -65,7 +67,7 @@ export function TechPicker({
   };
 
   return (
-    <FieldShell label={label} error={error} hint="Core technologies are highlighted on the card." group>
+    <FieldShell name={name} label={label} error={error} hint="Core technologies are highlighted on the card." group>
       {({ id, describedBy }) => (
         <div className="space-y-2">
           {value.length > 0 && (

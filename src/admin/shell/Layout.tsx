@@ -13,7 +13,10 @@ import {
   Link2,
   Loader2,
   LogOut,
+  MousePointerClick,
+  Send,
   Settings,
+  Undo2,
   UserRound,
   WifiOff,
 } from 'lucide-react';
@@ -21,7 +24,8 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import type { Content } from '../../content/types';
 import { useAdminContent } from '../state/AdminContentContext';
-import { Button, ConfirmDialog, cx, focusRing } from '../ui/primitives';
+import { useToast } from '../state/toast';
+import { Badge, Button, ConfirmDialog, cx, focusRing } from '../ui/primitives';
 
 interface NavItem {
   to: string;
@@ -32,6 +36,7 @@ interface NavItem {
 
 export const NAV: NavItem[] = [
   { to: '', label: 'Dashboard', icon: LayoutDashboard },
+  { to: 'editor', label: 'Visual editor', icon: MousePointerClick },
   { to: 'profile', label: 'Profile', icon: UserRound },
   { to: 'projects', label: 'Projects', icon: FolderKanban, count: (d) => d.projects.length },
   {
@@ -62,15 +67,122 @@ function SaveStatus() {
       </span>
     ) : saveState === 'saved' ? (
       <>
-        <Check size={14} className="text-[#3ddc97]" aria-hidden="true" /> Published
+        <Check size={14} className="text-[#3ddc97]" aria-hidden="true" /> Saved to draft
       </>
     ) : (
-      <span className="text-[#5f7a93]">Changes publish instantly</span>
+      <span className="text-[#5f7a93]">Changes save to your draft</span>
     );
   return (
     <p role="status" aria-live="polite" className="hidden sm:flex items-center gap-1.5 text-[13px] text-[#b8c9d9]">
       {content}
     </p>
+  );
+}
+
+/** Status pill + Publish / Discard draft. Visitors only see what was last published. */
+export function PublishControls({ showStatus = true }: { showStatus?: boolean }) {
+  const { hasUnpublishedChanges, publishedRev, saveState, publish, discardDraft } = useAdminContent();
+  const toast = useToast();
+  const [busy, setBusy] = useState<'publish' | 'discard' | null>(null);
+  const [confirm, setConfirm] = useState<'discard' | 'force' | null>(null);
+  const saving = saveState === 'saving';
+
+  const runPublish = async (force = false) => {
+    setBusy('publish');
+    const res = await publish({ force });
+    setBusy(null);
+    if (res.ok) {
+      setConfirm(null);
+      toast({
+        tone: 'success',
+        message: 'Published. Visitors now see your changes.',
+        action: { label: 'View site', onClick: () => window.open('/', '_blank', 'noopener,noreferrer') },
+      });
+      return;
+    }
+    if (res.code === 'published_changed') {
+      setConfirm('force');
+      return;
+    }
+    setConfirm(null);
+    toast({
+      tone: 'error',
+      message: `Not published: ${res.message} The draft is unchanged.`,
+      action: res.code === 'stale_draft' || res.issues ? undefined : { label: 'Retry', onClick: () => void runPublish(force) },
+    });
+  };
+
+  const runDiscard = async () => {
+    setBusy('discard');
+    const res = await discardDraft();
+    setBusy(null);
+    setConfirm(null);
+    toast(res.ok ? { tone: 'success', message: 'Draft discarded. It matches the live site again.' } : { tone: 'error', message: `Not discarded: ${res.message}` });
+  };
+
+  return (
+    <>
+      {showStatus && (
+      <span className="hidden md:inline-flex">
+        {hasUnpublishedChanges ? (
+          <Badge tone="warn">
+            <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true" /> Unpublished changes
+          </Badge>
+        ) : (
+          <Badge tone="ok">
+            <Check size={12} aria-hidden="true" /> Up to date
+          </Badge>
+        )}
+      </span>
+      )}
+      {hasUnpublishedChanges && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setConfirm('discard')}
+          disabled={busy !== null}
+          icon={<Undo2 size={15} aria-hidden="true" />}
+          title="Discard draft: go back to the live version"
+        >
+          <span className="hidden xl:inline">Discard draft</span>
+          <span className="sr-only xl:hidden">Discard draft</span>
+        </Button>
+      )}
+      <Button
+        variant="primary"
+        size="sm"
+        onClick={() => void runPublish()}
+        disabled={!hasUnpublishedChanges || saving || busy === 'discard'}
+        busy={busy === 'publish'}
+        icon={<Send size={14} aria-hidden="true" />}
+        title={hasUnpublishedChanges ? 'Publish the draft to the live site' : 'Nothing to publish: the draft matches the live site'}
+      >
+        Publish
+        <span className="sr-only">{hasUnpublishedChanges ? ' (unpublished changes)' : ' (up to date)'}</span>
+      </Button>
+
+      {confirm === 'discard' && (
+        <ConfirmDialog
+          title="Discard unpublished changes?"
+          message={`Your draft goes back to what the live site shows${publishedRev ? ` (revision ${publishedRev})` : ''}. A backup of the current draft is kept on the server.`}
+          confirmLabel="Discard changes"
+          busy={busy === 'discard'}
+          onCancel={() => setConfirm(null)}
+          onConfirm={() => void runDiscard()}
+        />
+      )}
+      {confirm === 'force' && (
+        <ConfirmDialog
+          title="The live site changed"
+          tone="primary"
+          message="Someone published a different version (for example from History) after this draft was started. Publishing now replaces the live site with your draft. The current live version stays in History."
+          confirmLabel="Publish anyway"
+          busy={busy === 'publish'}
+          onCancel={() => setConfirm(null)}
+          onConfirm={() => void runPublish(true)}
+        />
+      )}
+    </>
   );
 }
 
@@ -90,7 +202,7 @@ function useOnline() {
 }
 
 export function Layout({ children, onLogout }: { children: ReactNode; onLogout: () => void }) {
-  const { doc, conflict, dismissConflict, reload, source } = useAdminContent();
+  const { doc, conflict, dismissConflict, reload, publishedRev } = useAdminContent();
   const online = useOnline();
   const brand = doc ? `${doc.site.brand.primary}${doc.site.brand.suffix ? ` ${doc.site.brand.suffix}` : ''}` : 'Portfolio';
 
@@ -138,6 +250,7 @@ export function Layout({ children, onLogout }: { children: ReactNode; onLogout: 
           </p>
           <div className="ml-auto flex items-center gap-2 sm:gap-4">
             <SaveStatus />
+            <PublishControls />
             <a
               href="/"
               target="_blank"
@@ -168,11 +281,11 @@ export function Layout({ children, onLogout }: { children: ReactNode; onLogout: 
       <div className="flex">
         <nav aria-label="Admin sections" className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-64 shrink-0 overflow-y-auto border-r border-[#14304b] px-3 py-5 lg:block">
           <div className="space-y-0.5">{NAV.map((item) => navLink(item))}</div>
-          {source === 'seed' && (
-            <p className="mt-6 rounded-lg border border-[#27496b] bg-[#0a1a2b] p-3 text-xs leading-relaxed text-[#8ea6bd]">
-              The live site is showing the built-in content. Your first change saves it as revision 1.
-            </p>
-          )}
+          <p className="mt-6 rounded-lg border border-[#27496b] bg-[#0a1a2b] p-3 text-xs leading-relaxed text-[#8ea6bd]">
+            {publishedRev === 0
+              ? 'The live site is showing the built-in content. Edits save to your private draft; Publish makes them live as revision 1.'
+              : 'Edits save to your private draft. Visitors see them only after you publish.'}
+          </p>
         </nav>
         <main id="admin-main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
           <div className="mx-auto max-w-6xl">{children}</div>
@@ -181,9 +294,9 @@ export function Layout({ children, onLogout }: { children: ReactNode; onLogout: 
 
       {conflict && (
         <ConfirmDialog
-          title="Content changed elsewhere"
+          title="Draft changed elsewhere"
           tone="primary"
-          message="The content was updated in another tab or by a restore, and your last change could not be applied on top of it. Reload to continue from the latest version."
+          message="The draft was updated in another tab or by a restore, and your last change could not be applied on top of it. Reload to continue from the latest draft."
           confirmLabel="Reload latest"
           onCancel={dismissConflict}
           onConfirm={() => {

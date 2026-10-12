@@ -18,6 +18,8 @@ export interface FormProps<T> {
   doc: Content;
   extras: FormExtras;
   isNew: boolean;
+  /** Rendered inside the visual editor's properties panel (no autofocus). */
+  embedded?: boolean;
 }
 
 export interface EntityConfig<K extends CollectionKey> {
