@@ -159,6 +159,17 @@ export function ContentProvider({ children, fallback = null }: { children: React
   );
 }
 
+const STATIC_STATUS: ContentStatus = { status: 'ready', source: 'api', revalidating: false, error: null };
+
+/**
+ * Provides a fixed document (the editor canvas renders the draft with it).
+ * Never reads or writes the public localStorage cache, so a draft cannot leak into it.
+ */
+export function StaticContentProvider({ content, children }: { content: Content; children: ReactNode }) {
+  const value = useMemo<ContextValue>(() => ({ content, status: STATIC_STATUS }), [content]);
+  return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>;
+}
+
 function useContentContext(): ContextValue {
   const ctx = useContext(ContentContext);
   if (!ctx) throw new Error('useContent must be used inside <ContentProvider>');

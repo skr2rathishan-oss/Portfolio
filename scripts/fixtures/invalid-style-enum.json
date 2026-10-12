@@ -1,0 +1,10 @@
+{
+  "description": "Free-form value in an item style.",
+  "expect": "invalid",
+  "issuePath": "projects.0.style.background",
+  "set": {
+    "projects.0.style": {
+      "background": "hotpink"
+    }
+  }
+}

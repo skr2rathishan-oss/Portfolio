@@ -1,0 +1,126 @@
+{
+  "description": "More than 10 custom sections on one page.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.about.sections",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "about": {
+          "sections": [
+            {
+              "id": "sec_fx_0",
+              "type": "custom",
+              "order": 0,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_1",
+              "type": "custom",
+              "order": 1,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_2",
+              "type": "custom",
+              "order": 2,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_3",
+              "type": "custom",
+              "order": 3,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_4",
+              "type": "custom",
+              "order": 4,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_5",
+              "type": "custom",
+              "order": 5,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_6",
+              "type": "custom",
+              "order": 6,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_7",
+              "type": "custom",
+              "order": 7,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_8",
+              "type": "custom",
+              "order": 8,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_9",
+              "type": "custom",
+              "order": 9,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            },
+            {
+              "id": "sec_fx_10",
+              "type": "custom",
+              "order": 10,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": []
+            }
+          ]
+        }
+      }
+    }
+  }
+}

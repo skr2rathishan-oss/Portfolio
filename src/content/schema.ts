@@ -2,7 +2,9 @@
 // Used by the admin UI, Netlify functions and scripts/validate-seed.ts.
 // The public site must NOT import this file (keeps zod out of the public bundle).
 import { z } from 'zod';
-import type { Content } from './types';
+import { BLOCK_TYPES, BUILTIN_SECTION_TYPES, LAYOUT_LIMITS, PAGE_KEYS, SECTION_META, isBuiltinType } from './layout';
+import { STYLE_VALUES } from './styleClasses';
+import type { Block, BuiltinSectionType, Content, Section, SiteLayout, StylePresets } from './types';
 
 // ── Limits ───────────────────────────────────────────────────
 export const LIMITS = {
@@ -62,6 +64,31 @@ const entity = (prefix: string) => ({
 
 const LinkRefSchema = z.object({ url: UrlSchema, label: optText(LIMITS.short) });
 const CtaSchema = z.object({ label: reqText(LIMITS.short), to: UrlSchema });
+
+// ── Style presets (visual editor) ────────────────────────────
+// Every key is an optional enum of design-system presets (no free-form CSS).
+const styleEnum = <K extends keyof typeof STYLE_VALUES>(key: K) => z.enum(STYLE_VALUES[key]).optional();
+export const StylePresetsSchema = z.object({
+  textSize: styleEnum('textSize'),
+  fontWeight: styleEnum('fontWeight'),
+  textColor: styleEnum('textColor'),
+  textAlign: styleEnum('textAlign'),
+  background: styleEnum('background'),
+  padding: styleEnum('padding'),
+  spaceTop: styleEnum('spaceTop'),
+  width: styleEnum('width'),
+  boxAlign: styleEnum('boxAlign'),
+  radius: styleEnum('radius'),
+  border: styleEnum('border'),
+  imageHeight: styleEnum('imageHeight'),
+  imageAspect: styleEnum('imageAspect'),
+  imageFit: styleEnum('imageFit'),
+  imagePosition: styleEnum('imagePosition'),
+  columns: styleEnum('columns'),
+  titleSize: styleEnum('titleSize'),
+  titleColor: styleEnum('titleColor'),
+  emphasis: styleEnum('emphasis'),
+}) satisfies z.ZodType<StylePresets>;
 
 // ── Sections ─────────────────────────────────────────────────
 export const SiteSettingsSchema = z.object({
@@ -157,6 +184,7 @@ export const SocialLinkSchema = z.object({
   showInHero: z.boolean(),
   showInContact: z.boolean(),
   accent: HexColorSchema.optional(),
+  style: StylePresetsSchema.optional(),
 });
 
 export const ProjectCategorySchema = z.object({ ...entity('pcat'), label: reqText(LIMITS.short) });
@@ -177,6 +205,7 @@ export const ProjectSchema = z.object({
   highlights: list().optional(),
   date: DateYMSchema.optional(),
   featured: z.boolean(),
+  style: StylePresetsSchema.optional(),
 });
 
 export const TechCategorySchema = z.object({
@@ -199,6 +228,7 @@ export const TechnologySchema = z.object({
   highlights: list().optional(),
   showInStack: z.boolean(),
   featured: z.boolean(),
+  style: StylePresetsSchema.optional(),
 });
 
 export const EducationSchema = z.object({
@@ -213,6 +243,7 @@ export const EducationSchema = z.object({
   url: UrlSchema.optional(),
   grade: optText(LIMITS.short),
   description: optText(LIMITS.summary),
+  style: StylePresetsSchema.optional(),
 });
 
 export const MilestoneSchema = z.object({
@@ -238,6 +269,7 @@ export const CertificationSchema = z.object({
   skills: list(),
   accent: HexColorSchema.optional(),
   featured: z.boolean(),
+  style: StylePresetsSchema.optional(),
 });
 
 export const AchievementSchema = z.object({
@@ -254,6 +286,7 @@ export const AchievementSchema = z.object({
   link: LinkRefSchema.optional(),
   accent: HexColorSchema.optional(),
   featured: z.boolean(),
+  style: StylePresetsSchema.optional(),
 });
 
 export const RoleSchema = z.object({
@@ -271,6 +304,7 @@ export const RoleSchema = z.object({
   image: MediaUrlSchema.optional(),
   url: UrlSchema.optional(),
   accent: HexColorSchema.optional(),
+  style: StylePresetsSchema.optional(),
 });
 
 export const ProgramSchema = z.object({
@@ -286,9 +320,134 @@ export const ProgramSchema = z.object({
   logo: MediaUrlSchema.optional(),
   url: UrlSchema.optional(),
   certificationId: idWithPrefix('cert').optional(),
+  style: StylePresetsSchema.optional(),
 });
 
 const collection = <T extends z.ZodTypeAny>(item: T) => z.array(item).max(LIMITS.collection);
+
+// ── Layout (visual editor) ───────────────────────────────────
+const blockBase = {
+  id: idWithPrefix('blk'),
+  order: z.number().int(),
+  visible: z.boolean(),
+  style: StylePresetsSchema.optional(),
+};
+
+const ImageBlockPropsSchema = z
+  .object({
+    src: MediaUrlSchema.optional(),
+    alt: text(LIMITS.title),
+    caption: optText(200),
+    href: UrlSchema.optional(),
+  })
+  .superRefine((p, ctx) => {
+    if (p.src && !p.alt) ctx.addIssue({ code: 'custom', path: ['alt'], message: 'Alt text is required when an image is set' });
+  });
+
+export const GalleryImageSchema = z.object({
+  id: idWithPrefix('gimg'),
+  src: MediaUrlSchema,
+  alt: reqText(LIMITS.title),
+  caption: optText(200),
+});
+
+export const BlockSchema = z.discriminatedUnion('type', [
+  z.object({
+    ...blockBase,
+    type: z.literal('heading'),
+    props: z.object({ text: reqText(LIMITS.title), level: z.enum(['h2', 'h3']) }),
+  }),
+  z.object({ ...blockBase, type: z.literal('text'), props: z.object({ text: reqText(LAYOUT_LIMITS.blockText) }) }),
+  z.object({ ...blockBase, type: z.literal('image'), props: ImageBlockPropsSchema }),
+  z.object({
+    ...blockBase,
+    type: z.literal('gallery'),
+    props: z.object({
+      images: z.array(GalleryImageSchema).max(LAYOUT_LIMITS.galleryImages, `At most ${LAYOUT_LIMITS.galleryImages} images`),
+    }),
+  }),
+  z.object({
+    ...blockBase,
+    type: z.literal('button'),
+    props: z.object({
+      label: reqText(LIMITS.short),
+      href: UrlSchema,
+      variant: z.enum(['primary', 'secondary', 'quiet']),
+      icon: z.enum(['none', 'arrow', 'external', 'download', 'mail']),
+    }),
+  }),
+  z.object({
+    ...blockBase,
+    type: z.literal('contactInfo'),
+    props: z.object({
+      title: optText(LIMITS.title),
+      showEmail: z.boolean(),
+      showLocation: z.boolean(),
+      showSocials: z.boolean(),
+    }),
+  }),
+  z.object({ ...blockBase, type: z.literal('divider'), props: z.object({}) }),
+]) satisfies z.ZodType<Block>;
+
+// Keeps BLOCK_TYPES (layout.ts) and the union above in sync.
+type _BlockTypesMatch = [z.infer<typeof BlockSchema>['type']] extends [(typeof BLOCK_TYPES)[number]]
+  ? [(typeof BLOCK_TYPES)[number]] extends [z.infer<typeof BlockSchema>['type']]
+    ? true
+    : never
+  : never;
+const _blockTypesMatch: _BlockTypesMatch = true;
+void _blockTypesMatch;
+
+const sectionBase = {
+  id: idWithPrefix('sec'),
+  order: z.number().int(),
+  visible: z.boolean(),
+  style: StylePresetsSchema.optional(),
+};
+
+export const BuiltinSectionSchema = z.object({
+  ...sectionBase,
+  type: z.enum(BUILTIN_SECTION_TYPES as [BuiltinSectionType, ...BuiltinSectionType[]]),
+  props: z
+    .object({
+      title: optText(LIMITS.title),
+      lead: optText(LAYOUT_LIMITS.sectionLead),
+      secondaryTitle: optText(LIMITS.title),
+      buttonLabel: optText(LIMITS.short),
+    })
+    .optional(),
+});
+
+export const CustomSectionSchema = z.object({
+  ...sectionBase,
+  type: z.literal('custom'),
+  props: z.object({
+    title: optText(LIMITS.title),
+    lead: optText(LAYOUT_LIMITS.sectionLead),
+    arrangement: z.enum(['stack', 'grid']),
+  }),
+  blocks: z
+    .array(BlockSchema)
+    .max(LAYOUT_LIMITS.blocksPerSection, `At most ${LAYOUT_LIMITS.blocksPerSection} blocks per section`),
+});
+
+export const SectionSchema = z.discriminatedUnion('type', [CustomSectionSchema, BuiltinSectionSchema]) satisfies z.ZodType<Section>;
+
+const PageLayoutSchema = z.object({
+  sections: z
+    .array(SectionSchema)
+    .max(LAYOUT_LIMITS.sectionsPerPage, `At most ${LAYOUT_LIMITS.sectionsPerPage} sections per page`),
+});
+
+export const LayoutSchema = z.object({
+  version: z.literal(1),
+  pages: z.object(
+    Object.fromEntries(PAGE_KEYS.map((p) => [p, PageLayoutSchema.optional()])) as Record<
+      (typeof PAGE_KEYS)[number],
+      z.ZodOptional<typeof PageLayoutSchema>
+    >,
+  ),
+}) satisfies z.ZodType<SiteLayout>;
 
 const ContentObjectSchema = z.object({
   schemaVersion: z.literal(1),
@@ -306,6 +465,7 @@ const ContentObjectSchema = z.object({
   achievements: collection(AchievementSchema),
   roles: collection(RoleSchema),
   programs: collection(ProgramSchema),
+  layout: LayoutSchema.optional(),
 });
 
 // ── Cross-document rules (unique ids + referential integrity) ─
@@ -332,6 +492,52 @@ function checkIntegrity(doc: z.infer<typeof ContentObjectSchema>, ctx: Ctx) {
   doc.profile.about.facts.forEach((f, i) => claim(f.id, ['profile', 'about', 'facts', i, 'id']));
   doc.profile.about.goals.forEach((g, i) => claim(g.id, ['profile', 'about', 'goals', i, 'id']));
   doc.profile.about.stats.forEach((s, i) => claim(s.id, ['profile', 'about', 'stats', i, 'id']));
+
+  // Layout: global id uniqueness, built-ins on their own page (once), caps.
+  if (doc.layout) {
+    let blocksTotal = 0;
+    for (const page of PAGE_KEYS) {
+      const sections = doc.layout.pages[page]?.sections;
+      if (!sections) continue;
+      const base = ['layout', 'pages', page, 'sections'];
+      const builtins = new Set<string>();
+      let customCount = 0;
+      sections.forEach((s, i) => {
+        claim(s.id, [...base, i, 'id']);
+        if (s.type === 'custom') {
+          customCount++;
+          blocksTotal += s.blocks.length;
+          s.blocks.forEach((b, j) => {
+            claim(b.id, [...base, i, 'blocks', j, 'id']);
+            if (b.type === 'gallery') {
+              b.props.images.forEach((img, k) => claim(img.id, [...base, i, 'blocks', j, 'props', 'images', k, 'id']));
+            }
+          });
+        } else if (isBuiltinType(s.type)) {
+          if (SECTION_META[s.type].page !== page) {
+            ctx.addIssue({
+              code: 'custom',
+              path: [...base, i, 'type'],
+              message: `Section "${s.type}" belongs to the ${SECTION_META[s.type].page} page`,
+            });
+          } else if (builtins.has(s.type)) {
+            ctx.addIssue({ code: 'custom', path: [...base, i, 'type'], message: `Section "${s.type}" appears twice` });
+          }
+          builtins.add(s.type);
+        }
+      });
+      if (customCount > LAYOUT_LIMITS.customSectionsPerPage) {
+        ctx.addIssue({
+          code: 'custom',
+          path: base,
+          message: `At most ${LAYOUT_LIMITS.customSectionsPerPage} custom sections per page`,
+        });
+      }
+    }
+    if (blocksTotal > LAYOUT_LIMITS.blocksTotal) {
+      ctx.addIssue({ code: 'custom', path: ['layout'], message: `At most ${LAYOUT_LIMITS.blocksTotal} blocks in total` });
+    }
+  }
 
   const techIds = new Set(doc.technologies.map((t) => t.id));
   const techCatIds = new Set(doc.techCategories.map((c) => c.id));

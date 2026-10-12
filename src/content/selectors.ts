@@ -1,6 +1,6 @@
 // Pure helpers over the content document. No zod, no React — safe for the public
 // bundle and for Netlify functions.
-import type { Content, DateYM, Entity, ID, Project, Technology } from './types';
+import type { Content, DateYM, Entity, ID, PageKey, PageLayout, Project, SiteLayout, Technology } from './types';
 
 /** Stable sort by `order` (ties keep their original relative position). Returns a new array. */
 export function sortByOrder<T extends { order: number }>(items: readonly T[]): T[] {
@@ -39,6 +39,7 @@ export function normalizePublic(content: Content): Content {
 
   return {
     ...content,
+    ...(content.layout ? { layout: normalizeLayout(content.layout) } : {}),
     socials: visibleSorted(content.socials),
     projects: visibleSorted(content.projects).map((p) => ({
       ...p,
@@ -59,6 +60,24 @@ export function normalizePublic(content: Content): Content {
       return rest;
     }),
   };
+}
+
+/**
+ * Public view of the layout: hidden custom sections and hidden blocks are removed and blocks are
+ * sorted by `order`. Hidden built-in sections are KEPT (as markers) so that resolvePage() does not
+ * re-insert them as visible; renderers skip sections with `visible === false`.
+ */
+function normalizeLayout(layout: SiteLayout): SiteLayout {
+  const pages: SiteLayout['pages'] = {};
+  for (const [key, page] of Object.entries(layout.pages ?? {}) as [PageKey, PageLayout | undefined][]) {
+    if (!page) continue;
+    pages[key] = {
+      sections: (page.sections ?? [])
+        .filter((s) => s.type !== 'custom' || s.visible !== false)
+        .map((s) => (s.type === 'custom' ? { ...s, blocks: visibleSorted(s.blocks ?? []) } : s)),
+    };
+  }
+  return { ...layout, pages };
 }
 
 export function indexById<T extends { id: ID }>(items: readonly T[]): Map<ID, T> {

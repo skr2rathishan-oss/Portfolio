@@ -1,0 +1,22 @@
+{
+  "description": "Section id with the wrong prefix.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.0.id",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "blk_hero",
+              "type": "home.hero",
+              "order": 0,
+              "visible": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import * as api from './api';
+import { EditorPage } from './editor/EditorPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import { CertificationsPage } from './pages/CertificationsPage';
 import { Dashboard } from './pages/Dashboard';
@@ -86,22 +87,31 @@ function AdminRoutes({ onLogout }: { onLogout: () => void }) {
     );
   }
   return (
-    <Layout onLogout={onLogout}>
-      <Routes>
-        <Route index element={<Dashboard />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="projects" element={<ProjectsPage />} />
-        <Route path="achievements" element={<AchievementsPage />} />
-        <Route path="certifications" element={<CertificationsPage />} />
-        <Route path="education" element={<EducationPage />} />
-        <Route path="technologies" element={<TechnologiesPage />} />
-        <Route path="socials" element={<SocialsPage />} />
-        <Route path="site" element={<SitePage />} />
-        <Route path="media" element={<MediaPage />} />
-        <Route path="history" element={<HistoryPage />} />
-        <Route path="*" element={<Navigate to="/admin" replace />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      {/* The visual editor is full-screen, outside the sidebar Layout. */}
+      <Route path="editor/*" element={<EditorPage />} />
+      <Route
+        path="*"
+        element={
+          <Layout onLogout={onLogout}>
+            <Routes>
+              <Route index element={<Dashboard />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="projects" element={<ProjectsPage />} />
+              <Route path="achievements" element={<AchievementsPage />} />
+              <Route path="certifications" element={<CertificationsPage />} />
+              <Route path="education" element={<EducationPage />} />
+              <Route path="technologies" element={<TechnologiesPage />} />
+              <Route path="socials" element={<SocialsPage />} />
+              <Route path="site" element={<SitePage />} />
+              <Route path="media" element={<MediaPage />} />
+              <Route path="history" element={<HistoryPage />} />
+              <Route path="*" element={<Navigate to="/admin" replace />} />
+            </Routes>
+          </Layout>
+        }
+      />
+    </Routes>
   );
 }
 

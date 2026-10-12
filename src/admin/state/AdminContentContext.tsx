@@ -28,7 +28,8 @@ export type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
 export type MutateResult =
   | { ok: true }
-  | { ok: false; message: string; issues?: ValidationIssue[] };
+  /** `code` is set for errors the UI branches on, e.g. 'published_changed' from publish(). */
+  | { ok: false; message: string; issues?: ValidationIssue[]; code?: string };
 
 export interface MutateOptions {
   /** Toast text on success, e.g. "Project saved". */
@@ -58,6 +59,17 @@ interface ContextValue {
   removeWithUndo: (key: CollectionKey, id: string, label: string) => Promise<MutateResult>;
   reload: () => Promise<void>;
   dismissConflict: () => void;
+  // ── Draft / publish (FROZEN interface; WS-A swaps the temporary implementations) ──
+  /** Live (published) revision. */
+  publishedRev: number;
+  /** Draft differs from published (computed server-side). */
+  hasUnpublishedChanges: boolean;
+  /** Waits for the save queue to drain, then publishes the draft. `{ok:false, code:'published_changed'}` on 409. */
+  publish: (opts?: { force?: boolean }) => Promise<MutateResult>;
+  /** Resets the draft to the published content (the server backs the old draft up). */
+  discardDraft: () => Promise<MutateResult>;
+  /** Resolves when the save queue is empty. */
+  flush: () => Promise<void>;
 }
 
 const Ctx = createContext<ContextValue | null>(null);
@@ -231,6 +243,29 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('beforeunload', onBeforeUnload);
   }, [pending.length]);
 
+  // TEMPORARY (foundation step): the data path is still the legacy publish-on-save one.
+  const flush = useCallback(async () => {
+    let current: Promise<unknown>;
+    do {
+      current = queue.current;
+      await current;
+    } while (current !== queue.current);
+  }, []);
+
+  const publish = useCallback(
+    async (_opts?: { force?: boolean }): Promise<MutateResult> => {
+      await flush();
+      return { ok: true };
+    },
+    [flush],
+  );
+
+  const discardDraft = useCallback(async (): Promise<MutateResult> => {
+    await flush();
+    await reload();
+    return { ok: true };
+  }, [flush, reload]);
+
   const doc = useMemo(() => {
     if (!confirmed) return null;
     return pending.reduce((d, p) => {
@@ -256,6 +291,11 @@ export function AdminContentProvider({ children }: { children: ReactNode }) {
     removeWithUndo,
     reload,
     dismissConflict: () => setConflict(false),
+    publishedRev: confirmed?.rev ?? 0,
+    hasUnpublishedChanges: false,
+    publish,
+    discardDraft,
+    flush,
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

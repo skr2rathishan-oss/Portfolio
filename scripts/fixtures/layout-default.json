@@ -1,0 +1,146 @@
+{
+  "description": "Materialized DEFAULT_LAYOUT; must validate and round-trip unchanged.",
+  "expect": "valid",
+  "matchesDefaultLayout": true,
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_home_hero",
+              "type": "home.hero",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_home_core_stack",
+              "type": "home.coreStack",
+              "order": 1,
+              "visible": true
+            },
+            {
+              "id": "sec_home_highlights",
+              "type": "home.highlights",
+              "order": 2,
+              "visible": true
+            },
+            {
+              "id": "sec_home_contact_cta",
+              "type": "home.contactCta",
+              "order": 3,
+              "visible": true
+            }
+          ]
+        },
+        "about": {
+          "sections": [
+            {
+              "id": "sec_about_header",
+              "type": "about.header",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_about_intro",
+              "type": "about.intro",
+              "order": 1,
+              "visible": true
+            },
+            {
+              "id": "sec_about_goals",
+              "type": "about.goals",
+              "order": 2,
+              "visible": true
+            },
+            {
+              "id": "sec_about_stats",
+              "type": "about.stats",
+              "order": 3,
+              "visible": true
+            },
+            {
+              "id": "sec_about_education",
+              "type": "about.education",
+              "order": 4,
+              "visible": true
+            },
+            {
+              "id": "sec_about_certifications",
+              "type": "about.certifications",
+              "order": 5,
+              "visible": true
+            }
+          ]
+        },
+        "projects": {
+          "sections": [
+            {
+              "id": "sec_projects_header",
+              "type": "projects.header",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_projects_stack",
+              "type": "projects.stack",
+              "order": 1,
+              "visible": true
+            },
+            {
+              "id": "sec_projects_list",
+              "type": "projects.list",
+              "order": 2,
+              "visible": true
+            }
+          ]
+        },
+        "achievements": {
+          "sections": [
+            {
+              "id": "sec_achievements_header",
+              "type": "achievements.header",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_achievements_hackathons",
+              "type": "achievements.hackathons",
+              "order": 1,
+              "visible": true
+            },
+            {
+              "id": "sec_achievements_community",
+              "type": "achievements.community",
+              "order": 2,
+              "visible": true
+            },
+            {
+              "id": "sec_achievements_programs",
+              "type": "achievements.programs",
+              "order": 3,
+              "visible": true
+            }
+          ]
+        },
+        "contact": {
+          "sections": [
+            {
+              "id": "sec_contact_header",
+              "type": "contact.header",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_contact_main",
+              "type": "contact.main",
+              "order": 1,
+              "visible": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}

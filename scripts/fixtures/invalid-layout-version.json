@@ -1,0 +1,11 @@
+{
+  "description": "Unsupported layout version.",
+  "expect": "invalid",
+  "issuePath": "layout.version",
+  "set": {
+    "layout": {
+      "version": 2,
+      "pages": {}
+    }
+  }
+}

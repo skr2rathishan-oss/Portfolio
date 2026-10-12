@@ -1,0 +1,37 @@
+{
+  "description": "Image set without alt text.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.0.blocks.0.props.alt",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_fx",
+              "type": "custom",
+              "order": 0,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx",
+                  "type": "image",
+                  "order": 0,
+                  "visible": true,
+                  "props": {
+                    "src": "/projects/StudyBuddy.jpg",
+                    "alt": ""
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

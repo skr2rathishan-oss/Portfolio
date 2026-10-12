@@ -101,6 +101,74 @@ export const putContent = (content: Content, rev: number) =>
     headers: { 'If-Match': `"rev-${rev}"` },
   }).then((r) => r.data);
 
+// ── Draft / publish (FROZEN client contract; server: netlify/functions/admin-draft.mts, WS-A) ──
+// Drafts are private: /api/content only ever serves the published `content` key.
+// Every draft mutation sends `If-Match: "draft-N"` (428 when missing, 412 when stale).
+export const draftEtag = (draftRev: number) => `"draft-${draftRev}"`;
+
+export interface DraftEnvelope {
+  draftRev: number;
+  /** Published rev the draft was based on (publish answers 409 `published_changed` when it moved). */
+  baseRev: number;
+  publishedRev: number;
+  updatedAt: string;
+  publishedUpdatedAt: string;
+  /** 'draft' = stored draft; 'published' / 'seed' = no draft key yet (virtual draft, draftRev 0). */
+  source: 'draft' | 'published' | 'seed';
+  hasUnpublishedChanges: boolean;
+  content: Content;
+}
+export interface DraftSaveResult {
+  draftRev: number;
+  updatedAt: string;
+  hasUnpublishedChanges: boolean;
+}
+export interface PublishResult {
+  publishedRev: number;
+  draftRev: number;
+  updatedAt: string;
+}
+export interface PublishStatus {
+  publishedRev: number;
+  draftRev: number;
+  hasUnpublishedChanges: boolean;
+  publishedUpdatedAt: string;
+  draftUpdatedAt: string;
+}
+
+/** GET /api/admin/draft */
+export const getDraft = () => request<DraftEnvelope>('/api/admin/draft').then((r) => r.data);
+/** PUT /api/admin/draft — 400 validation (details.issues) / 412 / 413 / 415 / 428. */
+export const putDraft = (content: Content, draftRev: number) =>
+  request<DraftSaveResult>('/api/admin/draft', {
+    method: 'PUT',
+    body: { content },
+    headers: { 'If-Match': draftEtag(draftRev) },
+  }).then((r) => r.data);
+/** POST /api/admin/publish — 409 code `published_changed` unless `force`. */
+export const publish = (draftRev: number, force = false) =>
+  request<PublishResult>('/api/admin/publish', {
+    method: 'POST',
+    body: force ? { force: true } : {},
+    headers: { 'If-Match': draftEtag(draftRev) },
+  }).then((r) => r.data);
+/** POST /api/admin/draft/discard — backs up the draft, resets it to published; returns the new draft. */
+export const discardDraft = (draftRev: number) =>
+  request<DraftEnvelope>('/api/admin/draft/discard', {
+    method: 'POST',
+    headers: { 'If-Match': draftEtag(draftRev) },
+  }).then((r) => r.data);
+/** POST /api/admin/revisions/:id/restore-to-draft — published content is untouched. */
+export const restoreToDraft = (id: string, draftRev: number) =>
+  request<DraftSaveResult>(`/api/admin/revisions/${encodeURIComponent(id)}/restore-to-draft`, {
+    method: 'POST',
+    headers: { 'If-Match': draftEtag(draftRev) },
+  }).then((r) => r.data);
+/** GET /api/admin/status */
+export const getStatus = () => request<PublishStatus>('/api/admin/status').then((r) => r.data);
+/** GET /api/admin/export?source=draft|published (default published). */
+export const exportUrl = (source: 'draft' | 'published' = 'published') => `/api/admin/export?source=${source}`;
+
 export interface RevisionInfo {
   id: string;
   rev: number;

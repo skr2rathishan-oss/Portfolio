@@ -1,0 +1,39 @@
+{
+  "description": "javascript: URL on a button.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.0.blocks.0.props.href",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_fx",
+              "type": "custom",
+              "order": 0,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx",
+                  "type": "button",
+                  "order": 0,
+                  "visible": true,
+                  "props": {
+                    "label": "Click",
+                    "href": "javascript:alert(1)",
+                    "variant": "primary",
+                    "icon": "none"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

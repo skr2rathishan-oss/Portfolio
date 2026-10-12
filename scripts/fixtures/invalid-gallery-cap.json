@@ -1,0 +1,162 @@
+{
+  "description": "More than 24 gallery images.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.0.blocks.0.props.images",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_fx",
+              "type": "custom",
+              "order": 0,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx",
+                  "type": "gallery",
+                  "order": 0,
+                  "visible": true,
+                  "props": {
+                    "images": [
+                      {
+                        "id": "gimg_fx_0",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 0"
+                      },
+                      {
+                        "id": "gimg_fx_1",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 1"
+                      },
+                      {
+                        "id": "gimg_fx_2",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 2"
+                      },
+                      {
+                        "id": "gimg_fx_3",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 3"
+                      },
+                      {
+                        "id": "gimg_fx_4",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 4"
+                      },
+                      {
+                        "id": "gimg_fx_5",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 5"
+                      },
+                      {
+                        "id": "gimg_fx_6",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 6"
+                      },
+                      {
+                        "id": "gimg_fx_7",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 7"
+                      },
+                      {
+                        "id": "gimg_fx_8",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 8"
+                      },
+                      {
+                        "id": "gimg_fx_9",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 9"
+                      },
+                      {
+                        "id": "gimg_fx_10",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 10"
+                      },
+                      {
+                        "id": "gimg_fx_11",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 11"
+                      },
+                      {
+                        "id": "gimg_fx_12",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 12"
+                      },
+                      {
+                        "id": "gimg_fx_13",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 13"
+                      },
+                      {
+                        "id": "gimg_fx_14",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 14"
+                      },
+                      {
+                        "id": "gimg_fx_15",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 15"
+                      },
+                      {
+                        "id": "gimg_fx_16",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 16"
+                      },
+                      {
+                        "id": "gimg_fx_17",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 17"
+                      },
+                      {
+                        "id": "gimg_fx_18",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 18"
+                      },
+                      {
+                        "id": "gimg_fx_19",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 19"
+                      },
+                      {
+                        "id": "gimg_fx_20",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 20"
+                      },
+                      {
+                        "id": "gimg_fx_21",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 21"
+                      },
+                      {
+                        "id": "gimg_fx_22",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 22"
+                      },
+                      {
+                        "id": "gimg_fx_23",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 23"
+                      },
+                      {
+                        "id": "gimg_fx_24",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Image 24"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

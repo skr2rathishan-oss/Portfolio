@@ -1,0 +1,28 @@
+{
+  "description": "Same built-in twice on a page.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.1.type",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_home_hero",
+              "type": "home.hero",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_fx_hero2",
+              "type": "home.hero",
+              "order": 1,
+              "visible": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}
