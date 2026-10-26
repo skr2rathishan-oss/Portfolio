@@ -1,0 +1,22 @@
+{
+  "description": "Unknown section type.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.0.type",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_fx",
+              "type": "home.iframe",
+              "order": 0,
+              "visible": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}

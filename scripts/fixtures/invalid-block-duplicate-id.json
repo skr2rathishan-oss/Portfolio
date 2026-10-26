@@ -1,0 +1,41 @@
+{
+  "description": "Block id reused (ids are globally unique).",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.0.blocks.1.id",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_fx",
+              "type": "custom",
+              "order": 0,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx",
+                  "type": "divider",
+                  "order": 0,
+                  "visible": true,
+                  "props": {}
+                },
+                {
+                  "id": "blk_fx",
+                  "type": "divider",
+                  "order": 1,
+                  "visible": true,
+                  "props": {}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "description": "Built-in section placed on another page.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.1.type",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_home_hero",
+              "type": "home.hero",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_fx_intro",
+              "type": "about.intro",
+              "order": 1,
+              "visible": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}

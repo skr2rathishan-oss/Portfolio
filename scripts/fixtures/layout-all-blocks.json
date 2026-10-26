@@ -1,0 +1,513 @@
+{
+  "description": "Every block type and many style presets: custom sections on home (between hero and core stack) and about, a hidden custom section, a hidden block, a hidden built-in (about.stats), reordered achievements sections, section text overrides, item styles.",
+  "expect": "valid",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_home_hero",
+              "type": "home.hero",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_fx_blocks",
+              "type": "custom",
+              "order": 1,
+              "visible": true,
+              "props": {
+                "title": "Every block",
+                "lead": "One of each block type with style presets.",
+                "arrangement": "stack"
+              },
+              "style": {
+                "spaceTop": "lg",
+                "background": "surface",
+                "padding": "md",
+                "radius": "panel",
+                "border": "line",
+                "width": "wide",
+                "boxAlign": "center"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx_heading",
+                  "type": "heading",
+                  "order": 0,
+                  "visible": true,
+                  "props": {
+                    "text": "A heading",
+                    "level": "h2"
+                  },
+                  "style": {
+                    "textSize": "h2",
+                    "textColor": "accent",
+                    "textAlign": "center"
+                  }
+                },
+                {
+                  "id": "blk_fx_heading3",
+                  "type": "heading",
+                  "order": 1,
+                  "visible": true,
+                  "props": {
+                    "text": "A smaller heading",
+                    "level": "h3"
+                  }
+                },
+                {
+                  "id": "blk_fx_text",
+                  "type": "text",
+                  "order": 2,
+                  "visible": true,
+                  "props": {
+                    "text": "First paragraph.\n\nSecond paragraph with more words."
+                  },
+                  "style": {
+                    "textSize": "lead",
+                    "fontWeight": "medium",
+                    "textColor": "ink-2",
+                    "width": "prose"
+                  }
+                },
+                {
+                  "id": "blk_fx_image",
+                  "type": "image",
+                  "order": 3,
+                  "visible": true,
+                  "props": {
+                    "src": "/projects/StudyBuddy.jpg",
+                    "alt": "Study Buddy screenshot",
+                    "caption": "Study Buddy",
+                    "href": "/projects"
+                  },
+                  "style": {
+                    "width": "content",
+                    "boxAlign": "center",
+                    "radius": "card",
+                    "border": "strong",
+                    "imageHeight": "md",
+                    "imageAspect": "photo",
+                    "imageFit": "cover",
+                    "imagePosition": "top"
+                  }
+                },
+                {
+                  "id": "blk_fx_image_empty",
+                  "type": "image",
+                  "order": 4,
+                  "visible": true,
+                  "props": {
+                    "alt": ""
+                  }
+                },
+                {
+                  "id": "blk_fx_gallery",
+                  "type": "gallery",
+                  "order": 5,
+                  "visible": true,
+                  "props": {
+                    "images": [
+                      {
+                        "id": "gimg_fx_1",
+                        "src": "/certificates/azure.jpg",
+                        "alt": "Azure certificate",
+                        "caption": "Azure"
+                      },
+                      {
+                        "id": "gimg_fx_2",
+                        "src": "/certificates/docker.jpg",
+                        "alt": "Docker certificate"
+                      },
+                      {
+                        "id": "gimg_fx_3",
+                        "src": "/projects/Velora.jpeg",
+                        "alt": "Velora"
+                      }
+                    ]
+                  },
+                  "style": {
+                    "columns": "3",
+                    "radius": "control",
+                    "imageAspect": "square",
+                    "imageFit": "cover",
+                    "imagePosition": "center"
+                  }
+                },
+                {
+                  "id": "blk_fx_btn1",
+                  "type": "button",
+                  "order": 6,
+                  "visible": true,
+                  "props": {
+                    "label": "See projects",
+                    "href": "/projects",
+                    "variant": "primary",
+                    "icon": "arrow"
+                  },
+                  "style": {
+                    "textAlign": "center"
+                  }
+                },
+                {
+                  "id": "blk_fx_btn2",
+                  "type": "button",
+                  "order": 7,
+                  "visible": true,
+                  "props": {
+                    "label": "GitHub",
+                    "href": "https://github.com/",
+                    "variant": "secondary",
+                    "icon": "external"
+                  }
+                },
+                {
+                  "id": "blk_fx_btn3",
+                  "type": "button",
+                  "order": 8,
+                  "visible": true,
+                  "props": {
+                    "label": "Email me",
+                    "href": "mailto:someone@example.com",
+                    "variant": "quiet",
+                    "icon": "mail"
+                  }
+                },
+                {
+                  "id": "blk_fx_contact",
+                  "type": "contactInfo",
+                  "order": 9,
+                  "visible": true,
+                  "props": {
+                    "title": "Reach me",
+                    "showEmail": true,
+                    "showLocation": true,
+                    "showSocials": true
+                  },
+                  "style": {
+                    "background": "navy",
+                    "padding": "sm",
+                    "radius": "card",
+                    "border": "accent",
+                    "textAlign": "left"
+                  }
+                },
+                {
+                  "id": "blk_fx_divider",
+                  "type": "divider",
+                  "order": 10,
+                  "visible": true,
+                  "props": {},
+                  "style": {
+                    "width": "narrow",
+                    "boxAlign": "center"
+                  }
+                },
+                {
+                  "id": "blk_fx_hidden",
+                  "type": "text",
+                  "order": 11,
+                  "visible": false,
+                  "props": {
+                    "text": "HIDDEN BLOCK — must not render publicly"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "sec_home_core_stack",
+              "type": "home.coreStack",
+              "order": 2,
+              "visible": true,
+              "props": {
+                "title": "Main tools",
+                "buttonLabel": "Everything"
+              },
+              "style": {
+                "spaceTop": "md",
+                "background": "navy",
+                "padding": "lg",
+                "radius": "panel",
+                "border": "line"
+              }
+            },
+            {
+              "id": "sec_fx_grid",
+              "type": "custom",
+              "order": 3,
+              "visible": true,
+              "props": {
+                "title": "Grid section",
+                "arrangement": "grid"
+              },
+              "style": {
+                "columns": "4",
+                "spaceTop": "xl",
+                "textAlign": "center"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx_grid_1",
+                  "type": "text",
+                  "order": 1,
+                  "visible": true,
+                  "props": {
+                    "text": "Grid cell 1"
+                  },
+                  "style": {
+                    "textSize": "sm",
+                    "fontWeight": "bold",
+                    "textColor": "success"
+                  }
+                },
+                {
+                  "id": "blk_fx_grid_2",
+                  "type": "text",
+                  "order": 2,
+                  "visible": true,
+                  "props": {
+                    "text": "Grid cell 2"
+                  },
+                  "style": {
+                    "textSize": "sm",
+                    "fontWeight": "bold",
+                    "textColor": "warning"
+                  }
+                },
+                {
+                  "id": "blk_fx_grid_3",
+                  "type": "text",
+                  "order": 3,
+                  "visible": true,
+                  "props": {
+                    "text": "Grid cell 3"
+                  },
+                  "style": {
+                    "textSize": "sm",
+                    "fontWeight": "bold",
+                    "textColor": "success"
+                  }
+                },
+                {
+                  "id": "blk_fx_grid_4",
+                  "type": "text",
+                  "order": 4,
+                  "visible": true,
+                  "props": {
+                    "text": "Grid cell 4"
+                  },
+                  "style": {
+                    "textSize": "sm",
+                    "fontWeight": "bold",
+                    "textColor": "warning"
+                  }
+                },
+                {
+                  "id": "blk_fx_grid_5",
+                  "type": "text",
+                  "order": 5,
+                  "visible": true,
+                  "props": {
+                    "text": "Grid cell 5"
+                  },
+                  "style": {
+                    "textSize": "sm",
+                    "fontWeight": "bold",
+                    "textColor": "success"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "sec_home_highlights",
+              "type": "home.highlights",
+              "order": 4,
+              "visible": true,
+              "props": {
+                "title": "Highlights",
+                "secondaryTitle": "Latest"
+              }
+            },
+            {
+              "id": "sec_home_contact_cta",
+              "type": "home.contactCta",
+              "order": 5,
+              "visible": true,
+              "props": {
+                "buttonLabel": "Say hello"
+              },
+              "style": {
+                "spaceTop": "sm",
+                "background": "accent-wash",
+                "border": "accent",
+                "radius": "card",
+                "padding": "xl"
+              }
+            },
+            {
+              "id": "sec_fx_hidden",
+              "type": "custom",
+              "order": 9,
+              "visible": false,
+              "props": {
+                "title": "HIDDEN SECTION — must not render publicly",
+                "arrangement": "stack"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx_hidden2",
+                  "type": "divider",
+                  "order": 0,
+                  "visible": true,
+                  "props": {}
+                }
+              ]
+            }
+          ]
+        },
+        "about": {
+          "sections": [
+            {
+              "id": "sec_about_header",
+              "type": "about.header",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_about_intro",
+              "type": "about.intro",
+              "order": 1,
+              "visible": true
+            },
+            {
+              "id": "sec_about_goals",
+              "type": "about.goals",
+              "order": 2,
+              "visible": true
+            },
+            {
+              "id": "sec_about_stats",
+              "type": "about.stats",
+              "order": 3,
+              "visible": false
+            },
+            {
+              "id": "sec_about_education",
+              "type": "about.education",
+              "order": 4,
+              "visible": true
+            },
+            {
+              "id": "sec_about_certifications",
+              "type": "about.certifications",
+              "order": 5,
+              "visible": true,
+              "style": {
+                "columns": "2"
+              },
+              "props": {
+                "title": "Certificates",
+                "lead": "Custom lead."
+              }
+            },
+            {
+              "id": "sec_fx_about_extra",
+              "type": "custom",
+              "order": 99,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx_about_text",
+                  "type": "text",
+                  "order": 0,
+                  "visible": true,
+                  "props": {
+                    "text": "Untitled custom section at the end of About."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "achievements": {
+          "sections": [
+            {
+              "id": "sec_achievements_header",
+              "type": "achievements.header",
+              "order": 0,
+              "visible": true
+            },
+            {
+              "id": "sec_achievements_programs",
+              "type": "achievements.programs",
+              "order": 1,
+              "visible": true,
+              "style": {
+                "columns": "1"
+              }
+            },
+            {
+              "id": "sec_achievements_community",
+              "type": "achievements.community",
+              "order": 2,
+              "visible": true
+            },
+            {
+              "id": "sec_achievements_hackathons",
+              "type": "achievements.hackathons",
+              "order": 3,
+              "visible": true
+            }
+          ]
+        }
+      }
+    },
+    "projects.0.style": {
+      "background": "raised",
+      "border": "accent",
+      "radius": "panel",
+      "titleSize": "lg",
+      "titleColor": "accent",
+      "imageFit": "contain",
+      "imageAspect": "video",
+      "imagePosition": "bottom"
+    },
+    "certifications.0.style": {
+      "background": "navy",
+      "border": "strong",
+      "radius": "control",
+      "titleSize": "sm",
+      "titleColor": "ink",
+      "imageFit": "contain",
+      "imagePosition": "top"
+    },
+    "achievements.0.style": {
+      "background": "surface",
+      "border": "line",
+      "radius": "none",
+      "titleSize": "md",
+      "titleColor": "accent"
+    },
+    "roles.0.style": {
+      "background": "raised",
+      "radius": "card",
+      "imageFit": "contain"
+    },
+    "education.0.style": {
+      "border": "accent",
+      "titleColor": "accent"
+    },
+    "technologies.0.style": {
+      "emphasis": "accent"
+    },
+    "socials.0.style": {
+      "emphasis": "accent"
+    }
+  }
+}

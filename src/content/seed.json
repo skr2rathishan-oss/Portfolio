@@ -1,0 +1,857 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-11T00:00:00.000Z",
+  "site": {
+    "title": "Rathishan Mahendran — AI & Software Developer",
+    "description": "Portfolio of Rathishan Mahendran, a Computer Engineering student at the University of Ruhuna building AI agents and full-stack products.",
+    "footerText": "Built with React & TypeScript.",
+    "brand": { "primary": "Rathishan", "suffix": "M" },
+    "cv": {
+      "url": "/Resume/Rathishan_Mahendran_CV_FullStack_Intern.pdf",
+      "fileName": "Rathishan_Mahendran_CV_FullStack_Intern.pdf"
+    },
+    "ogImage": "/profile/Aboutmeprofile.jpeg"
+  },
+  "profile": {
+    "fullName": "Rathishan Mahendran",
+    "hero": {
+      "roleBadge": "AI & Software Developer",
+      "focusAreas": ["AI", "AI Agents", "Software", "Robotics"],
+      "headline": "Building intelligent systems,",
+      "headlineAccent": "one project at a time.",
+      "intro": "I'm Rathishan Mahendran — a Computer Engineering student at the University of Ruhuna who builds real software: AI agents, full-stack products and autonomous hardware.",
+      "primaryCta": { "label": "View my work", "to": "/projects" },
+      "secondaryCta": { "label": "Let's talk", "to": "/contact" },
+      "image": "/profile/Aboutmeprofile.jpeg",
+      "imageAlt": "Portrait of Rathishan Mahendran"
+    },
+    "about": {
+      "displayName": "Mahendran Rathishan",
+      "tagline": "Computer Engineering Student · Front End Developer",
+      "bio": "B.Sc. Computer Engineering undergraduate at the University of Ruhuna, Sri Lanka (expected graduation 2028). Passionate about Generative AI, Full-Stack Development, and Embedded Systems.",
+      "image": "/profile/Aboutmeprofile.jpeg",
+      "interests": ["AI Engineering", "Full-Stack Dev", "Generative AI", "IoT", "Open Source"],
+      "facts": [
+        { "id": "fact_location", "icon": "MapPin", "label": "Location", "value": "Sri Lanka (GMT+5:30)" },
+        { "id": "fact_university", "icon": "BookOpen", "label": "University", "value": "Univ. of Ruhuna" },
+        { "id": "fact_degree", "icon": "GraduationCap", "label": "Degree", "value": "B.Sc. Comp. Eng." },
+        { "id": "fact_languages", "icon": "Languages", "label": "Languages", "value": "English & Tamil" }
+      ],
+      "goals": [
+        { "id": "goal_aiml", "emoji": "🤖", "title": "AI/ML Engineer", "description": "LLM agentic systems" },
+        { "id": "goal_open_source", "emoji": "🌍", "title": "Open Source", "description": "Community tools & contributions" },
+        { "id": "goal_fullstack", "emoji": "⚡", "title": "Full-Stack", "description": "End-to-end premium apps" }
+      ],
+      "stats": []
+    },
+    "contact": {
+      "eyebrow": "Get in Touch",
+      "heading": "Let's",
+      "headingAccent": "Connect.",
+      "intro": "Open to collaborations, internships, and conversations about AI, software engineering, and robotics.",
+      "email": "vvivushan@gmail.com",
+      "location": "Sri Lanka",
+      "timezone": "GMT+5:30",
+      "availability": {
+        "enabled": true,
+        "title": "Available for opportunities",
+        "subtitle": "Internships · Research · Collaborations"
+      }
+    }
+  },
+  "socials": [
+    { "id": "soc_email", "order": 0, "visible": true, "platform": "email", "label": "Email", "handle": "vvivushan@gmail.com", "url": "mailto:vvivushan@gmail.com", "showInHero": false, "showInContact": true, "accent": "#ea4335" },
+    { "id": "soc_linkedin", "order": 1, "visible": true, "platform": "linkedin", "label": "LinkedIn", "handle": "rathishan-mahendran", "url": "https://linkedin.com/in/rathishan-mahendran", "showInHero": true, "showInContact": true, "accent": "#0a66c2" },
+    { "id": "soc_github", "order": 2, "visible": true, "platform": "github", "label": "GitHub", "handle": "skr2rathishan-oss", "url": "https://github.com/skr2rathishan-oss", "showInHero": true, "showInContact": true, "accent": "#e6edf3" },
+    { "id": "soc_instagram", "order": 3, "visible": true, "platform": "instagram", "label": "Instagram", "handle": "rathishan._", "url": "https://instagram.com/rathishan._", "showInHero": true, "showInContact": false, "accent": "#e4405f" },
+    { "id": "soc_facebook", "order": 4, "visible": true, "platform": "facebook", "label": "Facebook", "handle": "rathishan.21", "url": "https://facebook.com/rathishan.21", "showInHero": true, "showInContact": false, "accent": "#1877f2" },
+    { "id": "soc_ieee", "order": 5, "visible": true, "platform": "ieee", "label": "IEEE", "handle": "IEEE Student Branch", "showInHero": false, "showInContact": false, "accent": "#00629b" },
+    { "id": "soc_university", "order": 6, "visible": true, "platform": "university", "label": "University", "handle": "Univ. of Ruhuna", "url": "https://www.eng.ruh.ac.lk/", "showInHero": false, "showInContact": true, "accent": "#7c3aed" },
+    { "id": "soc_location", "order": 7, "visible": true, "platform": "location", "label": "Location", "handle": "Sri Lanka · GMT+5:30", "showInHero": false, "showInContact": true, "accent": "#10b981" }
+  ],
+  "projects": [
+    {
+      "id": "prj_browze_ai",
+      "order": 0,
+      "visible": true,
+      "title": "Browze.AI - Autonomous Web Agent",
+      "summary": "An autonomous, JARVIS-like web agent that browses for you. I work on the browser extension frontend and UI integration as part of the team. Still a work in progress.",
+      "sourceUrl": "https://github.com/Sathursan-S/Browser.AI",
+      "image": "/projects/brozwai.jpg",
+      "imageAlt": "Browze.AI banner: the agent that browses for you",
+      "stack": [
+        {
+          "techId": "tec_ai_agents",
+          "level": "core"
+        }
+      ],
+      "categoryIds": [
+        "pcat_ai",
+        "pcat_frontend"
+      ],
+      "featured": true,
+      "priority": "high",
+      "highlights": [
+        "Extension frontend & UI integration",
+        "Team project, guided by Sathursan Sanmukanathan",
+        "Work in progress"
+      ]
+    },
+    {
+      "id": "prj_n8n_job_matching",
+      "order": 1,
+      "visible": true,
+      "title": "n8n AI Job Discovery & Matching Agent",
+      "summary": "An AI-powered automated n8n workflow system for autonomous job discovery, resume analysis, and intelligent candidate-job matching powered by NVIDIA Nemotron LLM.",
+      "image": "/projects/n8n-job-matching.png",
+      "imageAlt": "n8n workflow canvas of the AI job discovery and matching agent",
+      "stack": [
+        {
+          "techId": "tec_n8n",
+          "level": "core"
+        },
+        {
+          "techId": "tec_nvidia_nemotron",
+          "level": "core"
+        },
+        {
+          "techId": "tec_ai_agents",
+          "level": "core"
+        },
+        {
+          "techId": "tec_llms",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_workflow_automations",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_python",
+          "level": "exposure"
+        }
+      ],
+      "categoryIds": [
+        "pcat_ai"
+      ],
+      "sourceUrl": "https://github.com/skr2rathishan-oss/n8n-ai-job-matching",
+      "featured": true
+    },
+    {
+      "id": "prj_velora",
+      "order": 2,
+      "visible": true,
+      "title": "Velora - E-Commerce AI Agent",
+      "summary": "Velora transforms online shopping into a natural conversation: users search for products, get personalised recommendations, check delivery availability, complete checkout and track orders, all through an intelligent AI assistant.",
+      "image": "/projects/Velora.jpeg",
+      "imageAlt": "Velora e-commerce AI agent interface",
+      "stack": [
+        {
+          "techId": "tec_react",
+          "level": "core"
+        },
+        {
+          "techId": "tec_typescript",
+          "level": "core"
+        },
+        {
+          "techId": "tec_nodejs",
+          "level": "core"
+        },
+        {
+          "techId": "tec_mcp",
+          "level": "core"
+        },
+        {
+          "techId": "tec_llms",
+          "level": "core"
+        },
+        {
+          "techId": "tec_express",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_mongodb",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_docker",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_google_cloud",
+          "level": "supporting"
+        }
+      ],
+      "categoryIds": [
+        "pcat_ai",
+        "pcat_fullstack"
+      ],
+      "sourceUrl": "https://github.com/skr2rathishan-oss/EcommerceAiagent",
+      "demoUrl": "https://drive.google.com/file/d/1Yv_aZXqZv2L50LALfHK6NYD9sxVJM8Xw/view?usp=drive_link",
+      "demoLabel": "Video demo",
+      "featured": true,
+      "highlights": [
+        "Smart product search & recommendations",
+        "Conversational shopping experience",
+        "Delivery checking & order tracking",
+        "Multilingual support (English, Sinhala & Tamil)",
+        "Context-aware AI with memory"
+      ]
+    },
+    {
+      "id": "prj_supportpilot",
+      "order": 3,
+      "visible": true,
+      "title": "SupportPilot - AI Customer Support Platform",
+      "summary": "An AI-powered customer support platform featuring automated ticket routing, role-based access control (RBAC), multi-tenant onboarding, and a real-time platform admin dashboard.",
+      "image": "/projects/CustomerSupoort.png",
+      "imageAlt": "SupportPilot customer support dashboard",
+      "stack": [
+        {
+          "techId": "tec_react",
+          "level": "core"
+        },
+        {
+          "techId": "tec_typescript",
+          "level": "core"
+        },
+        {
+          "techId": "tec_nodejs",
+          "level": "core"
+        },
+        {
+          "techId": "tec_ai_routing",
+          "level": "core"
+        },
+        {
+          "techId": "tec_tailwind",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_rbac_auth",
+          "level": "supporting"
+        }
+      ],
+      "categoryIds": [
+        "pcat_fullstack",
+        "pcat_ai"
+      ],
+      "sourceUrl": "https://github.com/skr2rathishan-oss/Ai-powered-Customer-Support-Platform",
+      "featured": true
+    },
+    {
+      "id": "prj_study_buddy",
+      "order": 4,
+      "visible": true,
+      "title": "Personalized Study Buddy",
+      "summary": "An AI-driven study companion that personalises learning paths and tracks progress using TypeScript-first architecture.",
+      "image": "/projects/StudyBuddy.jpg",
+      "imageAlt": "Personalized Study Buddy app screen",
+      "stack": [
+        {
+          "techId": "tec_typescript",
+          "level": "core"
+        },
+        {
+          "techId": "tec_react",
+          "level": "core"
+        },
+        {
+          "techId": "tec_tailwind",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_vite",
+          "level": "supporting"
+        }
+      ],
+      "categoryIds": [
+        "pcat_ai",
+        "pcat_frontend"
+      ],
+      "sourceUrl": "https://github.com/skr2rathishan-oss/Personalized-Study-Buddy",
+      "featured": false
+    },
+    {
+      "id": "prj_ml_portfolio",
+      "order": 5,
+      "visible": true,
+      "title": "Machine Learning Portfolio",
+      "summary": "Machine learning portfolio covering data preprocessing, exploratory data analysis, feature engineering, regression, classification, clustering, and end-to-end model development.",
+      "image": "/projects/MachineLearning.png",
+      "imageAlt": "Machine learning portfolio notebook preview",
+      "stack": [
+        {
+          "techId": "tec_python",
+          "level": "core"
+        },
+        {
+          "techId": "tec_scikit_learn",
+          "level": "core"
+        },
+        {
+          "techId": "tec_tensorflow",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_pytorch",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_pandas",
+          "level": "supporting"
+        }
+      ],
+      "categoryIds": [
+        "pcat_ai"
+      ],
+      "sourceUrl": "https://github.com/skr2rathishan-oss/machine-learning-portfolio",
+      "featured": false
+    },
+    {
+      "id": "prj_ecommerce_mini",
+      "order": 6,
+      "visible": true,
+      "title": "E-Commerce Mini-Project",
+      "summary": "A fully responsive Vue 3 e-commerce SPA featuring real-time product search, cart management, JWT auth, and pagination — consuming the DummyJSON REST API.",
+      "image": "/projects/Ecommerce-miniproject.jpg",
+      "imageAlt": "E-commerce mini-project product listing page",
+      "stack": [
+        {
+          "techId": "tec_vue",
+          "level": "core"
+        },
+        {
+          "techId": "tec_tailwind",
+          "level": "core"
+        },
+        {
+          "techId": "tec_typescript",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_dummyjson",
+          "level": "supporting"
+        },
+        {
+          "techId": "tec_vite",
+          "level": "exposure"
+        }
+      ],
+      "categoryIds": [
+        "pcat_frontend"
+      ],
+      "sourceUrl": "https://github.com/skr2rathishan-oss/Mini-Project",
+      "demoUrl": "https://miniproject584.netlify.app/",
+      "demoLabel": "Live demo",
+      "featured": true
+    },
+    {
+      "id": "prj_web_dev_collection",
+      "order": 7,
+      "visible": true,
+      "title": "Web Dev Collection",
+      "summary": "Curated showcase of responsive UI experiments exploring animations, modern CSS techniques, and interactive frontend components.",
+      "image": "/projects/web-dev-collection.svg",
+      "imageAlt": "Placeholder illustration of a browser window with code brackets",
+      "stack": [
+        {
+          "techId": "tec_html",
+          "level": "core"
+        },
+        {
+          "techId": "tec_css",
+          "level": "core"
+        },
+        {
+          "techId": "tec_javascript",
+          "level": "core"
+        }
+      ],
+      "categoryIds": [
+        "pcat_frontend"
+      ],
+      "sourceUrl": "https://github.com/skr2rathishan-oss/Web_Development_Projects",
+      "featured": false
+    }
+  ],
+  "projectCategories": [
+    { "id": "pcat_fullstack", "order": 0, "visible": true, "label": "Full-Stack" },
+    { "id": "pcat_ai", "order": 1, "visible": true, "label": "AI & Machine Learning" },
+    { "id": "pcat_frontend", "order": 2, "visible": true, "label": "Frontend / UI" }
+  ],
+  "techCategories": [
+    { "id": "tcat_ai_agents", "order": 0, "visible": true, "title": "AI Agents & LLMs", "subtitle": "Autonomous agents, tool calling, memory systems, and LangChain orchestration.", "icon": "Bot" },
+    { "id": "tcat_ml", "order": 1, "visible": true, "title": "Machine Learning", "subtitle": "Model training, data preprocessing, regression, and classification.", "icon": "Layers" },
+    { "id": "tcat_frontend", "order": 2, "visible": true, "title": "Frontend & UI", "subtitle": "Reactive web applications, state management, and responsive styling.", "icon": "Globe" },
+    { "id": "tcat_backend", "order": 3, "visible": true, "title": "Backend & APIs", "subtitle": "API services, runtimes, and data stores behind the apps.", "icon": "Server" },
+    { "id": "tcat_tooling", "order": 4, "visible": true, "title": "Tooling & DevOps", "subtitle": "Version control, build tooling, API testing, and developer workflow.", "icon": "Wrench" },
+    { "id": "tcat_robotics", "order": 5, "visible": true, "title": "Robotics", "subtitle": "Robot software and sensor integration.", "icon": "Cpu" },
+    { "id": "tcat_concepts", "order": 6, "visible": false, "title": "Concepts", "subtitle": "Concept tags used on projects; not shown in the tech stack.", "icon": "Sparkles" }
+  ],
+  "technologies": [
+    { "id": "tec_python", "order": 0, "visible": true, "name": "Python", "categoryId": "tcat_ai_agents", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/python/python-original.svg", "summary": "Primary language for AI agents, machine learning experiments, and backend scripts.", "highlights": ["Agent Architecture", "Data Pipelines", "Automation Scripts", "FastAPI Services"], "showInStack": true, "featured": true },
+    { "id": "tec_langchain", "order": 1, "visible": true, "name": "LangChain", "categoryId": "tcat_ai_agents", "proficiency": "core", "summary": "Orchestrating agent workflows, memory buffers, and tool-calling chains in Velora AI.", "highlights": ["Agent Tool Calling", "Custom Prompts", "Conversation Memory", "LLM Chains"], "showInStack": true, "featured": true },
+    { "id": "tec_n8n", "order": 2, "visible": true, "name": "n8n", "categoryId": "tcat_ai_agents", "proficiency": "core", "summary": "Autonomous AI workflows, NVIDIA Nemotron LLM orchestration, and automated job matching.", "highlights": ["Automated AI Pipelines", "NVIDIA Nemotron LLMs", "Resume Analysis & Scoring", "Webhook Integrations"], "showInStack": true, "featured": true },
+    { "id": "tec_ai_agents", "order": 3, "visible": true, "name": "AI Agents", "categoryId": "tcat_ai_agents", "proficiency": "core", "summary": "Multi-tool reasoning, function calling, and structured JSON outputs.", "highlights": ["Function Calling", "Structured Schemas", "Multi-step Reasoning", "Automated Search"], "showInStack": true, "featured": true },
+    { "id": "tec_nvidia_nemotron", "order": 4, "visible": true, "name": "NVIDIA Nemotron", "categoryId": "tcat_ai_agents", "proficiency": "familiar", "summary": "LLM used for resume analysis and job matching in the n8n agent.", "showInStack": true, "featured": false },
+    { "id": "tec_mcp", "order": 5, "visible": true, "name": "MCP", "categoryId": "tcat_ai_agents", "proficiency": "proficient", "summary": "Model Context Protocol tools connecting AI agents to live commerce services.", "showInStack": true, "featured": false },
+
+    { "id": "tec_scikit_learn", "order": 0, "visible": true, "name": "scikit-learn", "categoryId": "tcat_ml", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/scikitlearn/scikitlearn-original.svg", "summary": "Classical ML algorithms, regression, classification, clustering, and cross-validation.", "highlights": ["Feature Engineering", "Random Forests", "Regression Models", "Hyperparameter Tuning"], "showInStack": true, "featured": true },
+    { "id": "tec_pandas", "order": 1, "visible": true, "name": "Pandas", "categoryId": "tcat_ml", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/pandas/pandas-original.svg", "summary": "Exploratory data analysis, cleaning, data wrangling, and feature transformations.", "highlights": ["Data Preprocessing", "Feature Extraction", "Outlier Detection", "Data Cleaning"], "showInStack": true, "featured": true },
+    { "id": "tec_pytorch", "order": 2, "visible": true, "name": "PyTorch", "categoryId": "tcat_ml", "proficiency": "familiar", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/pytorch/pytorch-original.svg", "summary": "Building, training, and evaluating deep learning neural network architectures.", "highlights": ["Tensors & Layers", "Training Loops", "Loss Functions", "Model Validation"], "showInStack": true, "featured": true },
+    { "id": "tec_tensorflow", "order": 3, "visible": true, "name": "TensorFlow", "categoryId": "tcat_ml", "proficiency": "familiar", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/tensorflow/tensorflow-original.svg", "summary": "Machine learning workflows, Keras model pipelines, and neural classification.", "highlights": ["Keras Models", "Data Pipeline", "Model Evaluation", "Feature Scaling"], "showInStack": true, "featured": true },
+    { "id": "tec_hugging_face", "order": 4, "visible": true, "name": "Hugging Face", "categoryId": "tcat_ml", "proficiency": "exploring", "summary": "Currently exploring model fine-tuning with Hugging Face.", "showInStack": true, "featured": false },
+
+    { "id": "tec_react", "order": 0, "visible": true, "name": "React", "categoryId": "tcat_frontend", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/react/react-original.svg", "summary": "Component-driven interactive web applications with custom hooks and state.", "highlights": ["Custom Hooks", "Dynamic State", "Framer Motion Animations", "SPA Architecture"], "showInStack": true, "featured": true },
+    { "id": "tec_typescript", "order": 1, "visible": true, "name": "TypeScript", "categoryId": "tcat_frontend", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/typescript/typescript-original.svg", "summary": "Strictly-typed scalable web applications, robust interfaces, and type safety.", "highlights": ["Type-safe Interfaces", "Full-Stack SPAs", "API Contracts", "State Management"], "showInStack": true, "featured": true },
+    { "id": "tec_vue", "order": 2, "visible": true, "name": "Vue.js", "categoryId": "tcat_frontend", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/vuejs/vuejs-original.svg", "summary": "Reactive SPAs built with Composition API, Pinia state, and Vue Router in the E-Commerce SPA.", "highlights": ["Composition API", "Pinia Store", "Reactive Directives", "Single-File Components"], "showInStack": true, "featured": true },
+    { "id": "tec_tailwind", "order": 3, "visible": true, "name": "Tailwind CSS", "categoryId": "tcat_frontend", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/tailwindcss/tailwindcss-original.svg", "summary": "Utility-first responsive UI design, custom themes, and sleek layouts.", "highlights": ["Responsive Design", "Custom Themes", "Glassmorphism", "Micro-interactions"], "showInStack": true, "featured": true },
+    { "id": "tec_javascript", "order": 4, "visible": true, "name": "JavaScript", "categoryId": "tcat_frontend", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/javascript/javascript-original.svg", "summary": "Dynamic client-side interactions, asynchronous flows, and DOM manipulation.", "highlights": ["Event Handling", "Interactive UI Logic", "REST Integrations", "Async Workflows"], "showInStack": true, "featured": true },
+    { "id": "tec_html", "order": 5, "visible": true, "name": "HTML", "categoryId": "tcat_frontend", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/html5/html5-original.svg", "summary": "Semantic page structure and accessible markup.", "highlights": ["Semantic Layouts", "Accessible Markup"], "showInStack": true, "featured": true },
+    { "id": "tec_css", "order": 6, "visible": true, "name": "CSS", "categoryId": "tcat_frontend", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/css3/css3-original.svg", "summary": "Responsive flexbox/grid systems and CSS animations.", "highlights": ["Flexbox & CSS Grid", "Custom Keyframes", "Responsive Breakpoints"], "showInStack": true, "featured": true },
+
+    { "id": "tec_fastapi", "order": 0, "visible": true, "name": "FastAPI", "categoryId": "tcat_backend", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/fastapi/fastapi-original.svg", "summary": "Async API endpoints powering AI agent workflows.", "highlights": ["Async Handlers", "Pydantic Schemas", "CORS & Auth", "Model Endpoints"], "showInStack": true, "featured": true },
+    { "id": "tec_nodejs", "order": 1, "visible": true, "name": "Node.js", "categoryId": "tcat_backend", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/nodejs/nodejs-original.svg", "summary": "Backend services for full-stack web applications.", "showInStack": true, "featured": false },
+    { "id": "tec_rest_apis", "order": 2, "visible": true, "name": "REST APIs", "categoryId": "tcat_backend", "proficiency": "core", "summary": "Designing, consuming, and handling asynchronous RESTful HTTP endpoints.", "highlights": ["Async Fetch", "Error Boundaries", "JWT Authentication", "Pagination & Filter"], "showInStack": true, "featured": true },
+    { "id": "tec_redis_vector", "order": 3, "visible": true, "name": "Redis Vector Search", "categoryId": "tcat_backend", "proficiency": "exploring", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/redis/redis-original.svg", "summary": "Currently exploring vector search with Redis.", "showInStack": true, "featured": false },
+    { "id": "tec_express", "order": 4, "visible": true, "name": "Express", "categoryId": "tcat_backend", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/express/express-original.svg", "summary": "REST APIs and server routes for Node.js applications.", "showInStack": true, "featured": false },
+    { "id": "tec_mongodb", "order": 5, "visible": true, "name": "MongoDB", "categoryId": "tcat_backend", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/mongodb/mongodb-original.svg", "summary": "Document database for application and order data.", "showInStack": true, "featured": false },
+
+    { "id": "tec_git", "order": 0, "visible": true, "name": "Git & GitHub", "categoryId": "tcat_tooling", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/git/git-original.svg", "summary": "Version control, atomic commits, branching workflows, and open-source collaboration.", "highlights": ["Feature Branches", "Pull Requests", "Git Rebase & Merge", "Release Tags"], "showInStack": true, "featured": true },
+    { "id": "tec_vite", "order": 1, "visible": true, "name": "Vite", "categoryId": "tcat_tooling", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/vitejs/vitejs-original.svg", "summary": "Fast frontend build tooling, hot module replacement, and asset bundling.", "highlights": ["HMR", "Rollup Bundling", "Environment Config", "Tree-shaking"], "showInStack": true, "featured": true },
+    { "id": "tec_linux", "order": 2, "visible": true, "name": "Linux & Bash", "categoryId": "tcat_tooling", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/linux/linux-original.svg", "summary": "Command-line scripting, process management, and system administration.", "highlights": ["Shell Scripting", "Process Management", "CLI Tools", "File Permissions"], "showInStack": true, "featured": true },
+    { "id": "tec_postman", "order": 3, "visible": true, "name": "Postman", "categoryId": "tcat_tooling", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/postman/postman-original.svg", "summary": "API endpoint testing, request debugging, and payload validation.", "highlights": ["Payload Testing", "Environment Variables", "Header Verification", "Response Inspection"], "showInStack": true, "featured": true },
+    { "id": "tec_vscode", "order": 4, "visible": true, "name": "VS Code", "categoryId": "tcat_tooling", "proficiency": "core", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/vscode/vscode-original.svg", "summary": "Developer IDE workflow, breakpoints, linters, and productivity extensions.", "highlights": ["Integrated Debugger", "ESLint & TypeScript", "Git Graph", "Productivity Shortcuts"], "showInStack": true, "featured": true },
+    { "id": "tec_docker", "order": 5, "visible": true, "name": "Docker", "categoryId": "tcat_tooling", "proficiency": "proficient", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/docker/docker-original.svg", "summary": "Containerised builds and deployments.", "showInStack": true, "featured": false },
+    { "id": "tec_google_cloud", "order": 6, "visible": true, "name": "Google Cloud", "categoryId": "tcat_tooling", "proficiency": "familiar", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/googlecloud/googlecloud-original.svg", "summary": "Cloud hosting for deployed AI applications.", "showInStack": true, "featured": false },
+
+    { "id": "tec_ros2", "order": 0, "visible": true, "name": "ROS 2", "categoryId": "tcat_robotics", "proficiency": "exploring", "icon": "https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/ros/ros-original.svg", "summary": "Currently exploring sensor fusion with ROS 2.", "showInStack": true, "featured": false },
+
+    { "id": "tec_llms", "order": 0, "visible": true, "name": "LLMs", "categoryId": "tcat_concepts", "proficiency": "familiar", "showInStack": false, "featured": false },
+    { "id": "tec_workflow_automations", "order": 1, "visible": true, "name": "Workflow Automations", "categoryId": "tcat_concepts", "proficiency": "familiar", "showInStack": false, "featured": false },
+    { "id": "tec_ai_routing", "order": 2, "visible": true, "name": "AI Routing", "categoryId": "tcat_concepts", "proficiency": "familiar", "showInStack": false, "featured": false },
+    { "id": "tec_rbac_auth", "order": 3, "visible": true, "name": "RBAC Auth", "categoryId": "tcat_concepts", "proficiency": "familiar", "showInStack": false, "featured": false },
+    { "id": "tec_dummyjson", "order": 4, "visible": true, "name": "DummyJSON", "categoryId": "tcat_concepts", "proficiency": "familiar", "showInStack": false, "featured": false }
+  ],
+  "education": [
+    {
+      "id": "edu_ruhuna", "order": 0, "visible": true,
+      "degree": "B.Sc. Computer Engineering",
+      "institution": "University of Ruhuna",
+      "start": "2023", "end": "2028",
+      "status": "in-progress",
+      "logo": "/Education/Ruhuna.jpeg",
+      "url": "https://www.eng.ruh.ac.lk/"
+    },
+    {
+      "id": "edu_central_college", "order": 1, "visible": true,
+      "degree": "A/L Physical Science",
+      "institution": "Mu/Puthukkudiyiruppu Central College",
+      "start": "2020", "end": "2023",
+      "status": "completed",
+      "logo": "/Education/Central_College.jpeg",
+      "url": "https://www.facebook.com/share/g/1CBMDWqCH5/"
+    }
+  ],
+  "academicPathway": [
+    { "id": "ms_graduation", "order": 0, "visible": true, "year": "2028", "label": "Expected Graduation", "sub": "B.Sc. Computer Engineering", "done": false },
+    { "id": "ms_computer_engineering", "order": 1, "visible": true, "year": "2024", "label": "Entered Computer Engineering", "sub": "University of Ruhuna", "done": true },
+    { "id": "ms_engineering_enrolled", "order": 2, "visible": true, "year": "2023", "label": "B.Sc. Engineering Enrolled", "sub": "University of Ruhuna", "done": true },
+    { "id": "ms_al_completed", "order": 3, "visible": true, "year": "2023", "label": "A/L Completed", "sub": "Physical Science Stream", "done": true },
+    { "id": "ms_al_started", "order": 4, "visible": true, "year": "2020", "label": "A/L Studies Began", "sub": "Mu/Puthukkudiyiruppu Central College", "done": true, "url": "https://www.facebook.com/share/g/1CBMDWqCH5/" }
+  ],
+  "certifications": [
+    {
+      "id": "cert_azure_essentials", "order": 0, "visible": true,
+      "name": "Microsoft Azure Essentials",
+      "issuer": "Microsoft & LinkedIn",
+      "issued": "2026-09",
+      "image": "/certificates/azure.jpg",
+      "credentialUrl": "https://www.linkedin.com/learning/certificates/ef7af3cdb93346f07e0245e86a543f87b74892449b540de91ff8a72515a139ec",
+      "description": "Core cloud computing principles, Azure architectural components, resource management, cloud governance, and security fundamentals.",
+      "skills": ["Microsoft Azure", "Cloud Computing", "Security"],
+      "accent": "#0078d4",
+      "featured": true
+    },
+    {
+      "id": "cert_python_ds_ml", "order": 1, "visible": true,
+      "name": "Python for Data Science & ML",
+      "issuer": "LinkedIn Learning",
+      "issued": "2026-05",
+      "image": "/certificates/machinlearning.jpg",
+      "credentialUrl": "https://www.linkedin.com/learning/certificates/e8f6a8566a84c4b89f884553037d7c052e9311e85f02e5df834a0d46dbe04d9d",
+      "description": "Exploratory data analysis, statistical model fitting, predictive regression algorithms, and machine learning pipelines in Python.",
+      "skills": ["Machine Learning", "Python", "Artificial Intelligence"],
+      "accent": "#10b981",
+      "featured": true
+    },
+    {
+      "id": "cert_devtown_genai", "order": 2, "visible": true,
+      "name": "Generative AI Chatbot Bootcamp",
+      "issuer": "DevTown & Microsoft Student Chapter - MSIT",
+      "issued": "2026-03",
+      "image": "/certificates/devtown_screenshot.jpg",
+      "pdf": "/certificates/devtown.pdf",
+      "credentialUrl": "https://cert.devtown.in/verify/ZKOpTH",
+      "credentialId": "ZKOpTH",
+      "description": "Built and deployed generative AI chatbots using LLMs, prompt engineering, and conversational AI architectures in collaboration with Microsoft Student Chapter.",
+      "skills": ["AI", "Prompt Engineering", "LLMs", "Chatbot Dev"],
+      "accent": "#a855f7",
+      "featured": true
+    },
+    {
+      "id": "cert_docker_foundations", "order": 3, "visible": true,
+      "name": "Docker Foundations",
+      "issuer": "Docker & LinkedIn",
+      "issued": "2026-03",
+      "image": "/certificates/docker_screenshot.jpg",
+      "pdf": "/certificates/docker.pdf",
+      "credentialUrl": "https://www.linkedin.com/learning/certificates/0bba75b6ffea8780fbce41622d99983ff99d4702426d4391841d57215df37a41",
+      "description": "Hands-on containerization fundamentals, Dockerfile authoring, multi-container orchestration, and image management.",
+      "skills": ["Containerization", "Docker Products", "DevOps"],
+      "accent": "#2496ed",
+      "featured": true
+    },
+    {
+      "id": "cert_sliit_aiml_stage1", "order": 4, "visible": true,
+      "name": "AI/ML Engineer - Stage 1",
+      "issuer": "SLIIT Faculty of Computing",
+      "issued": "2025-10",
+      "image": "/certificates/sliit.jpg",
+      "credentialUrl": "https://code.sliit.org/certificates/veaysmvojn",
+      "description": "Training covering machine learning pipelines, deep neural networks, image processing, and computer vision models.",
+      "skills": ["Machine Learning", "Deep Learning", "Computer Vision"],
+      "accent": "#f59e0b",
+      "featured": true
+    },
+    {
+      "id": "cert_github_actions", "order": 5, "visible": false,
+      "name": "GitHub Actions Learning",
+      "issuer": "GitHub Actions Learning (by Nisal Gunawardhana)",
+      "issued": "2026-02",
+      "image": "/certificates/github-logo.png",
+      "credentialUrl": "https://github.com/nisalgunawardhana/github-actions-learning/issues/85#issuecomment-3848795415",
+      "skills": ["GitHub", "GitHub Actions"],
+      "featured": false
+    },
+    {
+      "id": "cert_educative_genai_handbook", "order": 6, "visible": false,
+      "name": "Generative AI Handbook",
+      "issuer": "Educative",
+      "issued": "2025-12",
+      "image": "/certificates/educative-logo.jpg",
+      "credentialUrl": "https://www.educative.io/verify-certificate/985KjktxAO7yklNVyH0jWo6rDgkVhN",
+      "skills": ["LLMs", "RAG", "Fine-tuning", "Prompt Engineering"],
+      "featured": false
+    },
+    {
+      "id": "cert_ieeextreme_19", "order": 7, "visible": true,
+      "name": "IEEEXtreme 19.0 Programming Competition",
+      "issuer": "IEEE",
+      "issued": "2025-10",
+      "image": "/certificates/ieeextreme.jpg",
+      "description": "Certificate of Participation: competed with team Tamilcoders in IEEEXtreme 19.0, a 24-hour competitive programming competition that hosted 19,000+ participants.",
+      "skills": ["Competitive Programming", "Algorithms", "Data Structures", "Problem Solving"],
+      "accent": "#00629b",
+      "featured": true
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach_codeblast_2025",
+      "order": 0,
+      "visible": true,
+      "title": "CodeBlast 2025 Hackathon",
+      "kind": "hackathon",
+      "organizer": "University of Ruhuna & SLT Mobitel",
+      "date": "2025-12",
+      "result": "Top 10 finalist",
+      "image": "/about/codeblast_square.png",
+      "gallery": [
+        {
+          "src": "/activities/codeblast/09.jpg",
+          "alt": "Rathishan in front of the CodeBlast 2025 and Southern AI Expo backdrop"
+        },
+        {
+          "src": "/activities/codeblast/03.jpg",
+          "alt": "Presenting the team's study buddy recommender to the judges"
+        },
+        {
+          "src": "/activities/codeblast/06.jpg",
+          "alt": "Explaining the solution on stage while teammates look on"
+        },
+        {
+          "src": "/activities/codeblast/02.jpg",
+          "alt": "CodeBlast 2025 Top 10 teams announcement, listing team CodeMakers"
+        },
+        {
+          "src": "/activities/codeblast/05.jpg",
+          "alt": "Team CodeMakers at their workstations in the hackathon lab"
+        },
+        {
+          "src": "/activities/codeblast/08.jpg",
+          "alt": "Team selfie in front of the CodeBlast backdrop"
+        },
+        {
+          "src": "/activities/codeblast/10.jpg",
+          "alt": "Standing at the CodeBlast hackathon entrance beside an SLT Mobitel banner"
+        },
+        {
+          "src": "/activities/codeblast/07.jpg",
+          "alt": "Judging panel watching the team presentations"
+        }
+      ],
+      "description": "Reached the Top 10 of 30+ teams at CodeBlast 2025, the Ruhuna Hackathon Challenge run with SLT Mobitel alongside the ReXtro 2025 exhibition. Our team built an AI-powered study buddy recommender using MSPACE APIs and Microsoft Azure, and presented its architecture and implementation to an expert judging panel.",
+      "skills": [
+        "MSPACE APIs",
+        "Microsoft Azure",
+        "Backend Development",
+        "Model Training & Inference"
+      ],
+      "link": {
+        "url": "https://www.linkedin.com/posts/rathishan-mahendran-39812b316_codeblast2025-rextro2025-universityofruhuna-activity-7410300981302886402-QD_x",
+        "label": "View on LinkedIn"
+      },
+      "accent": "#00abf0",
+      "featured": true,
+      "team": "CodeMakers"
+    },
+    {
+      "id": "ach_rextro_2025_demo",
+      "order": 1,
+      "visible": true,
+      "title": "ReXtro 2025 Exhibition — Demonstrator",
+      "kind": "exhibition",
+      "organizer": "Faculty of Engineering, University of Ruhuna",
+      "date": "2025-12",
+      "image": "/activities/rextro-demo/05.jpg",
+      "gallery": [
+        {
+          "src": "/activities/rextro-demo/05.jpg",
+          "alt": "Letter of appreciation from the Dean, Faculty of Engineering, University of Ruhuna, for demonstrating at ReXtro 2025"
+        },
+        {
+          "src": "/activities/rextro-demo/04.jpg",
+          "alt": "ReXtro 2025 Exhibition Day 2 collage: Rathishan at the Look Alike Cam stall and explaining the demo to a teammate"
+        },
+        {
+          "src": "/activities/rextro-demo/02.jpg",
+          "alt": "Rathishan at the exhibition stall beside the “Look Alike” demo sign"
+        },
+        {
+          "src": "/activities/rextro-demo/03.jpg",
+          "alt": "Running a live demo next to the hand-gesture mouse control poster"
+        },
+        {
+          "src": "/activities/rextro-demo/01.jpg",
+          "alt": "Rathishan at the Embedded Zone of the ReXtro 2025 exhibition"
+        }
+      ],
+      "description": "Demonstrated the “Look Alike Cam” in the Embedded System Zone at ReXtro 2025, the Silver Jubilee Engineering Exhibition held 13–15 December 2025 to mark the 25th anniversary of the Faculty of Engineering, University of Ruhuna. Received a letter of appreciation from the Dean for dedication and teamwork during the event.",
+      "skills": [
+        "Embedded Systems",
+        "Computer Vision",
+        "Live Demonstration",
+        "Public Communication"
+      ],
+      "featured": false,
+      "result": "Demonstrator"
+    },
+    {
+      "id": "ach_english_conversation",
+      "order": 2,
+      "visible": true,
+      "title": "Intensive English Conversation Program",
+      "kind": "program",
+      "organizer": "Faculty of Engineering, University of Ruhuna & PNP Global (USA)",
+      "date": "2024-03",
+      "result": "Participant",
+      "image": "/activities/english-conversation/01.jpg",
+      "gallery": [
+        {
+          "src": "/activities/english-conversation/01.jpg",
+          "alt": "Group photo of the Intensive English Conversation Program participants"
+        },
+        {
+          "src": "/activities/english-conversation/02.jpg",
+          "alt": "Selfie with PNP Global facilitators and fellow participants"
+        },
+        {
+          "src": "/activities/english-conversation/03.jpg",
+          "alt": "Rathishan with a program facilitator after a session"
+        },
+        {
+          "src": "/activities/english-conversation/04.jpg",
+          "alt": "Rathishan with a program facilitator in the classroom"
+        },
+        {
+          "src": "/activities/english-conversation/05.jpg",
+          "alt": "Rathishan with a program facilitator outside the faculty"
+        },
+        {
+          "src": "/activities/english-conversation/06.jpg",
+          "alt": "Selfie with a program facilitator among participants"
+        }
+      ],
+      "description": "Took part in a five-day intensive English conversation program run by the Faculty of Engineering’s Career Guidance Unit with PNP Global (USA), building English fluency, communication, teamwork and confidence in professional and social settings.",
+      "skills": [
+        "English Communication",
+        "Teamwork",
+        "Professional Communication"
+      ],
+      "featured": false
+    },
+    {
+      "id": "ach_sustainable_building",
+      "order": 3,
+      "visible": true,
+      "title": "Sustainable Building Model",
+      "kind": "project",
+      "organizer": "Faculty of Engineering, University of Ruhuna",
+      "date": "2024",
+      "image": "/activities/sustainable-building/03.jpg",
+      "gallery": [
+        {
+          "src": "/activities/sustainable-building/03.jpg",
+          "alt": "Scale model of two glass-fronted blocks linked by a skybridge"
+        },
+        {
+          "src": "/activities/sustainable-building/01.jpg",
+          "alt": "Close-up of the model’s green roofs, glazed floors and wind turbines"
+        },
+        {
+          "src": "/activities/sustainable-building/04.jpg",
+          "alt": "The team standing around the finished building model"
+        },
+        {
+          "src": "/activities/sustainable-building/06.jpg",
+          "alt": "Team selfie with the model at the showcase"
+        },
+        {
+          "src": "/activities/sustainable-building/02.jpg",
+          "alt": "Team members reviewing the design on a laptop beside the model"
+        }
+      ],
+      "description": "Built and presented a scale model of a sustainable building as part of a team: two glass-fronted blocks linked by a skybridge, with green roofs, landscaping and small wind turbines for on-site renewable energy.",
+      "skills": [
+        "Sustainable Design",
+        "Model Making",
+        "Teamwork"
+      ],
+      "featured": false
+    },
+    {
+      "id": "ach_icore_research_explainers",
+      "order": 4,
+      "visible": true,
+      "title": "AI Research Explainers",
+      "kind": "research",
+      "organizer": "Innovation Club of Ruhuna Engineering (ICORE)",
+      "date": "2026",
+      "image": "/activities/research/01.jpg",
+      "gallery": [
+        {
+          "src": "/activities/research/01.jpg",
+          "alt": "Infographic: VESPO, solving the stability crisis in RL for LLMs"
+        },
+        {
+          "src": "/activities/research/02.jpg",
+          "alt": "Infographic: how the GrandCode multi-agent system works"
+        }
+      ],
+      "description": "Visual explainers of recent AI research shared through the Innovation Club of Ruhuna Engineering: VESPO, which stabilises off-policy reinforcement learning for LLMs, and GrandCode, a multi-agent, self-improving approach to competitive programming.",
+      "skills": [
+        "Reinforcement Learning",
+        "LLMs",
+        "Multi-Agent Systems",
+        "Research Communication"
+      ],
+      "link": {
+        "url": "https://theicore.org/",
+        "label": "Visit ICORE"
+      },
+      "featured": false,
+      "style": {
+        "imagePosition": "top"
+      }
+    },
+    {
+      "id": "ach_kapruka_2026",
+      "order": 5,
+      "visible": true,
+      "title": "Kapruka Agent Challenge 2026",
+      "kind": "challenge",
+      "organizer": "Kapruka Holdings PLC",
+      "date": "2026-07",
+      "result": "Builder",
+      "image": "/about/kapruka_square.png",
+      "description": "Built and submitted a live AI shopping agent on the Kapruka MCP in the Kapruka Agent Challenge 2026, alongside more than 700 developers across Sri Lanka.",
+      "skills": [
+        "AI Shopping Agent",
+        "Kapruka MCP",
+        "LLMs",
+        "Agentic Commerce"
+      ],
+      "link": {
+        "url": "https://github.com/skr2rathishan-oss/EcommerceAiagent",
+        "label": "View on GitHub"
+      },
+      "accent": "#a855f7",
+      "featured": true
+    },
+    {
+      "id": "ach_ieeextreme_19",
+      "order": 6,
+      "visible": true,
+      "title": "IEEEXtreme 19.0 Programming Competition",
+      "kind": "competition",
+      "organizer": "IEEE",
+      "date": "2025",
+      "result": "Participant",
+      "team": "Tamilcoders",
+      "image": "/about/ieee_square.png",
+      "description": "Participated with team Tamilcoders in IEEEXtreme 19.0, a 24-hour virtual competitive programming challenge with 19,000+ participants worldwide.",
+      "skills": [
+        "Competitive Programming",
+        "Algorithms",
+        "Data Structures",
+        "Team Problem Solving"
+      ],
+      "accent": "#00629b",
+      "featured": true
+    }
+  ],
+  "roles": [
+    {
+      "id": "role_ai_club",
+      "order": 0,
+      "visible": true,
+      "title": "AI Knowledge Disseminator (Part-time)",
+      "organization": "Innovation Club of Ruhuna Engineering (ICORE)",
+      "parentOrg": "University of Ruhuna",
+      "kind": "community",
+      "start": "2026-01",
+      "end": "present",
+      "description": "Contributed to AI knowledge dissemination within the university and broader external community.",
+      "url": "https://theicore.org/",
+      "accent": "#f59e0b",
+      "logo": "/about/icore.jpg"
+    },
+    {
+      "id": "role_ieee_member",
+      "order": 1,
+      "visible": true,
+      "title": "Member",
+      "organization": "IEEE",
+      "kind": "membership",
+      "start": "2024-12",
+      "end": "2026-12",
+      "description": "Took part in technical workshops and research discussions focused on advancements in AI engineering, plus professional development and networking activities.",
+      "logo": "/about/IEE.png",
+      "accent": "#00629b"
+    }
+  ],
+  "programs": []
+}
