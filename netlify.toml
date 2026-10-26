@@ -6,27 +6,13 @@
   NODE_VERSION = "22"
   NPM_FLAGS = "--legacy-peer-deps"
 
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
-
-[dev]
-  framework = "#custom"
-  command = "npm run dev"
-  targetPort = 5173
-  port = 8888
-  autoLaunch = false
-
-# SPA fallback. Functions declared with `config.path` (e.g. /api/*) are matched
-# before redirects, so this rule never swallows API routes. Static files win too
-# because the rule is not forced (no "!").
+# SPA fallback. Static files win because the rule is not forced (no "!").
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
 # ── Security headers (static files and the SPA shell) ─────────
-# Function responses (/api/*) set their own headers in netlify/functions.
 # The sha256 source in script-src only matches Vite's React-refresh preamble, an inline
 # script that exists only under `netlify dev` (production HTML has no inline scripts).
 [[headers]]
@@ -45,16 +31,3 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-# The admin panel is private: never indexed, never cached.
-[[headers]]
-  for = "/admin"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow, noarchive"
-    Cache-Control = "no-store"
-
-[[headers]]
-  for = "/admin/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow, noarchive"
-    Cache-Control = "no-store"

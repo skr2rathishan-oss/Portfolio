@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSearchParams } from 'react-router-dom';
 import { useContent } from '../../../content/ContentProvider';
-import { T, useEd } from '../../../content/editable';
 import { sectionText } from '../../../content/layout';
 import { indexById, stackTechnologies, techUsageCount } from '../../../content/selectors';
 import { swapGridCols } from '../../../content/styleClasses';
@@ -55,21 +54,16 @@ function useProjectFilters() {
 }
 
 export function ProjectsHeader({ section }: Props) {
-  const ed = useEd();
   return (
     <PageHeader
       title={sectionText(section, 'title')}
       lead={sectionText(section, 'lead')}
-      attrs={ed(T.section(section.id), 'section')}
-      titleAttrs={ed(T.section(section.id, 'title'), 'text')}
-      leadAttrs={ed(T.section(section.id, 'lead'), 'text')}
     />
   );
 }
 
 export function ProjectsStack({ section }: Props) {
   const { projects, technologies, techCategories } = useContent();
-  const ed = useEd();
   const { activeTech, update } = useProjectFilters();
   const usage = useMemo(() => techUsageCount(projects), [projects]);
 
@@ -85,48 +79,46 @@ export function ProjectsStack({ section }: Props) {
 
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       id="stack"
       aria-labelledby="stack-heading"
       className={applyStyle(
-        'mt-10 border-y border-line py-8 sm:mt-12',
+        'rounded-[1.5rem] border border-line bg-surface/70 p-5 backdrop-blur-sm',
         section.style,
-        bodyRules({ spaceTop: 'mt-10 sm:mt-12', padding: 'py-8', border: 'border-y border-line' }),
+        bodyRules({ spaceTop: '', padding: 'p-5', border: 'border border-line' }),
       )}
     >
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
-        <div>
-          <h2 {...ed(T.section(section.id, 'title'), 'text')} id="stack-heading" className="text-h2 text-ink">
-            {sectionText(section, 'title')}
-          </h2>
-          <p {...ed(T.section(section.id, 'lead'), 'text')} className="mt-2 text-[0.9375rem] text-ink-2">
-            {sectionText(section, 'lead')}
-          </p>
-        </div>
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <h2 id="stack-heading" className="text-lg font-bold text-ink">
+          {sectionText(section, 'title')}
+        </h2>
+        {activeTech && (
+          <button
+            type="button"
+            onClick={() => update('tech', null)}
+            className="inline-flex min-h-9 items-center text-xs font-semibold text-accent underline-offset-4 hover:underline"
+          >
+            Clear
+          </button>
+        )}
       </div>
 
-      <div className="space-y-5 md:space-y-3">
+      <div className="space-y-5">
         {groups.map(({ cat, techs }) => (
-          <div
-            key={cat.id}
-            {...ed(T.item('techCategories', cat.id), 'item')}
-            role="group"
-            aria-labelledby={`tcat-${cat.id}`}
-            className="md:grid md:grid-cols-[11rem_minmax(0,1fr)] md:items-start md:gap-6 lg:grid-cols-[13rem_minmax(0,1fr)]"
-          >
-            <h3 id={`tcat-${cat.id}`} className="mb-2 text-sm font-medium text-ink-2 md:mb-0 md:pt-2.5">
+          <div key={cat.id} role="group" aria-labelledby={`tcat-${cat.id}`}>
+            <h3 id={`tcat-${cat.id}`} className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-wider text-ink-3">
               {cat.title}
             </h3>
-            <ul className="scroll-row -mx-4 px-4 sm:-mx-8 sm:px-8 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:[mask-image:none]">
+            <ul className="flex flex-wrap gap-1.5">
               {techs.map((t) => {
                 const count = usage.get(t.id) ?? 0;
                 return (
-                  <li key={t.id} className="shrink-0">
+                  <li key={t.id}>
                     <TechChip
                       tech={t}
                       count={count > 0 ? count : undefined}
                       active={activeTech?.id === t.id}
                       onClick={count > 0 ? (tech) => update('tech', activeTech?.id === tech.id ? null : tech.id) : undefined}
+                      className="!min-h-9 !px-2.5 !text-xs"
                     />
                   </li>
                 );
@@ -137,7 +129,7 @@ export function ProjectsStack({ section }: Props) {
       </div>
 
       {exploring.length > 0 && (
-        <p className="mt-6 text-sm text-ink-2">
+        <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-ink-2">
           <span className="text-ink">Exploring now:</span> {exploring.map((t) => t.name).join(', ')}.
         </p>
       )}
@@ -147,7 +139,6 @@ export function ProjectsStack({ section }: Props) {
 
 export function ProjectsList({ section }: Props) {
   const { projects } = useContent();
-  const ed = useEd();
   const { techById, categories, activeTech, activeCategory, update, clear } = useProjectFilters();
 
   const filtered = useMemo(
@@ -159,8 +150,8 @@ export function ProjectsList({ section }: Props) {
       ),
     [projects, activeTech, activeCategory],
   );
-  const featured = filtered.filter((p) => p.featured);
-  const rest = filtered.filter((p) => !p.featured);
+  // Featured work first; the sort is stable, so `order` is kept within each group.
+  const ordered = [...filtered].sort((a, b) => Number(b.featured) - Number(a.featured));
   const filtering = !!(activeTech || activeCategory);
 
   let status = `Showing all ${plural(filtered.length, 'project', 'projects')}`;
@@ -170,7 +161,7 @@ export function ProjectsList({ section }: Props) {
     if (activeCategory) status += ` in ${activeCategory.label}`;
   }
 
-  const renderCard = (p: Project, variant: 'featured' | 'grid', index: number) => (
+  const renderCard = (p: Project, index: number) => (
     <motion.li
       key={p.id}
       id={`project-${p.id}`}
@@ -181,41 +172,31 @@ export function ProjectsList({ section }: Props) {
       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
       className="min-w-0"
     >
-      <ProjectCard
-        project={p}
-        techById={techById}
-        variant={variant}
-        priority={index < 2}
-        reverse={variant === 'featured' && index % 2 === 1}
-      />
+      <ProjectCard project={p} techById={techById} priority={index < 3} />
     </motion.li>
   );
 
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-labelledby="project-list-heading"
-      className={applyStyle('mt-10', section.style, bodyRules({ spaceTop: 'mt-10' }))}
+      className={applyStyle('', section.style, bodyRules({ spaceTop: '' }))}
     >
       <h2 id="project-list-heading" className="sr-only">
         Project list
       </h2>
 
       {categories.length > 1 && (
-        <div role="group" aria-label="Filter by category" className="scroll-row -mx-4 px-4 sm:-mx-8 sm:px-8 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:[mask-image:none]">
+        <div role="group" aria-label="Filter by category" className="scroll-row -mx-4 px-4 sm:-mx-8 sm:px-8 md:mx-0 md:flex-wrap md:justify-center md:overflow-visible md:px-0 md:[mask-image:none]">
           <button
             type="button"
             aria-pressed={!activeCategory}
             onClick={() => update('category', null)}
             className={cx(
               pillClass,
-              !activeCategory ? 'border-accent bg-accent-wash text-ink' : 'border-line text-ink-2 hover:border-white/25 hover:text-ink',
+              !activeCategory ? 'border-accent bg-accent-wash text-accent' : 'border-line text-ink-2 hover:border-white/25 hover:text-ink',
             )}
           >
-            All
-            <span aria-hidden="true" className="font-mono text-xs text-ink-3">
-              {projects.length}
-            </span>
+            All Projects
           </button>
           {categories.map(({ c, count }) => {
             const active = activeCategory?.id === c.id;
@@ -228,20 +209,17 @@ export function ProjectsList({ section }: Props) {
                 onClick={() => update('category', active ? null : c.id)}
                 className={cx(
                   pillClass,
-                  active ? 'border-accent bg-accent-wash text-ink' : 'border-line text-ink-2 hover:border-white/25 hover:text-ink',
+                  active ? 'border-accent bg-accent-wash text-accent' : 'border-line text-ink-2 hover:border-white/25 hover:text-ink',
                 )}
               >
                 {c.label}
-                <span aria-hidden="true" className={cx('font-mono text-xs', active ? 'text-accent' : 'text-ink-3')}>
-                  {count}
-                </span>
               </button>
             );
           })}
         </div>
       )}
 
-      <div className="mt-5 flex min-h-11 flex-wrap items-center gap-x-3 text-sm text-ink-2">
+      <div className={cx('mt-5 flex min-h-11 flex-wrap items-center justify-center gap-x-3 text-sm text-ink-2', !filtering && 'sr-only')}>
         <p role="status" aria-live="polite">
           {status}
         </p>
@@ -269,28 +247,14 @@ export function ProjectsList({ section }: Props) {
           </button>
         </div>
       ) : (
-        <>
-          {featured.length > 0 && (
-            <ul className="mt-6 grid gap-6" aria-label="Featured projects">
-              <AnimatePresence initial={false} mode="popLayout">
-                {featured.map((p, i) => renderCard(p, 'featured', i))}
-              </AnimatePresence>
-            </ul>
-          )}
-          {rest.length > 0 && (
-            <ul
-              className={cx(
-                swapGridCols('grid gap-6 md:grid-cols-2 xl:grid-cols-3', section.style?.columns),
-                featured.length > 0 ? 'mt-10' : 'mt-6',
-              )}
-              aria-label={featured.length > 0 ? 'More projects' : 'Projects'}
-            >
-              <AnimatePresence initial={false} mode="popLayout">
-                {rest.map((p, i) => renderCard(p, 'grid', featured.length + i))}
-              </AnimatePresence>
-            </ul>
-          )}
-        </>
+        <ul
+          className={cx(swapGridCols('grid gap-6 md:grid-cols-2 xl:grid-cols-3', section.style?.columns), 'mt-6')}
+          aria-label="Projects"
+        >
+          <AnimatePresence initial={false} mode="popLayout">
+            {ordered.map((p, i) => renderCard(p, i))}
+          </AnimatePresence>
+        </ul>
       )}
     </section>
   );

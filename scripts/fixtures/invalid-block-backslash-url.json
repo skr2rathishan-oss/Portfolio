@@ -1,0 +1,39 @@
+{
+  "description": "Backslash-relative URL (/\\evil.com resolves to https://evil.com in browsers) on a button.",
+  "expect": "invalid",
+  "issuePath": "layout.pages.home.sections.0.blocks.0.props.href",
+  "set": {
+    "layout": {
+      "version": 1,
+      "pages": {
+        "home": {
+          "sections": [
+            {
+              "id": "sec_fx",
+              "type": "custom",
+              "order": 0,
+              "visible": true,
+              "props": {
+                "arrangement": "stack"
+              },
+              "blocks": [
+                {
+                  "id": "blk_fx",
+                  "type": "button",
+                  "order": 0,
+                  "visible": true,
+                  "props": {
+                    "label": "Click",
+                    "href": "/\\evil.com",
+                    "variant": "primary",
+                    "icon": "none"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -8,15 +8,9 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "check:content": "tsx scripts/validate-seed.ts",
-    "dev:netlify": "netlify dev"
+    "check:content": "tsx scripts/validate-seed.ts"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
-    "@netlify/blobs": "^11.1.4",
-    "@netlify/functions": "^6.0.2",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
     "lucide-react": "^0.546.0",

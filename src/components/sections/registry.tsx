@@ -1,5 +1,4 @@
-// Section registry: section type -> public renderer. Used by the public pages and the editor canvas
-// alike (the canvas never forks renderers; it only adds edit-target attributes via EditContext).
+// Section registry: section type -> public renderer. Used by the public pages.
 import { lazy, Suspense, type ComponentType } from 'react';
 import type { BuiltinSection, BuiltinSectionType, CustomSection as CustomSectionT } from '../../content/types';
 import { AboutCertifications, AboutEducation, AboutGoals, AboutHeader, AboutIntro, AboutStats } from './builtin/about';
@@ -8,10 +7,12 @@ import {
   AchievementsHackathons,
   AchievementsHeader,
   AchievementsPrograms,
+  AchievementsResearch,
 } from './builtin/achievements';
 import { ContactHeader, ContactMain } from './builtin/contact';
 import { HomeContactCta, HomeCoreStack, HomeHero, HomeHighlights } from './builtin/home';
 import { ProjectsHeader, ProjectsList, ProjectsStack } from './builtin/projects';
+import TrcslTimeline from './builtin/TrcslTimeline';
 
 // Custom sections and their blocks are a separate chunk: the default pages never load it.
 // (Import BLOCK_COMPONENTS from '../blocks/CustomSection' directly where needed.)
@@ -44,6 +45,8 @@ export const SECTION_COMPONENTS: Record<BuiltinSectionType, BuiltinSectionCompon
   'projects.stack': ProjectsStack,
   'projects.list': ProjectsList,
   'achievements.header': AchievementsHeader,
+  'achievements.research': AchievementsResearch,
+  'achievements.trcsl': TrcslTimeline,
   'achievements.hackathons': AchievementsHackathons,
   'achievements.community': AchievementsCommunity,
   'achievements.programs': AchievementsPrograms,

@@ -4,16 +4,13 @@ import { motion } from 'motion/react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { Content } from '../../content/types';
 import { SOCIAL_ICONS } from '../../content/icons';
-import { T, useEd } from '../../content/editable';
 import { cx, isExternal, linkProps } from '../cards/shared';
 import { btnSignalOutline } from '../ui/styles';
 import { NAV_ITEMS } from './nav';
 
 function Brand({ site, fullName, onClick }: { site: Content['site']; fullName: string; onClick?: () => void }) {
-  const ed = useEd();
   return (
     <Link
-      {...ed(T.site('brand'), 'field')}
       to="/"
       onClick={onClick}
       aria-label={`${fullName}, home`}
@@ -37,10 +34,8 @@ function CvButton({
   compact?: boolean;
 }) {
   const external = isExternal(cv.url);
-  const ed = useEd();
   return (
     <a
-      {...ed(T.site('cv'), 'link')}
       href={cv.url}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : { download: cv.fileName || true })}
       className={cx(btnSignalOutline, className)}

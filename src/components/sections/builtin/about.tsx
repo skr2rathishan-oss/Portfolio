@@ -3,7 +3,6 @@
 // CertificationPreviewContext.
 import { createContext, useContext, useMemo } from 'react';
 import { useContent } from '../../../content/ContentProvider';
-import { T, useEd } from '../../../content/editable';
 import { getIcon } from '../../../content/icons';
 import { sectionText } from '../../../content/layout';
 import { swapGridCols } from '../../../content/styleClasses';
@@ -11,27 +10,24 @@ import type { BuiltinSection, Certification } from '../../../content/types';
 import CertificationCard from '../../cards/CertificationCard';
 import EducationCard from '../../cards/EducationCard';
 import { cx, linkProps, MediaImage, NewTabHint } from '../../cards/shared';
-import PageHeader, { SectionHeading } from '../../layout/PageHeader';
+import { SectionHeading } from '../../layout/PageHeader';
 import { applyStyle, bodyRules } from '../sectionStyle';
 
 type Props = { section: BuiltinSection };
 
 export const CertificationPreviewContext = createContext<((cert: Certification) => void) | undefined>(undefined);
 
+/** No visible page title (the intro leads the page); the <h1> stays for screen readers. */
 export function AboutHeader({ section }: Props) {
-  const ed = useEd();
   return (
-    <PageHeader
-      title={sectionText(section, 'title')}
-      attrs={ed(T.section(section.id), 'section')}
-      titleAttrs={ed(T.section(section.id, 'title'), 'text')}
-    />
+    <div className="pt-4 sm:pt-6">
+      <h1 className="sr-only">{sectionText(section, 'title')}</h1>
+    </div>
   );
 }
 
 export function AboutIntro({ section }: Props) {
   const { profile } = useContent();
-  const ed = useEd();
   const { about } = profile;
 
   const paragraphs = useMemo(
@@ -45,7 +41,6 @@ export function AboutIntro({ section }: Props) {
 
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-labelledby="intro-heading"
       className={applyStyle(
         'mt-8 grid gap-8 sm:mt-10 md:grid-cols-[14rem_minmax(0,1fr)] md:gap-10 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-14',
@@ -62,19 +57,17 @@ export function AboutIntro({ section }: Props) {
         height={720}
         className="aspect-[4/5] w-full max-w-[16rem] self-start rounded-panel border border-line bg-surface text-4xl md:max-w-none"
         imgClassName="object-cover object-[center_18%]"
-        attrs={ed(T.profile('about.image'), 'image')}
       />
       <div className="min-w-0">
-        <h2 {...ed(T.profile('about.displayName'), 'text')} id="intro-heading" className="text-h2 text-ink">
+        <h2 id="intro-heading" className="text-h2 text-ink">
           {about.displayName || profile.fullName}
         </h2>
         {about.tagline && (
-          <p {...ed(T.profile('about.tagline'), 'text')} className="mt-1 text-ink-2">
+          <p className="mt-1 text-ink-2">
             {about.tagline}
           </p>
         )}
         <div
-          {...ed(T.profile('about.bio'), 'field')}
           className="mt-5 max-w-[65ch] space-y-4 text-base leading-relaxed text-ink-2 sm:text-lead"
         >
           {paragraphs.map((p, i) => (
@@ -85,7 +78,7 @@ export function AboutIntro({ section }: Props) {
         </div>
 
         {about.facts.length > 0 && (
-          <dl {...ed(T.profile('about.facts'), 'field')} className="mt-8 grid max-w-2xl gap-x-8 border-t border-line sm:grid-cols-2">
+          <dl className="mt-8 grid max-w-2xl gap-x-8 border-t border-line sm:grid-cols-2">
             {about.facts.map((f) => {
               const Icon = getIcon(f.icon);
               return (
@@ -102,7 +95,7 @@ export function AboutIntro({ section }: Props) {
         )}
 
         {about.interests.length > 0 && (
-          <div {...ed(T.profile('about.interests'), 'field')} className="mt-6">
+          <div className="mt-6">
             <h3 className="text-sm font-medium text-ink-2">Interests</h3>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               {about.interests.map((i) => (
@@ -120,17 +113,15 @@ export function AboutIntro({ section }: Props) {
 
 export function AboutGoals({ section }: Props) {
   const { profile } = useContent();
-  const ed = useEd();
   const { goals } = profile.about;
   if (goals.length === 0) return null;
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-labelledby="goals-heading"
       className={applyStyle('section-gap', section.style, bodyRules({ spaceTop: 'section-gap' }))}
     >
-      <SectionHeading id="goals-heading" title={sectionText(section, 'title')} titleAttrs={ed(T.section(section.id, 'title'), 'text')} />
-      <ul {...ed(T.profile('about.goals'), 'field')} className="grid gap-x-8 border-t border-line md:grid-cols-3">
+      <SectionHeading id="goals-heading" title={sectionText(section, 'title')} />
+      <ul className="grid gap-x-8 border-t border-line md:grid-cols-3">
         {goals.map((g) => (
           <li key={g.id} className="border-b border-line py-4">
             <h3 className="font-semibold text-ink">{g.title}</h3>
@@ -144,16 +135,14 @@ export function AboutGoals({ section }: Props) {
 
 export function AboutStats({ section }: Props) {
   const { profile } = useContent();
-  const ed = useEd();
   const { stats } = profile.about;
   if (stats.length === 0) return null;
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-label="In numbers"
       className={applyStyle('section-gap', section.style, bodyRules({ spaceTop: 'section-gap' }))}
     >
-      <dl {...ed(T.profile('about.stats'), 'field')} className="flex flex-wrap gap-x-12 gap-y-4">
+      <dl className="flex flex-wrap gap-x-12 gap-y-4">
         {stats.map((s) => (
           <div key={s.id}>
             <dt className="text-sm text-ink-2">{s.label}</dt>
@@ -167,16 +156,14 @@ export function AboutStats({ section }: Props) {
 
 export function AboutEducation({ section }: Props) {
   const { education, academicPathway } = useContent();
-  const ed = useEd();
   if (education.length === 0 && academicPathway.length === 0) return null;
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-labelledby="education-heading"
       id="education"
       className={applyStyle('section-gap', section.style, bodyRules({ spaceTop: 'section-gap' }))}
     >
-      <SectionHeading id="education-heading" title={sectionText(section, 'title')} titleAttrs={ed(T.section(section.id, 'title'), 'text')} />
+      <SectionHeading id="education-heading" title={sectionText(section, 'title')} />
       <div className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14">
         {education.length > 0 && (
           <ul className="space-y-4">
@@ -190,7 +177,7 @@ export function AboutEducation({ section }: Props) {
 
         {academicPathway.length > 0 && (
           <div>
-            <h3 {...ed(T.section(section.id, 'secondaryTitle'), 'text')} className="text-sm font-medium text-ink-2">
+            <h3 className="text-sm font-medium text-ink-2">
               {sectionText(section, 'secondaryTitle')}
             </h3>
             <ol className="mt-4">
@@ -199,7 +186,6 @@ export function AboutEducation({ section }: Props) {
                 return (
                   <li
                     key={m.id}
-                    {...ed(T.item('academicPathway', m.id), 'item')}
                     className="relative grid grid-cols-[3.5rem_1.25rem_minmax(0,1fr)] gap-x-3"
                   >
                     <span className={cx('pt-0.5 font-mono text-sm', m.done ? 'text-ink-2' : 'text-ink-3')}>{m.year}</span>
@@ -242,12 +228,10 @@ export function AboutEducation({ section }: Props) {
 
 export function AboutCertifications({ section }: Props) {
   const { certifications } = useContent();
-  const ed = useEd();
   const onPreview = useContext(CertificationPreviewContext);
   if (certifications.length === 0) return null;
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-labelledby="certifications-heading"
       id="certifications"
       className={applyStyle('section-gap', section.style, bodyRules({ spaceTop: 'section-gap' }))}
@@ -256,8 +240,6 @@ export function AboutCertifications({ section }: Props) {
         id="certifications-heading"
         title={sectionText(section, 'title')}
         lead={sectionText(section, 'lead')}
-        titleAttrs={ed(T.section(section.id, 'title'), 'text')}
-        leadAttrs={ed(T.section(section.id, 'lead'), 'text')}
       />
       <ul className={swapGridCols('grid gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3', section.style?.columns)}>
         {certifications.map((c) => (

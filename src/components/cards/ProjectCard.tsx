@@ -1,161 +1,125 @@
-import { ExternalLink, Github, PlayCircle } from 'lucide-react';
-import type { ID, Project, Technology } from '../../content/types';
-import { formatDate } from '../../content/selectors';
-import { T, useEd } from '../../content/editable';
+import { Eye, Github, PlayCircle } from 'lucide-react';
+import type { ID, Project, ProjectPriority, Technology } from '../../content/types';
 import { applyStyle, cardRules } from '../sections/sectionStyle';
 import { cx, linkProps, MediaImage, NewTabHint } from './shared';
 
 export interface ProjectCardProps {
   project: Project;
   techById: Map<ID, Technology>;
-  /** 'featured' is a wide split card used for highlighted work; 'carousel' is kept for compatibility. */
-  variant?: 'grid' | 'carousel' | 'featured';
   /** Load the cover eagerly (first visible cards). */
   priority?: boolean;
-  /** Featured variant only: put the image on the right at wide sizes. */
-  reverse?: boolean;
   className?: string;
 }
 
 const LEVEL_ORDER = { core: 0, supporting: 1, exposure: 2 } as const;
-const MAX_CHIPS = 5;
+const MAX_CHIPS = 6;
 
-export default function ProjectCard({
-  project,
-  techById,
-  variant = 'grid',
-  priority = false,
-  reverse = false,
-  className,
-}: ProjectCardProps) {
-  const featured = variant === 'featured';
+const PRIORITY_LABEL: Record<ProjectPriority, string> = { high: 'High', medium: 'Medium', low: 'Low' };
+const PRIORITY_DOT: Record<ProjectPriority, string> = {
+  high: 'bg-amber-400',
+  medium: 'bg-sky-400',
+  low: 'bg-ink-3',
+};
+
+const buttonBase =
+  'inline-flex min-h-11 flex-1 basis-0 items-center justify-center gap-2 rounded-control px-4 text-sm font-semibold transition-colors duration-150 active:translate-y-px';
+
+export default function ProjectCard({ project, techById, priority = false, className }: ProjectCardProps) {
   const stack = [...project.stack]
     .sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level])
     .flatMap((s) => {
       const tech = techById.get(s.techId);
       return tech ? [{ ...s, tech }] : [];
     });
-  const shownStack = featured ? stack : stack.slice(0, MAX_CHIPS);
+  const shownStack = stack.slice(0, MAX_CHIPS);
   const hiddenCount = stack.length - shownStack.length;
   const isVideo = !!project.demoUrl && (/video/i.test(project.demoLabel ?? '') || /drive\.google|youtu|loom|vimeo/i.test(project.demoUrl));
-  const demoLabel = project.demoLabel?.trim() || (isVideo ? 'Watch demo' : 'Live demo');
-  const date = formatDate(project.date);
-  const ed = useEd();
+  const demoLabel = project.demoLabel?.trim() || (isVideo ? 'Watch Demo' : 'Visit Site');
+  const level: ProjectPriority = project.priority ?? (project.featured ? 'high' : 'medium');
   const { style } = project;
-  const f = (name: string) => T.field('projects', project.id, name);
 
   return (
     <article
-      {...ed(T.item('projects', project.id), 'item')}
       className={cx(
         applyStyle(
-          'group relative flex flex-col rounded-card bg-surface border border-line overflow-hidden transition-colors duration-150 hover:border-white/20',
+          'group relative flex h-full w-full flex-col rounded-[1.75rem] border border-line bg-surface/80 p-5 backdrop-blur-sm transition-[border-color,box-shadow] duration-200 hover:border-accent/40 hover:shadow-[0_0_32px_rgb(0_171_240/0.12)]',
           style,
-          cardRules({ background: 'bg-surface', border: 'border border-line', radius: 'rounded-card' }),
+          cardRules({ background: 'bg-surface/80', border: 'border border-line', radius: 'rounded-[1.75rem]' }),
         ),
-        featured && 'md:grid md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-stretch',
-        variant === 'carousel' ? 'w-[84vw] max-w-[340px] flex-shrink-0 snap-center' : 'w-full h-full',
         className,
       )}
     >
-      <MediaImage
-        src={project.image}
-        alt={project.imageAlt ?? `Screenshot of ${project.title}`}
-        fallbackText={project.title}
-        loading={priority ? 'eager' : 'lazy'}
-        width={1200}
-        height={750}
-        className={cx(
-          featured
-            ? 'relative w-full aspect-[16/10] bg-navy text-3xl border-b border-line'
-            : applyStyle('relative w-full aspect-[16/10] bg-navy text-3xl border-b border-line', style, [
-                { key: 'imageAspect', tokens: 'aspect-[16/10]' },
-              ]),
-          featured && 'md:aspect-auto md:h-full md:min-h-[18rem] md:border-b-0',
-          featured && (reverse ? 'md:order-2 md:border-l' : 'md:border-r'),
-        )}
-        imgClassName={applyStyle('object-cover object-top', style, [
-          { key: 'imageFit', tokens: 'object-cover' },
-          { key: 'imagePosition', tokens: 'object-top' },
-        ])}
-        attrs={ed(f('image'), 'image')}
-      />
-
-      <div className={cx('flex flex-1 flex-col p-5', featured && 'md:p-7 lg:p-8')}>
-        {(featured || date) && (
-          <p className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-3">
-            {featured && <span className="font-semibold text-accent">Featured</span>}
-            {date && (
-              <time dateTime={project.date} className="font-mono">
-                {date}
-              </time>
-            )}
-          </p>
-        )}
-
-        <h3
-          {...ed(f('title'), 'text')}
-          className={cx(
-            applyStyle('text-h3 text-ink text-pretty', style, [
-              { key: 'titleSize', tokens: 'text-h3' },
-              { key: 'titleColor', tokens: 'text-ink' },
-            ]),
-            featured && (!style?.titleSize || style.titleSize === 'md') && 'md:text-h2',
+      <div className="relative">
+        <MediaImage
+          src={project.image}
+          alt={project.imageAlt ?? `Screenshot of ${project.title}`}
+          fallbackText={project.title}
+          loading={priority ? 'eager' : 'lazy'}
+          width={1200}
+          height={750}
+          className={applyStyle('relative w-full aspect-[2/1] rounded-2xl bg-navy text-3xl', style, [
+            { key: 'imageAspect', tokens: 'aspect-[2/1]' },
+          ])}
+          imgClassName={applyStyle(
+            'object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]',
+            style,
+            [
+              { key: 'imageFit', tokens: 'object-cover' },
+              { key: 'imagePosition', tokens: 'object-top' },
+            ],
           )}
-        >
-          {project.title}
-        </h3>
+        />
+        <span className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-canvas/85 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wider text-ink backdrop-blur">
+          <span aria-hidden="true" className={cx('h-1.5 w-1.5 rounded-full', PRIORITY_DOT[level])} />
+          <span className="sr-only">Priority: </span>
+          {PRIORITY_LABEL[level]}
+        </span>
+      </div>
 
-        <p
-          {...ed(f('summary'), 'text')}
-          className={cx('mt-2 text-[0.9375rem] leading-relaxed text-ink-2', !featured && 'line-clamp-4')}
-        >
-          {project.summary}
-        </p>
+      <h3
+        title={project.title}
+        className={applyStyle('mt-5 truncate text-h3 font-bold text-ink', style, [
+          { key: 'titleSize', tokens: 'text-h3' },
+          { key: 'titleColor', tokens: 'text-ink' },
+        ])}
+      >
+        {project.title}
+      </h3>
 
-        {project.highlights && project.highlights.length > 0 && (
-          <ul {...ed(f('highlights'), 'field')} className="mt-3 space-y-1.5 text-sm text-ink-2">
-            {project.highlights.map((h) => (
-              <li key={h} className="flex gap-2">
-                <span aria-hidden="true" className="mt-[0.6em] h-1 w-1 flex-shrink-0 rounded-full bg-accent" />
-                <span>{h}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+      <p className="mt-2 line-clamp-3 text-[0.9375rem] leading-relaxed text-ink-2">{project.summary}</p>
 
-        {shownStack.length > 0 && (
-          <ul {...ed(f('stack'), 'field')} aria-label="Tech stack" className="mt-4 flex flex-wrap gap-1.5">
-            {shownStack.map(({ techId, level, tech }) => (
-              <li
-                key={techId}
-                className={cx(
-                  'rounded-chip border px-2 py-0.5 text-xs font-medium',
-                  level === 'core' ? 'border-accent/35 text-ink bg-accent-wash' : 'border-line text-ink-2',
-                )}
-              >
-                {tech.name}
-                {level === 'core' && <span className="sr-only"> (core)</span>}
-              </li>
-            ))}
-            {hiddenCount > 0 && (
-              <li className="rounded-chip border border-line px-2 py-0.5 text-xs font-medium text-ink-3">
-                +{hiddenCount}
-                <span className="sr-only"> more</span>
-              </li>
-            )}
-          </ul>
-        )}
+      {shownStack.length > 0 && (
+        <ul aria-label="Tech stack" className="mt-4 flex flex-wrap gap-2">
+          {shownStack.map(({ techId, level: stackLevel, tech }) => (
+            <li
+              key={techId}
+              className={cx(
+                'rounded-control border px-2.5 py-1 text-xs font-medium',
+                stackLevel === 'core' ? 'border-accent/40 bg-accent-wash text-accent' : 'border-line bg-white/[0.03] text-ink-2',
+              )}
+            >
+              {tech.name}
+              {stackLevel === 'core' && <span className="sr-only"> (core)</span>}
+            </li>
+          ))}
+          {hiddenCount > 0 && (
+            <li className="rounded-control border border-line px-2.5 py-1 text-xs font-medium text-ink-3">
+              +{hiddenCount}
+              <span className="sr-only"> more</span>
+            </li>
+          )}
+        </ul>
+      )}
 
-        {(project.demoUrl || project.sourceUrl) && (
-          <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
+      {(project.demoUrl || project.sourceUrl) && (
+        <div className="mt-auto pt-5">
+          <div className="flex gap-3 border-t border-line pt-4">
             {project.demoUrl && (
               <a
-                {...ed(f('demoUrl'), 'link')}
                 {...linkProps(project.demoUrl)}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover active:translate-y-px"
+                className={cx(buttonBase, 'bg-accent text-on-accent hover:bg-accent-hover')}
               >
-                {isVideo ? <PlayCircle size={16} aria-hidden="true" /> : <ExternalLink size={16} aria-hidden="true" />}
+                {isVideo ? <PlayCircle size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
                 <span>{demoLabel}</span>
                 <span className="sr-only">: {project.title}</span>
                 <NewTabHint url={project.demoUrl} />
@@ -163,19 +127,18 @@ export default function ProjectCard({
             )}
             {project.sourceUrl && (
               <a
-                {...ed(f('sourceUrl'), 'link')}
                 {...linkProps(project.sourceUrl)}
-                className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink-2 underline-offset-4 transition-colors hover:text-ink hover:underline"
+                className={cx(buttonBase, 'border border-line-strong bg-canvas/40 text-ink hover:border-accent/50 hover:text-accent')}
               >
                 <Github size={16} aria-hidden="true" />
-                <span>Source code</span>
+                <span>Source Code</span>
                 <span className="sr-only">: {project.title}</span>
                 <NewTabHint url={project.sourceUrl} />
               </a>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </article>
   );
 }

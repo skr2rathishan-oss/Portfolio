@@ -1,10 +1,9 @@
 // Content blocks for custom sections. Plain JSX text only (no HTML injection); every style value
 // maps to a fixed design-system class (src/content/styleClasses.ts).
-import { useContext, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { ArrowRight, Download, ExternalLink, Mail, MapPin, type LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useContent } from '../../content/ContentProvider';
-import { EditContext, T, useEd } from '../../content/editable';
 import { SOCIAL_ICONS } from '../../content/icons';
 import {
   BG,
@@ -61,26 +60,12 @@ function textClasses(
   );
 }
 
-/** Editor-only placeholder for blocks that render nothing publicly yet (no image chosen). */
-function EditPlaceholder({ attrs, children }: { attrs?: Record<string, string>; children: ReactNode }) {
-  return (
-    <div
-      {...attrs}
-      className="rounded-card border border-dashed border-line-strong/40 px-4 py-8 text-center text-sm text-ink-3"
-    >
-      {children}
-    </div>
-  );
-}
-
 export function HeadingBlock({ block, section }: BlockProps<HeadingBlockT>) {
-  const ed = useEd();
   const { style } = block;
   const Tag = block.props.level === 'h3' ? 'h3' : 'h2';
   return (
-    <div {...ed(T.block(section.id, block.id), 'block')} className={boxClasses(style) || undefined}>
+    <div className={boxClasses(style) || undefined}>
       <Tag
-        {...ed(T.block(section.id, block.id, 'text'), 'text')}
         className={cx(
           'text-balance',
           textClasses(style, { size: Tag === 'h2' ? 'text-h2' : 'text-h3', color: 'text-ink' }),
@@ -93,17 +78,14 @@ export function HeadingBlock({ block, section }: BlockProps<HeadingBlockT>) {
 }
 
 export function TextBlock({ block, section }: BlockProps<TextBlockT>) {
-  const ed = useEd();
   const { style } = block;
   const { text } = block.props;
   const paragraphs = text
     .split(/\n\s*\n/)
     .map((p) => p.trim())
     .filter(Boolean);
-  const textAttrs = ed(T.block(section.id, block.id, 'text'), 'text');
   return (
     <div
-      {...ed(T.block(section.id, block.id), 'block')}
       className={cx(
         'leading-relaxed',
         textClasses(style, { size: 'text-base', color: 'text-ink-2' }),
@@ -112,11 +94,11 @@ export function TextBlock({ block, section }: BlockProps<TextBlockT>) {
       )}
     >
       {paragraphs.length <= 1 ? (
-        <p {...textAttrs} className="whitespace-pre-line">
+        <p className="whitespace-pre-line">
           {text}
         </p>
       ) : (
-        <div {...textAttrs} className="space-y-4">
+        <div className="space-y-4">
           {paragraphs.map((p, i) => (
             <p key={i} className="whitespace-pre-line">
               {p}
@@ -147,22 +129,20 @@ function SmartLink({
   href,
   className,
   children,
-  attrs,
 }: {
   href: string;
   className?: string;
   children: ReactNode;
-  attrs?: Record<string, string>;
 }) {
   if (/^\/(?!\/)/.test(href)) {
     return (
-      <Link {...attrs} to={href} className={className}>
+      <Link to={href} className={className}>
         {children}
       </Link>
     );
   }
   return (
-    <a {...attrs} {...linkProps(href)} className={className}>
+    <a {...linkProps(href)} className={className}>
       {children}
       <NewTabHint url={href} />
     </a>
@@ -170,13 +150,10 @@ function SmartLink({
 }
 
 export function ImageBlock({ block, section }: BlockProps<ImageBlockT>) {
-  const ed = useEd();
-  const editing = useContext(EditContext) !== null;
   const { style } = block;
   const { src, alt, caption, href } = block.props;
-  const rootAttrs = ed(T.block(section.id, block.id), 'block');
   if (!src) {
-    return editing ? <EditPlaceholder attrs={rootAttrs}>Image block: choose an image</EditPlaceholder> : null;
+    return null;
   }
   const image = (
     <MediaImage
@@ -187,11 +164,10 @@ export function ImageBlock({ block, section }: BlockProps<ImageBlockT>) {
       height={750}
       className={imageFrame(style, { radius: 'rounded-card', border: 'border border-line', aspect: '' })}
       imgClassName={imageFit(style)}
-      attrs={ed(T.block(section.id, block.id, 'src'), 'image')}
     />
   );
   return (
-    <figure {...rootAttrs} className={boxClasses(style) || undefined}>
+    <figure className={boxClasses(style) || undefined}>
       {href ? (
         <SmartLink href={href} className="block transition-opacity hover:opacity-90">
           {image}
@@ -205,16 +181,13 @@ export function ImageBlock({ block, section }: BlockProps<ImageBlockT>) {
 }
 
 export function GalleryBlock({ block, section }: BlockProps<GalleryBlockT>) {
-  const ed = useEd();
-  const editing = useContext(EditContext) !== null;
   const { style } = block;
   const { images } = block.props;
-  const rootAttrs = ed(T.block(section.id, block.id), 'block');
   if (images.length === 0) {
-    return editing ? <EditPlaceholder attrs={rootAttrs}>Gallery block: add images</EditPlaceholder> : null;
+    return null;
   }
   return (
-    <div {...rootAttrs}>
+    <div>
       <ul className={cx('grid gap-3 sm:gap-4', COLUMNS[style?.columns ?? '3'])}>
         {images.map((img) => (
           <li key={img.id} className="min-w-0">
@@ -227,7 +200,6 @@ export function GalleryBlock({ block, section }: BlockProps<GalleryBlockT>) {
                 height={600}
                 className={imageFrame(style, { radius: 'rounded-control', border: 'border border-line', aspect: 'aspect-[4/3]' })}
                 imgClassName={imageFit(style)}
-                attrs={ed(T.block(section.id, block.id, `images.${img.id}`), 'image')}
               />
               {img.caption && <figcaption className="mt-1.5 text-sm text-ink-3">{img.caption}</figcaption>}
             </figure>
@@ -252,16 +224,14 @@ const BUTTON_VARIANT: Record<ButtonBlockT['props']['variant'], string> = {
 };
 
 export function ButtonBlock({ block, section }: BlockProps<ButtonBlockT>) {
-  const ed = useEd();
   const { label, href, variant, icon } = block.props;
   const Icon = BUTTON_ICON[icon];
   return (
     <div
-      {...ed(T.block(section.id, block.id), 'block')}
       className={block.style?.textAlign ? TEXT_ALIGN[block.style.textAlign] : undefined}
     >
       <SmartLink href={href} className={cx(BUTTON_VARIANT[variant], 'max-w-full')}>
-        <span {...ed(T.block(section.id, block.id, 'label'), 'text')} className="min-w-0 break-words">
+        <span className="min-w-0 break-words">
           {label}
         </span>
         {Icon && <Icon size={16} aria-hidden="true" className="shrink-0" />}
@@ -272,7 +242,6 @@ export function ButtonBlock({ block, section }: BlockProps<ButtonBlockT>) {
 
 export function ContactInfoBlock({ block, section }: BlockProps<ContactInfoBlockT>) {
   const { profile, socials } = useContent();
-  const ed = useEd();
   const { style } = block;
   const { title, showEmail, showLocation, showSocials } = block.props;
   const { contact } = profile;
@@ -285,7 +254,6 @@ export function ContactInfoBlock({ block, section }: BlockProps<ContactInfoBlock
 
   return (
     <div
-      {...ed(T.block(section.id, block.id), 'block')}
       className={cx(
         'min-w-0',
         style?.background && BG[style.background],
@@ -297,7 +265,7 @@ export function ContactInfoBlock({ block, section }: BlockProps<ContactInfoBlock
       )}
     >
       {title && (
-        <h3 {...ed(T.block(section.id, block.id, 'title'), 'text')} className="mb-3 text-h3 text-ink">
+        <h3 className="mb-3 text-h3 text-ink">
           {title}
         </h3>
       )}
@@ -349,10 +317,8 @@ export function ContactInfoBlock({ block, section }: BlockProps<ContactInfoBlock
 }
 
 export function DividerBlock({ block, section }: BlockProps<DividerBlockT>) {
-  const ed = useEd();
   return (
     <hr
-      {...ed(T.block(section.id, block.id), 'block')}
       className={cx('border-0 border-t border-line', boxClasses(block.style) || 'w-full')}
     />
   );

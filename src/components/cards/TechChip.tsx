@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { Technology } from '../../content/types';
-import { T, useEd } from '../../content/editable';
 import { applyStyle } from '../sections/sectionStyle';
 import { cx, initials } from './shared';
 
@@ -47,8 +46,6 @@ export function TechIcon({ tech, active = false }: { tech: Technology; active?: 
 
 export default function TechChip({ tech, count, active = false, onClick, className }: TechChipProps) {
   const label = count !== undefined ? `${tech.name}, ${count} project${count === 1 ? '' : 's'}` : tech.name;
-  const ed = useEd();
-  const attrs = ed(T.item('technologies', tech.id), 'item');
   const body = (
     <>
       <TechIcon tech={tech} active={active} />
@@ -67,7 +64,6 @@ export default function TechChip({ tech, count, active = false, onClick, classNa
   if (onClick) {
     return (
       <button
-        {...attrs}
         type="button"
         aria-pressed={active}
         aria-label={label}
@@ -88,7 +84,6 @@ export default function TechChip({ tech, count, active = false, onClick, classNa
   }
   return (
     <span
-      {...attrs}
       aria-label={count !== undefined ? label : undefined}
       className={cx(
         'group inline-flex min-h-9 shrink-0 items-center gap-2 px-1 text-sm font-medium whitespace-nowrap text-ink-2',

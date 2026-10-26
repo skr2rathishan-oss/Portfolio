@@ -4,7 +4,6 @@ import { motion, type Variants } from 'motion/react';
 import { Link } from 'react-router-dom';
 import type { Profile, SocialLink } from '../../content/types';
 import { SOCIAL_ICONS } from '../../content/icons';
-import { T, useEd } from '../../content/editable';
 import { cx, isExternal, linkProps, Monogram, NewTabHint } from '../cards/shared';
 import { applyStyle } from './sectionStyle';
 
@@ -16,8 +15,6 @@ export interface HeroProps {
   className?: string;
   /** Fill the first screen (below the header) from the lg breakpoint. Only the public Home passes it. */
   fullHeight?: boolean;
-  /** Edit-target attributes for the section root (visual editor only). */
-  attrs?: Record<string, string>;
 }
 
 const socialClass =
@@ -81,24 +78,22 @@ function Cta({
   to,
   label,
   primary,
-  attrs,
 }: {
   to: string;
   label: string;
   primary?: boolean;
-  attrs?: Record<string, string>;
 }) {
   const className = primary ? ctaPrimary : ctaSecondary;
   if (/^\/(?!\/)/.test(to)) {
     return (
-      <Link {...attrs} to={to} className={className}>
+      <Link to={to} className={className}>
         {label}
         {primary && <ArrowRight size={16} aria-hidden="true" className={ctaIcon} />}
       </Link>
     );
   }
   return (
-    <a {...attrs} {...linkProps(to)} className={className}>
+    <a {...linkProps(to)} className={className}>
       {label}
       {primary && <ExternalLink size={16} aria-hidden="true" className={ctaIcon} />}
       <NewTabHint url={to} />
@@ -106,20 +101,18 @@ function Cta({
   );
 }
 
-export default function Hero({ profile, socials, className, fullHeight, attrs }: HeroProps) {
+export default function Hero({ profile, socials, className, fullHeight }: HeroProps) {
   const { hero, fullName } = profile;
-  const ed = useEd();
   const heroSocials = socials.filter((s) => s.showInHero && s.url);
   const animate = useIntroOnce();
   const motionProps = animate ? { initial: 'hidden' as const, animate: 'visible' as const } : {};
   const [imageFailed, setImageFailed] = useState(false);
 
-  // A new image (admin preview) gets a fresh chance to load.
+  // A new image gets a fresh chance to load.
   useEffect(() => setImageFailed(false), [hero.image]);
 
   return (
     <section
-      {...attrs}
       aria-labelledby="hero-heading"
       className={cx(
         'grid items-center gap-12 pt-8 pb-14 sm:gap-14 sm:pt-12 sm:pb-16',
@@ -131,7 +124,6 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
       <motion.div variants={container} {...motionProps} className="flex min-w-0 flex-col items-start">
         {hero.roleBadge && (
           <motion.p
-            {...ed(T.profile('hero.roleBadge'), 'text')}
             variants={item}
             className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-accent/25 bg-white/[0.04] px-3 py-1.5 font-mono text-xs shadow-[0_0_15px_rgb(0_171_240/0.1)] backdrop-blur-sm sm:gap-2 sm:px-3.5"
           >
@@ -156,7 +148,6 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
 
         {hero.focusAreas.length > 0 && (
           <motion.div
-            {...ed(T.profile('hero.focusAreas'), 'field')}
             variants={item}
             className="mt-5 flex items-start gap-2 font-mono text-xs font-bold uppercase tracking-[0.25em] text-accent lg:text-[0.8125rem] xl:text-sm"
           >
@@ -183,11 +174,11 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
 
         <motion.h1 id="hero-heading" variants={item} className="mt-4 text-hero text-pretty sm:mt-5">
           <span className="sr-only">{fullName}: </span>
-          <span {...ed(T.profile('hero.headline'), 'text')} className="block text-ink">
+          <span className="block text-ink">
             {hero.headline}
           </span>{' '}
           {hero.headlineAccent && (
-            <span {...ed(T.profile('hero.headlineAccent'), 'text')} className="block text-accent">
+            <span className="block text-accent">
               {hero.headlineAccent}
             </span>
           )}
@@ -195,7 +186,6 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
 
         {hero.intro && (
           <motion.p
-            {...ed(T.profile('hero.intro'), 'text')}
             variants={item}
             className="mt-5 max-w-[36rem] text-base leading-relaxed text-ink-2"
           >
@@ -208,9 +198,8 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
             to={hero.primaryCta.to}
             label={hero.primaryCta.label}
             primary
-            attrs={ed(T.profile('hero.primaryCta'), 'link')}
           />
-          <Cta to={hero.secondaryCta.to} label={hero.secondaryCta.label} attrs={ed(T.profile('hero.secondaryCta'), 'link')} />
+          <Cta to={hero.secondaryCta.to} label={hero.secondaryCta.label} />
         </motion.div>
 
         {heroSocials.length > 0 && (
@@ -218,7 +207,7 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
             {heroSocials.map((s) => {
               const Icon = SOCIAL_ICONS[s.platform];
               return (
-                <motion.li key={s.id} {...ed(T.item('socials', s.id), 'item')} variants={socialItem}>
+                <motion.li key={s.id} variants={socialItem}>
                   <a
                     {...linkProps(s.url!)}
                     aria-label={`${s.label}${isExternal(s.url!) ? ' (opens in new tab)' : ''}`}
@@ -256,7 +245,6 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
           />
           {hero.image && !imageFailed ? (
             <img
-              {...ed(T.profile('hero.image'), 'image')}
               src={hero.image}
               alt={hero.imageAlt}
               width={768}
@@ -270,7 +258,6 @@ export default function Hero({ profile, socials, className, fullHeight, attrs }:
             <Monogram
               text={fullName}
               className="relative z-10 size-full rounded-blob text-5xl"
-              attrs={ed(T.profile('hero.image'), 'image')}
             />
           )}
         </div>

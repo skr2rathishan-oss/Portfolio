@@ -1,11 +1,9 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { ArrowUpRight, Check, Copy, Mail, MapPin, Send } from 'lucide-react';
 import { useContent } from '../../../content/ContentProvider';
-import { T, useEd } from '../../../content/editable';
 import type { BuiltinSection } from '../../../content/types';
 import { SOCIAL_ICONS } from '../../../content/icons';
 import { cx, linkProps, NewTabHint } from '../../cards/shared';
-import PageHeader from '../../layout/PageHeader';
 import { applyStyle, bodyRules } from '../sectionStyle';
 import { btnPrimary, btnSecondary } from '../../ui/styles';
 
@@ -73,25 +71,18 @@ type Props = { section: BuiltinSection };
 
 export function ContactHeader({ section }: Props) {
   const { profile } = useContent();
-  const ed = useEd();
   const { contact } = profile;
   const heading = [contact.heading, contact.headingAccent].filter(Boolean).join(' ') || 'Contact';
+  // A small page title only: the details and the form lead the page.
   return (
-    <PageHeader
-      title={heading}
-      lead={contact.intro || undefined}
-      attrs={ed(T.section(section.id), 'section')}
-      titleAttrs={ed(T.profile('contact.heading'), 'field')}
-      leadAttrs={ed(T.profile('contact.intro'), 'text')}
-    />
+    <h1 className="pt-10 text-h3 font-bold text-ink sm:pt-12">{heading}</h1>
   );
 }
 
-const mainClass = 'mt-10 grid gap-10 sm:mt-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14';
+const mainClass = 'mt-6 grid gap-10 sm:mt-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14';
 
 export function ContactMain({ section }: Props) {
   const { profile, socials } = useContent();
-  const ed = useEd();
   const { contact } = profile;
   const uid = useId();
   const formRef = useRef<HTMLFormElement>(null);
@@ -168,8 +159,7 @@ export function ContactMain({ section }: Props) {
 
   return (
       <div
-        {...ed(T.section(section.id), 'section')}
-        className={applyStyle(mainClass, section.style, bodyRules({ spaceTop: 'mt-10 sm:mt-12' }))}
+        className={applyStyle(mainClass, section.style, bodyRules({ spaceTop: 'mt-6 sm:mt-8' }))}
       >
         {/* Direct contact details */}
         <section aria-labelledby="contact-details-heading" className="min-w-0">
@@ -179,7 +169,6 @@ export function ContactMain({ section }: Props) {
 
           {contact.availability.enabled && contact.availability.title && (
             <div
-              {...ed(T.profile('contact.availability'), 'field')}
               className="mb-6 flex items-start gap-3 rounded-card border border-success/25 bg-success/[0.06] px-4 py-3">
               <span aria-hidden="true" className="mt-2 h-2 w-2 shrink-0 rounded-full bg-success" />
               <div>
@@ -197,7 +186,6 @@ export function ContactMain({ section }: Props) {
                   <dt className="text-xs text-ink-3">Email</dt>
                   <dd className="min-w-0">
                     <a
-                      {...ed(T.profile('contact.email'), 'text')}
                       href={mailto}
                       className="inline-block max-w-full break-all py-0.5 font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink"
                     >
@@ -213,7 +201,7 @@ export function ContactMain({ section }: Props) {
                 <MapPin size={18} aria-hidden="true" className="shrink-0 text-ink-3" />
                 <div>
                   <dt className="text-xs text-ink-3">Based in</dt>
-                  <dd {...ed(T.profile('contact.location'), 'field')} className="font-medium text-ink">
+                  <dd className="font-medium text-ink">
                     {place}
                   </dd>
                 </div>
@@ -237,7 +225,7 @@ export function ContactMain({ section }: Props) {
                     </>
                   );
                   return (
-                    <li key={s.id} {...ed(T.item('socials', s.id), 'item')} className="border-b border-line">
+                    <li key={s.id} className="border-b border-line">
                       {s.url ? (
                         <a
                           {...linkProps(s.url)}
@@ -266,7 +254,7 @@ export function ContactMain({ section }: Props) {
         </section>
 
         {/* Message form */}
-        <section aria-labelledby="contact-form-heading" className="min-w-0 rounded-panel border border-line bg-surface p-5 sm:p-7">
+        <section aria-labelledby="contact-form-heading" className="min-w-0 self-start rounded-panel border border-line bg-surface p-5 sm:p-6">
           <h2 id="contact-form-heading" className="text-h3 text-ink">
             Send a message
           </h2>
@@ -297,7 +285,7 @@ export function ContactMain({ section }: Props) {
               onInput={() => status.kind === 'sent' && setStatus({ kind: 'idle' })}
               aria-busy={sending}
               aria-describedby={`${uid}-required-note`}
-              className="mt-5 space-y-5"
+              className="mt-3 space-y-4"
             >
               <p id={`${uid}-required-note`} className="text-sm text-ink-3">
                 All fields except subject are required.
@@ -314,7 +302,7 @@ export function ContactMain({ section }: Props) {
                 style={{ display: 'none' }}
               />
 
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor={id('name')} className="mb-2 block text-sm font-medium text-ink-2">
                     Your name
@@ -386,7 +374,7 @@ export function ContactMain({ section }: Props) {
                 <textarea
                   id={id('message')}
                   name="message"
-                  rows={6}
+                  rows={3}
                   required
                   spellCheck
                   maxLength={MESSAGE_MAX}
@@ -395,7 +383,7 @@ export function ContactMain({ section }: Props) {
                   aria-describedby={describedBy('message', `${id('message')}-count`)}
                   onBlur={() => onBlur('message')}
                   onChange={(e) => setMessageLength(e.target.value.length)}
-                  className={cx(inputClass, 'min-h-[9rem] resize-y')}
+                  className={cx(inputClass, 'min-h-[5.5rem] resize-y')}
                 />
                 <div className="mt-1.5 flex items-start justify-between gap-4">
                   {errors.message ? (

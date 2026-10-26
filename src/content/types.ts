@@ -116,6 +116,7 @@ export interface ProjectCategory extends Entity {
 }
 
 export type StackLevel = 'core' | 'supporting' | 'exposure';
+export type ProjectPriority = 'high' | 'medium' | 'low';
 
 export interface Project extends Entity {
   title: string;
@@ -130,6 +131,8 @@ export interface Project extends Entity {
   highlights?: string[];
   date?: DateYM;
   featured: boolean;
+  /** Badge on the card. Absent = high when featured, otherwise medium. */
+  priority?: ProjectPriority;
   /** Design-system style presets (visual editor). Absent = the default look. */
   style?: StylePresets;
 }
@@ -196,7 +199,13 @@ export interface Certification extends Entity {
   style?: StylePresets;
 }
 
-export type AchievementKind = 'hackathon' | 'competition' | 'challenge' | 'award';
+export type AchievementKind = 'hackathon' | 'competition' | 'challenge' | 'award' | 'exhibition' | 'program' | 'research' | 'project';
+
+/** One event photo in an achievement's gallery. */
+export interface AchievementPhoto {
+  src: MediaUrl;
+  alt: string;
+}
 
 export interface Achievement extends Entity {
   title: string;
@@ -206,6 +215,8 @@ export interface Achievement extends Entity {
   result?: string;
   team?: string;
   image?: MediaUrl;
+  /** Event photos (first = cover). When present the card shows a photo gallery instead of `image`. */
+  gallery?: AchievementPhoto[];
   description?: string;
   skills: string[];
   link?: LinkRef;
@@ -356,6 +367,8 @@ export type BuiltinSectionType =
   | 'projects.stack'
   | 'projects.list'
   | 'achievements.header'
+  | 'achievements.research'
+  | 'achievements.trcsl'
   | 'achievements.hackathons'
   | 'achievements.community'
   | 'achievements.programs'

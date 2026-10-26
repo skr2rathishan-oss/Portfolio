@@ -105,21 +105,33 @@
               "visible": true
             },
             {
-              "id": "sec_achievements_hackathons",
-              "type": "achievements.hackathons",
+              "id": "sec_achievements_community",
+              "type": "achievements.community",
               "order": 1,
               "visible": true
             },
             {
-              "id": "sec_achievements_community",
-              "type": "achievements.community",
+              "id": "sec_achievements_research",
+              "type": "achievements.research",
               "order": 2,
+              "visible": true
+            },
+            {
+              "id": "sec_achievements_trcsl",
+              "type": "achievements.trcsl",
+              "order": 3,
+              "visible": true
+            },
+            {
+              "id": "sec_achievements_hackathons",
+              "type": "achievements.hackathons",
+              "order": 4,
               "visible": true
             },
             {
               "id": "sec_achievements_programs",
               "type": "achievements.programs",
-              "order": 3,
+              "order": 5,
               "visible": true
             }
           ]

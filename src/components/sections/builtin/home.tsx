@@ -1,10 +1,9 @@
-// Home page built-in sections. Markup is the 28e364b Home.tsx JSX, cut verbatim; only edit-target
-// attributes (emitted inside the editor canvas only) and opt-in style presets were added.
+// Home page built-in sections. Markup is the 28e364b Home.tsx JSX, cut verbatim; only opt-in style
+// presets were added.
 import { useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useContent } from '../../../content/ContentProvider';
-import { T, useEd } from '../../../content/editable';
 import { sectionText } from '../../../content/layout';
 import { dateSortKey, formatDate, indexById, techUsageCount } from '../../../content/selectors';
 import type { BuiltinSection, Technology } from '../../../content/types';
@@ -23,8 +22,7 @@ type Props = { section: BuiltinSection };
 
 export function HomeHero({ section }: Props) {
   const { profile, socials, site } = useContent();
-  const ed = useEd();
-  return <Hero profile={profile} socials={socials} cvUrl={site.cv?.url} fullHeight attrs={ed(T.section(section.id), 'section')} />;
+  return <Hero profile={profile} socials={socials} cvUrl={site.cv?.url} fullHeight />;
 }
 
 const chipClass =
@@ -32,7 +30,6 @@ const chipClass =
 
 export function HomeCoreStack({ section }: Props) {
   const { projects, technologies } = useContent();
-  const ed = useEd();
   const usage = useMemo(() => techUsageCount(projects), [projects]);
 
   // Featured technologies that real projects use, strongest first.
@@ -54,7 +51,6 @@ export function HomeCoreStack({ section }: Props) {
   if (coreStack.length === 0) return null;
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-labelledby="core-stack-heading"
       className={applyStyle('section-gap', section.style, bodyRules({ spaceTop: 'section-gap' }))}
     >
@@ -62,10 +58,8 @@ export function HomeCoreStack({ section }: Props) {
         id="core-stack-heading"
         title={sectionText(section, 'title')}
         lead={sectionText(section, 'lead')}
-        titleAttrs={ed(T.section(section.id, 'title'), 'text')}
-        leadAttrs={ed(T.section(section.id, 'lead'), 'text')}
         action={
-          <Link {...ed(T.section(section.id, 'buttonLabel'), 'text')} to="/projects#stack" className={btnQuiet}>
+          <Link to="/projects#stack" className={btnQuiet}>
             {sectionText(section, 'buttonLabel')}
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
@@ -75,7 +69,6 @@ export function HomeCoreStack({ section }: Props) {
         {coreStack.map(({ t, count }) => (
           <li key={t.id}>
             <Link
-              {...ed(T.item('technologies', t.id), 'item')}
               to={`/projects?tech=${encodeURIComponent(t.id)}#stack`}
               aria-label={`${t.name}: ${count} project${count === 1 ? '' : 's'}`}
               className={applyStyle(chipClass, t.style, [{ key: 'emphasis', tokens: 'border-line bg-surface/70' }])}
@@ -95,7 +88,6 @@ export function HomeCoreStack({ section }: Props) {
 
 export function HomeHighlights({ section }: Props) {
   const { projects, technologies, achievements } = useContent();
-  const ed = useEd();
   const techById = useMemo(() => indexById(technologies), [technologies]);
 
   const featuredProjects = useMemo(() => {
@@ -115,7 +107,6 @@ export function HomeHighlights({ section }: Props) {
 
   return (
     <div
-      {...ed(T.section(section.id), 'section')}
       className={applyStyle(
         'section-gap grid gap-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16',
         section.style,
@@ -127,7 +118,6 @@ export function HomeHighlights({ section }: Props) {
           <SectionHeading
             id="selected-work-heading"
             title={sectionText(section, 'title')}
-            titleAttrs={ed(T.section(section.id, 'title'), 'text')}
             action={
               <Link to="/projects" className={btnQuiet}>
                 All projects
@@ -143,7 +133,7 @@ export function HomeHighlights({ section }: Props) {
                 .filter(Boolean)
                 .slice(0, 3);
               return (
-                <li key={p.id} {...ed(T.item('projects', p.id), 'item')}>
+                <li key={p.id}>
                   <Link
                     to={`/projects#project-${p.id}`}
                     className="group grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-4 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-5"
@@ -156,16 +146,14 @@ export function HomeHighlights({ section }: Props) {
                       height={180}
                       className="aspect-[16/10] w-full rounded-control border border-line bg-navy text-lg"
                       imgClassName="object-cover object-top"
-                      attrs={ed(T.field('projects', p.id, 'image'), 'image')}
                     />
                     <span className="min-w-0">
                       <span
-                        {...ed(T.field('projects', p.id, 'title'), 'text')}
                         className="block font-semibold leading-snug text-ink underline-offset-4 group-hover:underline"
                       >
                         {p.title}
                       </span>
-                      <span {...ed(T.field('projects', p.id, 'summary'), 'text')} className="mt-1 line-clamp-2 text-sm text-ink-2">
+                      <span className="mt-1 line-clamp-2 text-sm text-ink-2">
                         {p.summary}
                       </span>
                       {core.length > 0 && <span className="mt-1.5 block text-xs text-ink-3">{core.join(', ')}</span>}
@@ -183,7 +171,6 @@ export function HomeHighlights({ section }: Props) {
           <SectionHeading
             id="recent-activity-heading"
             title={sectionText(section, 'secondaryTitle')}
-            titleAttrs={ed(T.section(section.id, 'secondaryTitle'), 'text')}
             action={
               <Link to="/achievements" className={btnQuiet}>
                 Achievements
@@ -193,7 +180,7 @@ export function HomeHighlights({ section }: Props) {
           />
           <ul className="divide-y divide-line border-y border-line">
             {recentAchievements.map((a) => (
-              <li key={a.id} {...ed(T.item('achievements', a.id), 'item')}>
+              <li key={a.id}>
                 <Link
                   to={`/achievements#${a.id}`}
                   className="group grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-4 py-4"
@@ -205,11 +192,9 @@ export function HomeHighlights({ section }: Props) {
                     width={144}
                     height={144}
                     className="aspect-square w-full rounded-control border border-line bg-navy text-base"
-                    attrs={ed(T.field('achievements', a.id, 'image'), 'image')}
                   />
                   <span className="min-w-0">
                     <span
-                      {...ed(T.field('achievements', a.id, 'title'), 'text')}
                       className="block font-semibold leading-snug text-ink underline-offset-4 group-hover:underline"
                     >
                       {a.title}
@@ -234,7 +219,6 @@ const ctaSectionClass =
 
 export function HomeContactCta({ section }: Props) {
   const { profile } = useContent();
-  const ed = useEd();
   const { contact } = profile;
   const title =
     section.props?.title ??
@@ -242,7 +226,6 @@ export function HomeContactCta({ section }: Props) {
 
   return (
     <section
-      {...ed(T.section(section.id), 'section')}
       aria-labelledby="home-contact-heading"
       className={applyStyle(
         ctaSectionClass,
@@ -257,16 +240,16 @@ export function HomeContactCta({ section }: Props) {
       )}
     >
       <div className="max-w-2xl">
-        <h2 {...ed(T.section(section.id, 'title'), 'text')} id="home-contact-heading" className="text-h2 text-ink">
+        <h2 id="home-contact-heading" className="text-h2 text-ink">
           {title}
         </h2>
         {contact.intro && (
-          <p {...ed(T.profile('contact.intro'), 'text')} className="mt-2 text-ink-2">
+          <p className="mt-2 text-ink-2">
             {contact.intro}
           </p>
         )}
       </div>
-      <Link {...ed(T.section(section.id, 'buttonLabel'), 'text')} to="/contact" className={`${btnPrimary} mt-6 shrink-0 lg:mt-0`}>
+      <Link to="/contact" className={`${btnPrimary} mt-6 shrink-0 lg:mt-0`}>
         {sectionText(section, 'buttonLabel')}
         <ArrowRight size={16} aria-hidden="true" />
       </Link>

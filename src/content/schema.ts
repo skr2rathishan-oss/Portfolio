@@ -1,5 +1,5 @@
 // zod (v4) validation for the content document.
-// Used by the admin UI, Netlify functions and scripts/validate-seed.ts.
+// Used by scripts/validate-seed.ts.
 // The public site must NOT import this file (keeps zod out of the public bundle).
 import { z } from 'zod';
 import { BLOCK_TYPES, BUILTIN_SECTION_TYPES, LAYOUT_LIMITS, PAGE_KEYS, SECTION_META, isBuiltinType } from './layout';
@@ -20,8 +20,10 @@ export const LIMITS = {
 } as const;
 
 // ── Patterns ─────────────────────────────────────────────────
-export const URL_RE = /^(https?:\/\/|mailto:|\/(?!\/))/;
-export const MEDIA_URL_RE = /^(https:\/\/|\/(?!\/))/;
+// Site paths are "/x", never "//host" or "/\host" (browsers treat both as protocol-relative), and
+// contain no backslashes.
+export const URL_RE = /^(https?:\/\/|mailto:|\/(?![/\\])(?!.*\\))/;
+export const MEDIA_URL_RE = /^(https:\/\/|\/(?![/\\])(?!.*\\))/;
 export const HEX_COLOR_RE = /^#[0-9a-f]{6}$/;
 export const DATE_YM_RE = /^\d{4}(-(0[1-9]|1[0-2]))?$/;
 export const ID_RE = /^[a-z]+_[a-z0-9_]{1,60}$/;
@@ -205,6 +207,7 @@ export const ProjectSchema = z.object({
   highlights: list().optional(),
   date: DateYMSchema.optional(),
   featured: z.boolean(),
+  priority: z.enum(['high', 'medium', 'low']).optional(),
   style: StylePresetsSchema.optional(),
 });
 
@@ -272,15 +275,27 @@ export const CertificationSchema = z.object({
   style: StylePresetsSchema.optional(),
 });
 
+/** Max photos in one achievement's gallery. */
+export const ACHIEVEMENT_GALLERY_MAX = 12;
+
+const AchievementPhotoSchema = z.object({
+  src: MediaUrlSchema,
+  alt: reqText(LIMITS.title),
+});
+
 export const AchievementSchema = z.object({
   ...entity('ach'),
   title: reqText(LIMITS.title),
-  kind: z.enum(['hackathon', 'competition', 'challenge', 'award']),
+  kind: z.enum(['hackathon', 'competition', 'challenge', 'award', 'exhibition', 'program', 'research', 'project']),
   organizer: reqText(LIMITS.title),
   date: DateYMSchema,
   result: optText(LIMITS.short),
   team: optText(LIMITS.short),
   image: MediaUrlSchema.optional(),
+  gallery: z
+    .array(AchievementPhotoSchema)
+    .max(ACHIEVEMENT_GALLERY_MAX, `At most ${ACHIEVEMENT_GALLERY_MAX} photos`)
+    .optional(),
   description: optText(LIMITS.summary),
   skills: list(),
   link: LinkRefSchema.optional(),

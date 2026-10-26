@@ -1,5 +1,4 @@
-// Public site shell (header, routes, footer). Moved verbatim out of App.tsx so the editor
-// canvas can render the same layout inside a MemoryRouter + StaticContentProvider.
+// Public site shell (header, routes, footer).
 // FROZEN signature: `export default function PortfolioLayout(): JSX.Element` (no props).
 import type { ReactNode } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';

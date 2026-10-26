@@ -1,7 +1,6 @@
 import { ArrowUpRight, MapPin } from 'lucide-react';
 import type { Role, RoleKind } from '../../content/types';
 import { formatRange } from '../../content/selectors';
-import { T, useEd } from '../../content/editable';
 import { applyStyle, cardRules } from '../sections/sectionStyle';
 import { cx, linkProps, MediaImage, NewTabHint } from './shared';
 
@@ -21,12 +20,9 @@ export const ROLE_KIND_LABEL: Record<RoleKind, string> = {
 export default function RoleCard({ role, className }: RoleCardProps) {
   const range = formatRange(role.start, role.end);
   const current = role.end === 'present';
-  const ed = useEd();
   const { style } = role;
-  const f = (name: string) => T.field('roles', role.id, name);
   return (
     <article
-      {...ed(T.item('roles', role.id), 'item')}
       className={cx(
         applyStyle(
           'grid gap-5 rounded-card border border-line bg-surface p-4 sm:grid-cols-[8rem_minmax(0,1fr)] sm:p-5 lg:grid-cols-[9rem_minmax(0,1fr)] lg:gap-7',
@@ -45,7 +41,6 @@ export default function RoleCard({ role, className }: RoleCardProps) {
         height={288}
         className="h-28 w-28 self-start rounded-control border border-line bg-raised text-3xl sm:h-32 sm:w-32 lg:h-36 lg:w-36"
         imgClassName={applyStyle('object-contain p-3', style, [{ key: 'imageFit', tokens: 'object-contain' }])}
-        attrs={ed(f('logo'), 'image')}
       />
 
       <div className="flex min-w-0 flex-col">
@@ -60,7 +55,6 @@ export default function RoleCard({ role, className }: RoleCardProps) {
         </div>
 
         <h3
-          {...ed(f('title'), 'text')}
           className={applyStyle('mt-3 text-h3 text-ink text-pretty', style, [
             { key: 'titleSize', tokens: 'text-h3' },
             { key: 'titleColor', tokens: 'text-ink' },
@@ -86,13 +80,13 @@ export default function RoleCard({ role, className }: RoleCardProps) {
         )}
 
         {role.description && (
-          <p {...ed(f('description'), 'text')} className="mt-3 max-w-[65ch] text-[0.9375rem] leading-relaxed text-ink-2">
+          <p className="mt-3 max-w-[65ch] text-[0.9375rem] leading-relaxed text-ink-2">
             {role.description}
           </p>
         )}
 
         {role.highlights && role.highlights.length > 0 && (
-          <ul {...ed(f('highlights'), 'field')} className="mt-3 max-w-[65ch] space-y-1.5 text-sm text-ink-2">
+          <ul className="mt-3 max-w-[65ch] space-y-1.5 text-sm text-ink-2">
             {role.highlights.map((h) => (
               <li key={h} className="flex gap-2">
                 <span aria-hidden="true" className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-accent" />
@@ -105,7 +99,6 @@ export default function RoleCard({ role, className }: RoleCardProps) {
         {role.url && (
           <div className="mt-auto pt-3">
             <a
-              {...ed(f('url'), 'link')}
               {...linkProps(role.url)}
               className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent underline-offset-4 hover:underline"
             >

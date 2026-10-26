@@ -1,14 +1,11 @@
-import { ArrowUpRight, Award } from 'lucide-react';
-import type { Certification, Program, ProgramKind } from '../../content/types';
+import { ArrowUpRight } from 'lucide-react';
+import type { Program, ProgramKind } from '../../content/types';
 import { formatRange } from '../../content/selectors';
-import { T, useEd } from '../../content/editable';
 import { applyStyle, cardRules } from '../sections/sectionStyle';
 import { cx, linkProps, MediaImage, NewTabHint, SkillList } from './shared';
 
 export interface ProgramCardProps {
   program: Program;
-  /** The linked certification (resolved by the caller from program.certificationId). */
-  certification?: Certification;
   className?: string;
 }
 
@@ -27,14 +24,11 @@ const MODE_LABEL = { online: 'Online', 'in-person': 'In person', hybrid: 'Hybrid
 const linkClass =
   'inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline';
 
-export default function ProgramCard({ program, certification, className }: ProgramCardProps) {
+export default function ProgramCard({ program, className }: ProgramCardProps) {
   const range = formatRange(program.start, program.end);
-  const ed = useEd();
   const { style } = program;
-  const f = (name: string) => T.field('programs', program.id, name);
   return (
     <article
-      {...ed(T.item('programs', program.id), 'item')}
       className={cx(
         applyStyle(
           'grid gap-5 rounded-card border border-line bg-surface p-4 sm:grid-cols-[6rem_minmax(0,1fr)] sm:p-5',
@@ -52,7 +46,6 @@ export default function ProgramCard({ program, certification, className }: Progr
         height={192}
         className="h-20 w-20 self-start rounded-control border border-line bg-raised text-xl sm:h-24 sm:w-24"
         imgClassName="object-contain p-2"
-        attrs={ed(f('logo'), 'image')}
       />
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
@@ -60,7 +53,6 @@ export default function ProgramCard({ program, certification, className }: Progr
           {program.mode && <span className="text-ink-3">{MODE_LABEL[program.mode]}</span>}
         </div>
         <h3
-          {...ed(f('title'), 'text')}
           className={applyStyle('mt-3 text-h3 text-ink text-pretty', style, [
             { key: 'titleSize', tokens: 'text-h3' },
             { key: 'titleColor', tokens: 'text-ink' },
@@ -71,26 +63,19 @@ export default function ProgramCard({ program, certification, className }: Progr
         <p className="mt-1 text-sm text-ink-2">{program.organizer}</p>
         {range && <p className="mt-1 font-mono text-xs text-ink-3">{range}</p>}
         {program.description && (
-          <p {...ed(f('description'), 'text')} className="mt-3 max-w-[65ch] text-[0.9375rem] leading-relaxed text-ink-2">
+          <p className="mt-3 max-w-[65ch] text-[0.9375rem] leading-relaxed text-ink-2">
             {program.description}
           </p>
         )}
         {program.skills.length > 0 && (
-          <div {...ed(f('skills'), 'field')} className="mt-4">
+          <div className="mt-4">
             <SkillList skills={program.skills} label="Skills covered" />
           </div>
         )}
-        {(certification?.credentialUrl || program.url) && (
+        {program.url && (
           <div className="mt-2 flex flex-wrap gap-x-5">
-            {certification?.credentialUrl && (
-              <a {...linkProps(certification.credentialUrl)} className={cx(linkClass, 'text-accent')}>
-                <Award size={15} aria-hidden="true" />
-                Certificate<span className="sr-only">: {certification.name}</span>
-                <NewTabHint url={certification.credentialUrl} />
-              </a>
-            )}
             {program.url && (
-              <a {...ed(f('url'), 'link')} {...linkProps(program.url)} className={cx(linkClass, 'text-ink-2 hover:text-ink')}>
+              <a {...linkProps(program.url)} className={cx(linkClass, 'text-ink-2 hover:text-ink')}>
                 Program page<span className="sr-only"> for {program.title}</span>
                 <ArrowUpRight size={15} aria-hidden="true" />
                 <NewTabHint url={program.url} />
